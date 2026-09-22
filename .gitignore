@@ -1,5 +1,5 @@
 # FXServer & MariaDB Binaries (machine-specific)
-server/
+/server/
 database/bin/
 database/data/
 database/include/
