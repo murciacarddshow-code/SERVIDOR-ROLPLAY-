@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDT Spain Rol - Fuerzas y Cuerpos de Seguridad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="tablet-case">
+        <!-- Header -->
+        <div class="tablet-header">
+            <div class="header-left">
+                <span class="police-badge">🛡️</span>
+                <div class="system-title">
+                    <h2>MDT SPAIN ROL</h2>
+                    <p>Terminal Móvil Policial &bull; CNP - Guardia Civil - SAMUR</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="agent-badge">
+                    <span id="officer-name">Agente Oficial</span> &bull; <span id="officer-callsign">ID: 01</span>
+                </div>
+                <button class="close-btn" id="btn-close-tablet">✕</button>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="tablet-body">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <div class="nav-item active" data-target="sec-dash">
+                    <span>🏠</span> Inicio / Centralita
+                </div>
+                <div class="nav-item" data-target="sec-citizens">
+                    <span>👤</span> Búsqueda Ciudadana
+                </div>
+                <div class="nav-item" data-target="sec-vehicles">
+                    <span>🚗</span> Registro Matrículas
+                </div>
+                <div class="nav-item" data-target="sec-penal">
+                    <span>⚖️</span> Código Penal y Multas
+                </div>
+                <div class="nav-item" data-target="sec-warrants">
+                    <span>🚨</span> Busca y Captura
+                </div>
+                <div class="nav-item" data-target="sec-ems">
+                    <span>🚑</span> SAMUR / Sanitarios
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-panel">
+                <!-- Section 1: Dashboard -->
+                <div class="view-section active" id="sec-dash">
+                    <div class="section-title">
+                        <span>📊</span> Estado del Operativo y Centralita 112
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem; margin-bottom:1.5rem;">
+                        <div style="background:#131a24; padding:1.2rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+                            <p style="color:#b2bec3; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Cuerpo Activo</p>
+                            <h3 style="color:#0984e3; margin-top:0.4rem;">CNP & Guardia Civil</h3>
+                        </div>
+                        <div style="background:#131a24; padding:1.2rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+                            <p style="color:#b2bec3; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Nivel de Alerta</p>
+                            <h3 style="color:#00b894; margin-top:0.4rem;">Verde (Patrullaje Regular)</h3>
+                        </div>
+                        <div style="background:#131a24; padding:1.2rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+                            <p style="color:#b2bec3; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Canal de Radio</p>
+                            <h3 style="color:#ffeaa7; margin-top:0.4rem;">Frecuencia 1.0 MHz (CNP)</h3>
+                        </div>
+                    </div>
+                    <div style="background:#131a24; padding:1.4rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+                        <h4 style="margin-bottom:0.8rem; color:#dfe6e9;">Protocolos de Actuación Rápida:</h4>
+                        <p style="color:#b2bec3; font-size:0.9rem; line-height:1.6;">
+                            1. Utilizar <strong>/dni</strong> para solicitar identificación oficial a ciudadanos sospechosos.<br>
+                            2. Realizar test de alcoholemia y narcotest saliva en controles preventivos.<br>
+                            3. Toda sanción debe registrarse en la pestaña <strong>Búsqueda Ciudadana</strong>.<br>
+                            4. Para ingresos penitenciarios en Bolingbroke utilizar el comando <strong>/jail [ID] [Minutos]</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Citizens Search -->
+                <div class="view-section" id="sec-citizens">
+                    <div class="section-title">
+                        <span>👤</span> Registro Civil y Búsqueda por DNI
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" class="search-input" id="input-citizen" placeholder="Introduce DNI español (ES-XXXXXXXX) o Nombre y Apellidos...">
+                        <button class="action-btn" id="btn-search-citizen">Buscar Ciudadano</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>DNI</th>
+                                <th>Nombre Completo</th>
+                                <th>Nacimiento</th>
+                                <th>Teléfono</th>
+                                <th>Licencias</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="citizen-results-body">
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:#b2bec3;">Introduce un término de búsqueda para consultar el fichero policial.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Section 3: Vehicles Search -->
+                <div class="view-section" id="sec-vehicles">
+                    <div class="section-title">
+                        <span>🚗</span> Control de Tráfico y Matrículas
+                    </div>
+                    <div class="search-bar">
+                        <input type="text" class="search-input" id="input-veh" placeholder="Introduce matrícula del vehículo (ej: 46ABC789)...">
+                        <button class="action-btn" id="btn-search-veh">Consultar Matrícula</button>
+                    </div>
+                    <div id="veh-result-box">
+                        <p style="color:#b2bec3;">Consulta una matrícula para verificar el titular, el modelo y si tiene encargo de búsqueda o robo.</p>
+                    </div>
+                </div>
+
+                <!-- Section 4: Penal Code -->
+                <div class="view-section" id="sec-penal">
+                    <div class="section-title">
+                        <span>⚖️</span> Código Penal y Baremos de Sanción (Euros €)
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Categoría</th>
+                                <th>Infracción / Delito</th>
+                                <th>Multa</th>
+                                <th>Prisión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="penal-table-body">
+                            <tr>
+                                <td colspan="5" style="text-align:center; color:#b2bec3;">Cargando catálogo del Código Penal...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Section 5: Warrants -->
+                <div class="view-section" id="sec-warrants">
+                    <div class="section-title">
+                        <span>🚨</span> Órdenes Activas de Busca y Captura
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fugitivo</th>
+                                <th>Cargos Judiciales</th>
+                                <th>Peligrosidad</th>
+                                <th>Agente Instructor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="warrants-table-body">
+                            <tr>
+                                <td colspan="5" style="text-align:center; color:#b2bec3;">No hay órdenes judiciales pendientes.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Section 6: SAMUR -->
+                <div class="view-section" id="sec-ems">
+                    <div class="section-title">
+                        <span>🚑</span> Registro de Intervenciones Médicas SAMUR
+                    </div>
+                    <div style="background:#131a24; padding:1.4rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06); margin-bottom:1.5rem;">
+                        <h4 style="color:#e74c3c; margin-bottom:0.8rem;">Comandos Médicos de Asistencia Inmediata:</h4>
+                        <p style="color:#dfe6e9; font-size:0.9rem; line-height:1.7;">
+                            &bull; <strong>/reanimar</strong>: Aplica protocolo de RCP y descarga con desfibrilador al paciente inconsciente más cercano.<br>
+                            &bull; <strong>/curar</strong>: Trata y venda todas las heridas físicas superficiales y fracturas.<br>
+                            &bull; <strong>/camilla</strong>: Despliega una camilla médica en el lugar para trasladar pacientes al hospital.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
