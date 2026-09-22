@@ -1,0 +1,23 @@
+# FXServer & MariaDB Binaries (machine-specific)
+server/
+database/bin/
+database/data/
+database/include/
+database/share/
+database/tmp/
+tools/
+*.zip
+
+# FiveM Cache & Runtime Logs
+server-data/cache/
+server-data/crashometry/
+server-data/db/
+txData/
+*.log
+*.tmp
+.system_generated/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
