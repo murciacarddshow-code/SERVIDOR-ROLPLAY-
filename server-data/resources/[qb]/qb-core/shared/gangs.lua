@@ -53,5 +53,32 @@ QBCore.Shared.Gangs = {
             ['2'] = { name = 'Shot Caller' },
             ['3'] = { name = 'Boss', isboss = true },
         },
+    },
+    mafia = {
+        label = 'Cosa Nostra / Mafia',
+        grades = {
+            ['0'] = { name = 'Asociado / Recluta' },
+            ['1'] = { name = 'Soldado / Sicario' },
+            ['2'] = { name = 'Caporegime / Subjefe' },
+            ['3'] = { name = 'Don / Jefe Supremo', isboss = true },
+        },
+    },
+    peaky = {
+        label = 'Peaky Blinders',
+        grades = {
+            ['0'] = { name = 'Recluta de Birmingham' },
+            ['1'] = { name = 'Gánster' },
+            ['2'] = { name = 'Mano Derecha' },
+            ['3'] = { name = 'Líder de la Familia', isboss = true },
+        },
+    },
+    bratva = {
+        label = 'Bratva Rusa',
+        grades = {
+            ['0'] = { name = 'Boyevik' },
+            ['1'] = { name = 'Brigadier' },
+            ['2'] = { name = 'Sovetnik' },
+            ['3'] = { name = 'Pakhan (Jefe)', isboss = true },
+        },
     }
 }
