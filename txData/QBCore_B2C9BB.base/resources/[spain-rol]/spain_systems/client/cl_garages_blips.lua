@@ -16,7 +16,6 @@ local garages = {
 }
 
 local mechanicShops = {
-    { name = "Taller Benny's Original Motor Works", coords = vector3(-211.34, -1323.98, 30.89) },
     { name = "Taller Los Santos Customs (Centro)", coords = vector3(-338.44, -136.75, 39.0) },
     { name = "Taller Los Santos Customs (Aeropuerto)", coords = vector3(-1155.54, -2007.18, 13.18) },
     { name = "Taller Mecánico Harmony Repair", coords = vector3(1175.05, 2640.22, 37.75) },

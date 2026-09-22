@@ -81,17 +81,17 @@ Config.Shops = {
     },
     bennys = { -- Default Bennys Location
         managed = true,
-        shopLabel = 'Benny\'s Motorworks',
+        shopLabel = 'Benny\'s Original Motor Works',
         showBlip = true,
-        blipSprite = 72,
+        blipSprite = 402,
         blipColor = 46,
         blipCoords = vector3(-211.73, -1325.28, 30.89),
         duty = vector3(-202.92, -1313.74, 31.70),
         stash = vector3(-199.58, -1314.65, 31.08),
         paint = vector3(-202.42, -1322.16, 31.29),
         vehicles = {
-            withdraw = vector3(0, 0, 0),
-            spawn = vector4(-370.51, -107.88, 38.35, 72.56),
+            withdraw = vector3(-205.81, -1304.59, 31.29),
+            spawn = vector4(-207.83, -1300.86, 31.29, 178.5),
             list = { 'flatbed', 'towtruck', 'minivan', 'blista' }
         },
     },

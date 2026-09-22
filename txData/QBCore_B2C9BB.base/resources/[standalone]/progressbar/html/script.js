@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
             this.progressLabel.textContent = data.label;
             this.progressPercentage.textContent = "0%";
-            this.progressContainer.style.display = "block";
+            this.progressContainer.style.display = "flex";
             let startTime = Date.now();
             let duration = parseInt(data.duration, 10);
 

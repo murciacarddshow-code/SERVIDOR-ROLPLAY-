@@ -7,6 +7,16 @@ echo ========================================================
 echo.
 
 set "GIT_CMD=%~dp0tools\git\cmd\git.exe"
+if not exist "%GIT_CMD%" (
+    where git >nul 2>&1
+    if %errorlevel% equ 0 (
+        set "GIT_CMD=git"
+    ) else (
+        for /d %%D in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do (
+            if exist "%%D\resources\app\git\cmd\git.exe" set "GIT_CMD=%%D\resources\app\git\cmd\git.exe"
+        )
+    )
+)
 
 echo Descargando las ultimas actualizaciones de tu companero...
 "%GIT_CMD%" pull

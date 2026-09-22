@@ -78,13 +78,10 @@ local function onPlayerConnecting(name, _, deferrals)
     Wait(0)
     deferrals.update(string.format(Lang:t('info.checking_ban'), name))
 
-    if not bansTableExists then
-        return deferrals.done(Lang:t('error.ban_table_not_found'))
+    if bansTableExists then
+        local success, isBanned, reason = pcall(QBCore.Functions.IsPlayerBanned, src)
+        if success and isBanned then return deferrals.done(reason) end
     end
-
-    local success, isBanned, reason = pcall(QBCore.Functions.IsPlayerBanned, src)
-    if not success then return deferrals.done(Lang:t('error.connecting_database_error')) end
-    if isBanned then return deferrals.done(reason) end
 
     Wait(0)
     deferrals.update(string.format(Lang:t('info.join_server'), name))

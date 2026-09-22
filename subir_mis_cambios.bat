@@ -7,6 +7,16 @@ echo ========================================================
 echo.
 
 set "GIT_CMD=%~dp0tools\git\cmd\git.exe"
+if not exist "%GIT_CMD%" (
+    where git >nul 2>&1
+    if %errorlevel% equ 0 (
+        set "GIT_CMD=git"
+    ) else (
+        for /d %%D in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do (
+            if exist "%%D\resources\app\git\cmd\git.exe" set "GIT_CMD=%%D\resources\app\git\cmd\git.exe"
+        )
+    )
+)
 
 set /p COMMIT_MSG="Describe brevemente que has cambiado o anadido: "
 if "%COMMIT_MSG%"=="" set COMMIT_MSG=Actualizacion de recursos y sistemas

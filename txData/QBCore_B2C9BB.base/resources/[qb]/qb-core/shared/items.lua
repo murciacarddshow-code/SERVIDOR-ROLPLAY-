@@ -306,6 +306,10 @@ QBCore.Shared.Items = {
 
     -- Mechanic Parts
     veh_toolbox                  = { name = 'veh_toolbox', label = 'Toolbox', weight = 1000, type = 'item', image = 'veh_toolbox.png', unique = false, useable = true, shouldClose = true, description = 'Check vehicle status' },
+    veh_door                     = { name = 'veh_door', label = 'Puerta de Coche', weight = 5000, type = 'item', image = 'veh_exterior.png', unique = false, useable = true, shouldClose = true, description = 'Puerta de repuesto para colocar puertas arrancadas en accidentes' },
+    veh_hood                     = { name = 'veh_hood', label = 'Capó de Repuesto', weight = 6000, type = 'item', image = 'veh_exterior.png', unique = false, useable = true, shouldClose = true, description = 'Capó metálico de recambio' },
+    veh_trunk                    = { name = 'veh_trunk', label = 'Maletero de Repuesto', weight = 5000, type = 'item', image = 'veh_exterior.png', unique = false, useable = true, shouldClose = true, description = 'Portón de maletero de recambio' },
+    veh_wheel                    = { name = 'veh_wheel', label = 'Rueda / Neumático', weight = 4000, type = 'item', image = 'veh_wheels.png', unique = false, useable = true, shouldClose = true, description = 'Rueda de repuesto para cambiar neumáticos pinchados' },
     veh_armor                    = { name = 'veh_armor', label = 'Armor', weight = 1000, type = 'item', image = 'veh_armor.png', unique = false, useable = true, shouldClose = true, description = 'Upgrade vehicle armor' },
     veh_brakes                   = { name = 'veh_brakes', label = 'Brakes', weight = 1000, type = 'item', image = 'veh_brakes.png', unique = false, useable = true, shouldClose = true, description = 'Upgrade vehicle brakes' },
     veh_engine                   = { name = 'veh_engine', label = 'Engine', weight = 1000, type = 'item', image = 'veh_engine.png', unique = false, useable = true, shouldClose = true, description = 'Upgrade vehicle engine' },

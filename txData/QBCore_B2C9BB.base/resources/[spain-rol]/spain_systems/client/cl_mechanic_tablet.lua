@@ -9,7 +9,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 -- Comprobar si tiene trabajo de mecánico o admin
 local function IsMechanic()
     local PlayerData = QBCore.Functions.GetPlayerData()
-    return PlayerData.job and PlayerData.job.name == 'mechanic' or QBCore.Functions.HasPermission('admin')
+    return PlayerData.job and (PlayerData.job.name == 'mechanic' or PlayerData.job.name == 'bennys' or PlayerData.job.type == 'mechanic') or QBCore.Functions.HasPermission('admin')
 end
 
 -- Abrir menú de diagnóstico y tablet de mecánico
@@ -107,11 +107,17 @@ RegisterNetEvent('spain_mechanic:client:openTablet', function()
 end)
 
 -- Reparar motor y chapa
+-- Reparar motor y chapa
 RegisterNetEvent('spain_mechanic:client:fixVehicle', function(data)
-    local veh = data.veh
-    local ped = PlayerPedId()
+    local veh = data.veh or QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 6.0 then
+        QBCore.Functions.Notify('No hay ningún vehículo cerca para reparar.', 'error')
+        return
+    end
 
-    QBCore.Functions.Progressbar("mech_repair", "Mecánicos realizando reparación de motor y chapa...", 6000, false, true, {
+    SetVehicleDoorOpen(veh, 4, false, false)
+
+    QBCore.Functions.Progressbar("mech_repair", "Reparando motor, chapa y radiador...", 7000, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -120,27 +126,41 @@ RegisterNetEvent('spain_mechanic:client:fixVehicle', function(data)
         animDict = "mini@repair",
         anim = "fixing_a_ped",
         flags = 1,
-    }, {}, {}, function()
+    }, {
+        model = "prop_tool_wrench",
+        bone = 28422,
+        coords = vector3(0.06, 0.01, -0.02),
+        rotation = vector3(0.0, 0.0, 0.0),
+    }, {}, function()
+        SetVehicleDoorShut(veh, 4, false)
         SetVehicleEngineHealth(veh, 1000.0)
         SetVehicleBodyHealth(veh, 1000.0)
         SetVehicleFixed(veh)
         SetVehicleDeformationFixed(veh)
         SetVehicleUndriveable(veh, false)
         QBCore.Functions.Notify('Reparación de motor y chapa completada al 100%.', 'success')
+    end, function()
+        SetVehicleDoorShut(veh, 4, false)
+        QBCore.Functions.Notify('Reparación cancelada.', 'error')
     end)
 end)
 
 -- Reparar neumáticos
 RegisterNetEvent('spain_mechanic:client:fixTyres', function(data)
-    local veh = data.veh
-    QBCore.Functions.Progressbar("mech_tyres", "Cambiando neumáticos y equilibrando ruedas...", 4000, false, true, {
+    local veh = data.veh or QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 6.0 then
+        QBCore.Functions.Notify('No hay ningún vehículo cerca.', 'error')
+        return
+    end
+
+    QBCore.Functions.Progressbar("mech_tyres", "Cambiando neumáticos y equilibrando ruedas...", 4500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
         disableCombat = true,
     }, {
-        animDict = "mini@repair",
-        anim = "fixing_a_ped",
+        animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+        anim = "machinic_loop_mechandplayer",
         flags = 1,
     }, {}, {}, function()
         for i = 0, 7 do
@@ -152,13 +172,22 @@ end)
 
 -- Lavar vehículo
 RegisterNetEvent('spain_mechanic:client:cleanVehicle', function(data)
-    local veh = data.veh
-    QBCore.Functions.Progressbar("mech_clean", "Limpieza con pistola a presión y encerado...", 3000, false, true, {
+    local veh = data.veh or QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 6.0 then
+        QBCore.Functions.Notify('No hay ningún vehículo cerca.', 'error')
+        return
+    end
+
+    QBCore.Functions.Progressbar("mech_clean", "Limpieza con pistola a presión y encerado...", 3500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
         disableCombat = true,
-    }, {}, {}, {}, function()
+    }, {
+        animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+        anim = "machinic_loop_mechandplayer",
+        flags = 1,
+    }, {}, {}, function()
         SetVehicleDirtLevel(veh, 0.0)
         QBCore.Functions.Notify('Vehículo limpio y reluciente.', 'success')
     end)
@@ -167,11 +196,215 @@ end)
 -- Facturar a cliente
 RegisterNetEvent('spain_mechanic:client:billCustomer', function()
     local closestPlayer, closestDistance = QBCore.Functions.GetClosestPlayer()
-    if closestPlayer ~= -1 and closestDistance <= 3.0 then
+    if closestPlayer ~= -1 and closestDistance <= 3.5 then
         local targetServerId = GetPlayerServerId(closestPlayer)
-        local amount = prompt and prompt("Importe de la factura de taller (en Euros €):", "500") or 500
-        TriggerServerEvent('spain_mechanic:server:sendBill', targetServerId, tonumber(amount) or 500)
+        local dialog = exports['qb-input']:ShowInput({
+            header = "Factura de Taller - Cobrar a Cliente",
+            submitText = "Emitir Factura",
+            inputs = {
+                {
+                    text = "Importe (€)",
+                    name = "amount",
+                    type = "number",
+                    isRequired = true
+                },
+                {
+                    text = "Concepto / Descripción del servicio",
+                    name = "reason",
+                    type = "text",
+                    isRequired = false
+                }
+            }
+        })
+
+        if dialog and dialog.amount then
+            local amount = tonumber(dialog.amount)
+            if amount and amount > 0 then
+                TriggerServerEvent('spain_mechanic:server:sendBill', targetServerId, amount, dialog.reason or "Servicios de Taller")
+            else
+                QBCore.Functions.Notify('Debes ingresar un importe válido.', 'error')
+            end
+        end
     else
         QBCore.Functions.Notify('No hay ningún cliente cerca para facturar.', 'error')
     end
+end)
+
+RegisterCommand('factura', function()
+    if IsMechanic() then
+        TriggerEvent('spain_mechanic:client:billCustomer')
+    else
+        QBCore.Functions.Notify('Solo personal de talleres mecánicos puede emitir facturas.', 'error')
+    end
+end, false)
+
+-- =========================================================================
+-- INTEGRACIÓN CON QB-TARGET (INTERACCIÓN FÍSICA ESTILO ONX)
+-- =========================================================================
+CreateThread(function()
+    -- Interacción directa con el capó y motor
+    exports['qb-target']:AddTargetBone({'bonnet', 'engine'}, {
+        options = {
+            {
+                type = "client",
+                event = "spain_mechanic:client:openTablet",
+                icon = "fas fa-clipboard-check",
+                label = "Diagnosticar Motor y Averías",
+                canInteract = function() return IsMechanic() end,
+            },
+            {
+                type = "client",
+                action = function(entity)
+                    TriggerEvent("spain_mechanic:client:fixVehicle", { veh = entity })
+                end,
+                icon = "fas fa-wrench",
+                label = "Reparar Motor y Chapa",
+                canInteract = function() return IsMechanic() end,
+            },
+            {
+                type = "client",
+                action = function(entity)
+                    TriggerEvent("qb-tunerchip:client:openChip")
+                end,
+                icon = "fas fa-microchip",
+                label = "Conectar Tablet ECU (Tuning)",
+                canInteract = function() return IsMechanic() end,
+            }
+        },
+        distance = 2.2
+    })
+
+    -- Interacción directa con las ruedas
+    exports['qb-target']:AddTargetBone({'wheel_lf', 'wheel_rf', 'wheel_lr', 'wheel_rr'}, {
+        options = {
+            {
+                type = "client",
+                action = function(entity)
+                    TriggerEvent("spain_mechanic:client:fixTyres", { veh = entity })
+                end,
+                icon = "fas fa-circle-dot",
+                label = "Cambiar Rueda y Frenos",
+                canInteract = function() return IsMechanic() end,
+            }
+        },
+        distance = 1.8
+    })
+
+    -- Opciones generales al mirar el vehículo
+    exports['qb-target']:AddGlobalVehicle({
+        options = {
+            {
+                type = "client",
+                action = function(entity)
+                    TriggerEvent("spain_mechanic:client:cleanVehicle", { veh = entity })
+                end,
+                icon = "fas fa-shower",
+                label = "Limpieza y Detailing",
+                canInteract = function() return IsMechanic() end,
+            },
+            {
+                type = "client",
+                event = "spain_mechanic:client:billCustomer",
+                icon = "fas fa-file-invoice-dollar",
+                label = "Cobrar / Facturar a Cliente",
+                canInteract = function() return IsMechanic() end,
+            }
+        },
+        distance = 2.5
+    })
+end)
+
+-- =========================================================================
+-- INSTALACIÓN DE PIEZAS DE CARROCERÍA FÍSICAS (PUERTAS, CAPÓ, MALETERO, RUEDAS)
+-- =========================================================================
+
+RegisterNetEvent('spain_mechanic:client:installDoor', function()
+    local veh = QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 4.0 then
+        QBCore.Functions.Notify('Debes estar cerca de un vehículo para colocar la puerta.', 'error')
+        return
+    end
+
+    QBCore.Functions.Progressbar("mech_door", "Encajando y atornillando puerta de repuesto...", 6000, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        flags = 1,
+    }, {
+        model = "prop_tool_wrench",
+        bone = 28422,
+        coords = vector3(0.06, 0.01, -0.02),
+        rotation = vector3(0.0, 0.0, 0.0),
+    }, {}, function()
+        for i = 0, 5 do
+            SetVehicleDoorShut(veh, i, false)
+        end
+        SetVehicleBodyHealth(veh, math.min(1000.0, GetVehicleBodyHealth(veh) + 150.0))
+        SetVehicleDeformationFixed(veh)
+        QBCore.Functions.Notify('Puerta colocada y bisagras calibradas.', 'success')
+        TriggerServerEvent('spain_mechanic:server:removeRepairItem', 'veh_door')
+    end)
+end)
+
+RegisterNetEvent('spain_mechanic:client:installHood', function()
+    local veh = QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 4.0 then
+        QBCore.Functions.Notify('Debes estar frente al vehículo para colocar el capó.', 'error')
+        return
+    end
+
+    QBCore.Functions.Progressbar("mech_hood", "Montando capó de recambio...", 5000, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        flags = 1,
+    }, {}, {}, function()
+        SetVehicleDoorShut(veh, 4, false)
+        SetVehicleBodyHealth(veh, math.min(1000.0, GetVehicleBodyHealth(veh) + 150.0))
+        QBCore.Functions.Notify('Capó instalado con éxito.', 'success')
+        TriggerServerEvent('spain_mechanic:server:removeRepairItem', 'veh_hood')
+    end)
+end)
+
+RegisterNetEvent('spain_mechanic:client:installTrunk', function()
+    local veh = QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 4.0 then
+        QBCore.Functions.Notify('Debes estar detrás del vehículo para colocar el maletero.', 'error')
+        return
+    end
+
+    QBCore.Functions.Progressbar("mech_trunk", "Instalando portón del maletero...", 5000, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        flags = 1,
+    }, {}, {}, function()
+        SetVehicleDoorShut(veh, 5, false)
+        SetVehicleBodyHealth(veh, math.min(1000.0, GetVehicleBodyHealth(veh) + 150.0))
+        QBCore.Functions.Notify('Portón de maletero instalado con éxito.', 'success')
+        TriggerServerEvent('spain_mechanic:server:removeRepairItem', 'veh_trunk')
+    end)
+end)
+
+RegisterNetEvent('spain_mechanic:client:installWheel', function()
+    local veh = QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 4.0 then
+        QBCore.Functions.Notify('Debes estar cerca del neumático dañado.', 'error')
+        return
+    end
+
+    TriggerEvent('spain_mechanic:client:fixTyres', { veh = veh })
+    TriggerServerEvent('spain_mechanic:server:removeRepairItem', 'veh_wheel')
 end)

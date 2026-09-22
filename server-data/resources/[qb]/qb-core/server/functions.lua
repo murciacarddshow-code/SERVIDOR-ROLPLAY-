@@ -658,11 +658,12 @@ end
 ---@return boolean, string?
 function QBCore.Functions.IsPlayerBanned(source)
     local plicense = QBCore.Functions.GetIdentifier(source, 'license')
+    if not plicense then return false end
     local result = MySQL.single.await('SELECT id, reason, expire FROM bans WHERE license = ?', { plicense })
     if not result then return false end
-    if os.time() < result.expire then
+    if result.expire and os.time() < (tonumber(result.expire) or 0) then
         local timeTable = os.date('*t', tonumber(result.expire))
-        return true, 'You have been banned from the server:\n' .. result.reason .. '\nYour ban expires ' .. timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
+        return true, 'You have been banned from the server:\n' .. (result.reason or '') .. '\nYour ban expires ' .. timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
     else
         MySQL.query('DELETE FROM bans WHERE id = ?', { result.id })
     end
