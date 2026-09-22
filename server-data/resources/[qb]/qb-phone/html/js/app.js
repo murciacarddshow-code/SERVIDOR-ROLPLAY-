@@ -514,7 +514,8 @@ QB.Screen.Notification = function(title, content, icon, timeout, color) {
 
 $(document).on('keydown', function() {
     switch(event.keyCode) {
-        case 27: // ESCAPE
+        case 27:  // ESCAPE
+        case 112: // F1
         if (up){
             $('#popup').fadeOut('slow');
             $('.popupclass').fadeOut('slow');
@@ -525,6 +526,15 @@ $(document).on('keydown', function() {
             break;
         }
     }
+});
+
+// Desactivar movimiento del juego cuando el jugador está escribiendo en campos de texto
+$(document).on('focus', 'input, textarea', function() {
+    $.post('https://qb-phone/DisableMovement', JSON.stringify({ disable: true }));
+});
+
+$(document).on('blur', 'input, textarea', function() {
+    $.post('https://qb-phone/DisableMovement', JSON.stringify({ disable: false }));
 });
 
 QB.Screen.popUp = function(source){

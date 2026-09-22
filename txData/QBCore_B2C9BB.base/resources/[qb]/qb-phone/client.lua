@@ -207,25 +207,83 @@ local function findVehFromPlateAndLocate(plate)
     end
 end
 
+local disableMovement = false
+
+RegisterNUICallback('DisableMovement', function(data, cb)
+    disableMovement = data.disable
+    cb('ok')
+end)
+
 local function DisableDisplayControlActions()
-    DisableControlAction(0, 1, true)   -- disable mouse look
-    DisableControlAction(0, 2, true)   -- disable mouse look
-    DisableControlAction(0, 3, true)   -- disable mouse look
-    DisableControlAction(0, 4, true)   -- disable mouse look
-    DisableControlAction(0, 5, true)   -- disable mouse look
-    DisableControlAction(0, 6, true)   -- disable mouse look
-    DisableControlAction(0, 263, true) -- disable melee
-    DisableControlAction(0, 264, true) -- disable melee
-    DisableControlAction(0, 257, true) -- disable melee
-    DisableControlAction(0, 140, true) -- disable melee
-    DisableControlAction(0, 141, true) -- disable melee
-    DisableControlAction(0, 142, true) -- disable melee
-    DisableControlAction(0, 143, true) -- disable melee
-    DisableControlAction(0, 177, true) -- disable escape
-    DisableControlAction(0, 200, true) -- disable escape
-    DisableControlAction(0, 202, true) -- disable escape
-    DisableControlAction(0, 322, true) -- disable escape
-    DisableControlAction(0, 245, true) -- disable chat
+    -- Bloquear rotación de cámara con ratón para mover el cursor del móvil
+    DisableControlAction(0, 1, true)   -- Look LR
+    DisableControlAction(0, 2, true)   -- Look UD
+    DisableControlAction(0, 3, true)
+    DisableControlAction(0, 4, true)
+    DisableControlAction(0, 5, true)
+    DisableControlAction(0, 6, true)
+
+    -- Bloquear ataque, golpes y disparos al hacer click en el móvil
+    DisableControlAction(0, 24, true)  -- Attack
+    DisableControlAction(0, 25, true)  -- Aim
+    DisableControlAction(0, 47, true)  -- Weapon attack
+    DisableControlAction(0, 58, true)  -- Weapon attack
+    DisableControlAction(0, 140, true) -- Melee Attack Light
+    DisableControlAction(0, 141, true) -- Melee Attack Heavy
+    DisableControlAction(0, 142, true) -- Melee Alternate
+    DisableControlAction(0, 143, true) -- Melee Block
+    DisableControlAction(0, 257, true) -- Attack 2
+    DisableControlAction(0, 263, true) -- Melee Attack 1
+    DisableControlAction(0, 264, true) -- Melee Attack 2
+
+    -- Bloquear cambio de armas y recarga
+    DisableControlAction(0, 14, true)  -- Weapon wheel next
+    DisableControlAction(0, 15, true)  -- Weapon wheel prev
+    DisableControlAction(0, 16, true)
+    DisableControlAction(0, 17, true)
+    DisableControlAction(0, 37, true)  -- Weapon wheel
+    DisableControlAction(0, 45, true)  -- Reload
+    DisableControlAction(0, 157, true) -- Select weapon 1
+    DisableControlAction(0, 158, true) -- Select weapon 2
+    DisableControlAction(0, 159, true) -- Select weapon 3
+    DisableControlAction(0, 160, true) -- Select weapon 4
+    DisableControlAction(0, 161, true) -- Select weapon 5
+    DisableControlAction(0, 162, true) -- Select weapon 6
+    DisableControlAction(0, 163, true) -- Select weapon 7
+    DisableControlAction(0, 164, true) -- Select weapon 8
+    DisableControlAction(0, 165, true) -- Select weapon 9
+
+    -- Bloquear menús conflictivos
+    DisableControlAction(0, 177, true) -- Escape
+    DisableControlAction(0, 199, true) -- Pause Menu
+    DisableControlAction(0, 200, true) -- Pause Menu
+    DisableControlAction(0, 202, true) -- Escape
+    DisableControlAction(0, 322, true) -- Escape
+    DisableControlAction(0, 245, true) -- Chat
+
+    -- Controles básicos de movimiento
+    if disableMovement then
+        DisableControlAction(0, 30, true)
+        DisableControlAction(0, 31, true)
+        DisableControlAction(0, 32, true)
+        DisableControlAction(0, 33, true)
+        DisableControlAction(0, 34, true)
+        DisableControlAction(0, 35, true)
+    else
+        EnableControlAction(0, 30, true) -- Moverse Izq/Der (A/D)
+        EnableControlAction(0, 31, true) -- Moverse Del/Atr (W/S)
+        EnableControlAction(0, 32, true) -- Moverse W
+        EnableControlAction(0, 33, true) -- Moverse S
+        EnableControlAction(0, 34, true) -- Moverse A
+        EnableControlAction(0, 35, true) -- Moverse D
+        EnableControlAction(0, 21, true) -- Correr (Shift)
+        EnableControlAction(0, 22, true) -- Saltar (Espacio)
+        EnableControlAction(0, 23, true) -- Entrar/salir vehiculo (F)
+        EnableControlAction(0, 71, true) -- Conducir acelerar (W)
+        EnableControlAction(0, 72, true) -- Conducir frenar (S)
+        EnableControlAction(0, 59, true) -- Conducir girar (A/D)
+        EnableControlAction(0, 76, true) -- Freno de mano (Espacio)
+    end
 end
 
 local function LoadPhone()
@@ -325,6 +383,7 @@ local function OpenPhone()
         if HasPhone then
             PhoneData.PlayerData = QBCore.Functions.GetPlayerData()
             SetNuiFocus(true, true)
+            SetNuiFocusKeepInput(true)
             SendNUIMessage({
                 action = 'open',
                 Tweets = PhoneData.Tweets,
@@ -508,11 +567,41 @@ local function CellFrontCamActivate(activate)
     return Citizen.InvokeNative(0x2491A93618B7D838, activate)
 end
 
+local function ClosePhone()
+    if not PhoneData.isOpen then return end
+    if not PhoneData.CallData.InCall then
+        DoPhoneAnimation('cellphone_text_out')
+        SetTimeout(400, function()
+            StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+            deletePhone()
+            PhoneData.AnimationData.lib = nil
+            PhoneData.AnimationData.anim = nil
+        end)
+    else
+        PhoneData.AnimationData.lib = nil
+        PhoneData.AnimationData.anim = nil
+        DoPhoneAnimation('cellphone_text_to_call')
+    end
+    SetNuiFocus(false, false)
+    SetNuiFocusKeepInput(false)
+    disableMovement = false
+    SetTimeout(500, function()
+        PhoneData.isOpen = false
+    end)
+end
+
 -- Command
 
 RegisterCommand('phone', function()
     local PlayerData = QBCore.Functions.GetPlayerData()
-    if not PhoneData.isOpen and LocalPlayer.state.isLoggedIn then
+    if PhoneData.isOpen then
+        SendNUIMessage({
+            action = 'close',
+        })
+        ClosePhone()
+        return
+    end
+    if LocalPlayer.state.isLoggedIn then
         if not PlayerData.metadata['ishandcuffed'] and not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] and not IsPauseMenuActive() then
             OpenPhone()
         else
@@ -521,7 +610,7 @@ RegisterCommand('phone', function()
     end
 end)
 
-RegisterKeyMapping('phone', 'Open Phone', 'keyboard', Config.OpenPhone)
+RegisterKeyMapping('phone', 'Abrir Telefono', 'keyboard', Config.OpenPhone)
 
 -- NUI Callbacks
 
@@ -584,23 +673,7 @@ RegisterNUICallback('RemoveMail', function(data, cb)
 end)
 
 RegisterNUICallback('Close', function(_, cb)
-    if not PhoneData.CallData.InCall then
-        DoPhoneAnimation('cellphone_text_out')
-        SetTimeout(400, function()
-            StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
-            deletePhone()
-            PhoneData.AnimationData.lib = nil
-            PhoneData.AnimationData.anim = nil
-        end)
-    else
-        PhoneData.AnimationData.lib = nil
-        PhoneData.AnimationData.anim = nil
-        DoPhoneAnimation('cellphone_text_to_call')
-    end
-    SetNuiFocus(false, false)
-    SetTimeout(500, function()
-        PhoneData.isOpen = false
-    end)
+    ClosePhone()
     cb('ok')
 end)
 
