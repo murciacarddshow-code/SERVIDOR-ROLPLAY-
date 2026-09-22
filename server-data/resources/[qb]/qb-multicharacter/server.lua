@@ -120,6 +120,23 @@ RegisterNetEvent('qb-multicharacter:server:createCharacter', function(data)
         repeat
             Wait(10)
         until hasDonePreloading[src]
+
+        local Player = QBCore.Functions.GetPlayer(src)
+        if Player then
+            local defaultModel = (data.gender == 1) and 'mp_f_freemode_01' or 'mp_m_freemode_01'
+            local citizenid = Player.PlayerData.citizenid
+            MySQL.query('SELECT id FROM playerskins WHERE citizenid = ?', { citizenid }, function(result)
+                if not result or not result[1] then
+                    MySQL.insert('INSERT INTO playerskins (citizenid, model, skin, active) VALUES (?, ?, ?, 1)', {
+                        citizenid,
+                        defaultModel,
+                        '{}'
+                    })
+                end
+            end)
+            Player.Functions.Save()
+        end
+
         if GetResourceState('qb-apartments') == 'started' and Apartments.Starting then
             local randbucket = (GetPlayerPed(src) .. math.random(1, 999))
             SetPlayerRoutingBucket(src, randbucket)
@@ -200,10 +217,18 @@ end)
 
 QBCore.Functions.CreateCallback('qb-multicharacter:server:getSkin', function(_, cb, cid)
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { cid, 1 })
-    if result[1] ~= nil then
+    if result[1] ~= nil and result[1].model ~= nil then
         cb(result[1].model, result[1].skin)
     else
-        cb(nil)
+        local ply = MySQL.query.await('SELECT charinfo FROM players WHERE citizenid = ?', { cid })
+        local defaultModel = 'mp_m_freemode_01'
+        if ply and ply[1] and ply[1].charinfo then
+            local cInfo = json.decode(ply[1].charinfo)
+            if cInfo and cInfo.gender == 1 then
+                defaultModel = 'mp_f_freemode_01'
+            end
+        end
+        cb(defaultModel, '{}')
     end
 end)
 

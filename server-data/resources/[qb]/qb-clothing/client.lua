@@ -1034,18 +1034,40 @@ RegisterNetEvent('qb-clothes:client:CreateFirstCharacter', function()
     end)
 end)
 
-RegisterNetEvent('qb-clothes:loadSkin', function(_, model, data)
-    model = model ~= nil and tonumber(model) or false
+RegisterNetEvent('qb-clothes:loadSkin', function(isNew, model, data)
     Citizen.CreateThread(function()
-        RequestModel(model)
-        while not HasModelLoaded(model) do
-            RequestModel(model)
-            Citizen.Wait(0)
+        local pedModel = nil
+        if model then
+            pedModel = tonumber(model) or GetHashKey(model)
         end
-        SetPlayerModel(PlayerId(), model)
-        SetPedComponentVariation(PlayerPedId(), 0, 0, 0, 2)
-        data = json.decode(data)
-        TriggerEvent('qb-clothing:client:loadPlayerClothing', data, PlayerPedId())
+        if not pedModel or pedModel == 0 then
+            local pData = QBCore.Functions.GetPlayerData()
+            local gender = (pData and pData.charinfo and pData.charinfo.gender) or 0
+            pedModel = (gender == 1) and `mp_f_freemode_01` or `mp_m_freemode_01`
+        end
+
+        RequestModel(pedModel)
+        local timeout = 0
+        while not HasModelLoaded(pedModel) and timeout < 100 do
+            Wait(50)
+            timeout = timeout + 1
+        end
+
+        if HasModelLoaded(pedModel) then
+            SetPlayerModel(PlayerId(), pedModel)
+            SetPedComponentVariation(PlayerPedId(), 0, 0, 0, 2)
+        end
+
+        if data then
+            local decoded = type(data) == 'table' and data or json.decode(data)
+            if decoded then
+                TriggerEvent('qb-clothing:client:loadPlayerClothing', decoded, PlayerPedId())
+            end
+        end
+
+        if isNew then
+            TriggerEvent('qb-clothes:client:CreateFirstCharacter')
+        end
     end)
 end)
 

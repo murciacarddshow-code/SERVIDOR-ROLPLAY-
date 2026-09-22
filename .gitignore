@@ -12,7 +12,10 @@ tools/
 server-data/cache/
 server-data/crashometry/
 server-data/db/
-txData/
+txData/*/cache/
+txData/*/logs/
+txData/default/logs/
+txData/default/data/*.backup.json
 *.log
 *.tmp
 .system_generated/

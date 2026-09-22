@@ -1,29 +1,41 @@
-local QBCore = exports['qb-core']:GetCoreObject({ 'Functions' })
+local QBCore = exports['qb-core']:GetCoreObject()
 
 RegisterServerEvent('qb-clothing:saveSkin', function(model, skin)
     local src = source
-    local Player = exports['qb-core']:GetPlayer(src)
+    local Player = QBCore.Functions.GetPlayer(src) or exports['qb-core']:GetPlayer(src)
+    if not Player then return end
     if model ~= nil and skin ~= nil then
-        -- TODO: Update primary key to be citizenid so this can be an insert on duplicate update query
-        MySQL.query('DELETE FROM playerskins WHERE citizenid = ?', { Player.PlayerData.citizenid }, function()
-            MySQL.insert('INSERT INTO playerskins (citizenid, model, skin, active) VALUES (?, ?, ?, ?)', {
-                Player.PlayerData.citizenid,
-                model,
-                skin,
-                1
-            })
+        local citizenid = Player.PlayerData.citizenid
+        local modelStr = tostring(model)
+        MySQL.query('SELECT id FROM playerskins WHERE citizenid = ?', { citizenid }, function(result)
+            if result and result[1] then
+                MySQL.update('UPDATE playerskins SET model = ?, skin = ?, active = 1 WHERE citizenid = ?', {
+                    modelStr,
+                    skin,
+                    citizenid
+                })
+            else
+                MySQL.insert('INSERT INTO playerskins (citizenid, model, skin, active) VALUES (?, ?, ?, 1)', {
+                    citizenid,
+                    modelStr,
+                    skin
+                })
+            end
         end)
     end
 end)
 
 RegisterServerEvent('qb-clothes:loadPlayerSkin', function()
     local src = source
-    local Player = exports['qb-core']:GetPlayer(src)
+    local Player = QBCore.Functions.GetPlayer(src) or exports['qb-core']:GetPlayer(src)
+    if not Player then return end
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { Player.PlayerData.citizenid, 1 })
-    if result[1] ~= nil then
+    if result and result[1] and result[1].model and result[1].skin then
         TriggerClientEvent('qb-clothes:loadSkin', src, false, result[1].model, result[1].skin)
     else
-        TriggerClientEvent('qb-clothes:loadSkin', src, true)
+        local gender = (Player.PlayerData.charinfo and Player.PlayerData.charinfo.gender) or 0
+        local defaultModel = (gender == 1) and 'mp_f_freemode_01' or 'mp_m_freemode_01'
+        TriggerClientEvent('qb-clothes:loadSkin', src, true, defaultModel, nil)
     end
 end)
 
