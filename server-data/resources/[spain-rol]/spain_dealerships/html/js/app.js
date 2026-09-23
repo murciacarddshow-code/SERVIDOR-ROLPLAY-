@@ -133,7 +133,8 @@ function renderCatalog() {
 
     if (filtered.length === 0) {
         grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">
-            <h3>No se encontraron vehículos en esta categoría o búsqueda.</h3>
+            <h3 style="color:var(--text-primary); margin-bottom:8px;">No hay vehículos en stock en este compra-venta</h3>
+            <p>El catálogo se compone exclusivamente de coches comprados a ciudadanos. ¡Vende tu vehículo aquí para añadirlo al stock!</p>
         </div>`;
         return;
     }
@@ -151,6 +152,9 @@ function renderCatalog() {
                 <div class="vehicle-title-price">
                     <div>
                         <h3>${veh.label}</h3>
+                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                            Matrícula: <strong style="color:#facc15;">${veh.plate}</strong> &bull; Origen: <strong>${veh.sellerName}</strong>
+                        </div>
                     </div>
                     <div class="vehicle-price-tag">${formatCurrency(veh.price)}</div>
                 </div>
@@ -174,8 +178,8 @@ function renderCatalog() {
                     </div>
                 </div>
 
-                <button class="btn-buy-card" onclick="openBuyModal('${veh.model}')">
-                    <span>🛒 Comprar para mi Garaje</span>
+                <button class="btn-buy-card" onclick="openBuyModal(${veh.stockId})">
+                    <span>🛒 Comprar este Vehículo</span>
                 </button>
             </div>
         `;
@@ -311,8 +315,8 @@ function renderHistory() {
 // --------------------------------------------------------------------------
 
 // 1. Modal Comprar
-window.openBuyModal = function(model) {
-    const veh = appState.catalog.find(v => v.model === model);
+window.openBuyModal = function(stockId) {
+    const veh = appState.catalog.find(v => v.stockId === parseInt(stockId));
     if (!veh) return;
     appState.selectedBuyVeh = veh;
 
@@ -322,13 +326,14 @@ window.openBuyModal = function(model) {
             <img src="${veh.image}" style="width:130px; height:80px; object-fit:contain; background:rgba(0,0,0,0.3); border-radius:8px;">
             <div>
                 <h4 style="font-size:1.2rem; color:#fff;">${veh.label}</h4>
-                <p style="color:var(--text-muted); font-size:0.85rem;">Marca: ${veh.brand} | Categoría: ${veh.category}</p>
+                <p style="color:var(--text-muted); font-size:0.85rem;">Marca: ${veh.brand} &bull; Matrícula: <strong style="color:#facc15;">${veh.plate}</strong></p>
+                <p style="color:var(--text-muted); font-size:0.80rem;">Vendedor original: <strong>${veh.sellerName}</strong></p>
                 <div style="margin-top:6px; font-size:1.3rem; font-weight:800; color:var(--accent-emerald);">${formatCurrency(veh.price)}</div>
             </div>
         </div>
         <div style="background:rgba(59, 130, 246, 0.1); border:1px solid rgba(59, 130, 246, 0.25); padding:12px; border-radius:8px; font-size:0.84rem; margin-top:8px;">
             ℹ️ El importe de <strong>${formatCurrency(veh.price)}</strong> se cargará directamente en tu <strong>cuenta bancaria</strong>. 
-            El vehículo será matriculado a tu nombre y quedará estacionado listo en tu <strong>Garaje Central (Pillbox)</strong>.
+            El vehículo mantendrá todas sus modificaciones y mejoras mecánicas, y quedará estacionado listo en tu <strong>Garaje Central (Pillbox)</strong>.
         </div>
     `;
 
@@ -345,9 +350,7 @@ document.getElementById('modal-buy-confirm').onclick = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            model: appState.selectedBuyVeh.model,
-            price: appState.selectedBuyVeh.price,
-            label: appState.selectedBuyVeh.label,
+            stockId: appState.selectedBuyVeh.stockId,
             dealershipId: appState.dealershipId
         })
     }).catch(() => {});
