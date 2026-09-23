@@ -410,4 +410,43 @@ QBCore.Shared.Jobs = {
 			['4'] = { name = 'Manager', isboss = true, payment = 150 },
 		},
 	},
+	dealership_sur = {
+		label = 'Motors Sur Ocasión',
+		type = 'dealer',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+			['0'] = { name = 'En Prácticas', payment = 55 },
+			['1'] = { name = 'Comercial Junior', payment = 85 },
+			['2'] = { name = 'Vendedor Senior', payment = 115 },
+			['3'] = { name = 'Gerente de Ventas', isboss = true, payment = 160 },
+			['4'] = { name = 'Dueño / Propietario', isboss = true, payment = 220 },
+		},
+	},
+	dealership_sandy = {
+		label = 'Desert Motors Sandy',
+		type = 'dealer',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+			['0'] = { name = 'En Prácticas', payment = 55 },
+			['1'] = { name = 'Comercial Junior', payment = 85 },
+			['2'] = { name = 'Vendedor Senior', payment = 115 },
+			['3'] = { name = 'Gerente de Ventas', isboss = true, payment = 160 },
+			['4'] = { name = 'Dueño / Propietario', isboss = true, payment = 220 },
+		},
+	},
+	dealership_paleto = {
+		label = 'Costa Norte Motors',
+		type = 'dealer',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+			['0'] = { name = 'En Prácticas', payment = 55 },
+			['1'] = { name = 'Comercial Junior', payment = 85 },
+			['2'] = { name = 'Vendedor Senior', payment = 115 },
+			['3'] = { name = 'Gerente de Ventas', isboss = true, payment = 160 },
+			['4'] = { name = 'Dueño / Propietario', isboss = true, payment = 220 },
+		},
+	},
 }
