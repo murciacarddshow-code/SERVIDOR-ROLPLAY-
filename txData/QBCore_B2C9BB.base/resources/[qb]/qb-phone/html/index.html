@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="./css/trucker.css">
     <link rel="stylesheet" href="./css/gallery.css">
     <link rel="stylesheet" href="./css/camera.css">
+    <link rel="stylesheet" href="./css/workshop.css">
 
     <!-- CDN's -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <!-- JQuery -->
@@ -1093,6 +1094,91 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Workshop Boss App -->
+                    <div class="workshop-app">
+                        <div class="workshop-app-header">
+                            <div class="workshop-header-info">
+                                <span class="workshop-title"><i class="fas fa-wrench"></i> <span id="workshop-header-name">Taller Mecánico</span></span>
+                                <span class="workshop-subtitle" id="workshop-boss-name">Jefe de Taller</span>
+                            </div>
+                            <span class="workshop-badge">Jefatura</span>
+                        </div>
+
+                        <div class="workshop-nav">
+                            <div class="workshop-tab-btn active" data-tab="finance">
+                                <i class="fas fa-wallet"></i> Finanzas
+                            </div>
+                            <div class="workshop-tab-btn" data-tab="employees">
+                                <i class="fas fa-users-cog"></i> Personal
+                            </div>
+                            <div class="workshop-tab-btn" data-tab="salaries">
+                                <i class="fas fa-money-bill-wave"></i> Sueldos
+                            </div>
+                        </div>
+
+                        <div class="workshop-content">
+                            <!-- Tab 1: Finanzas -->
+                            <div class="workshop-section active" id="workshop-sec-finance">
+                                <div class="workshop-bank-card">
+                                    <div class="workshop-bank-label">
+                                        <span>Fondos de la Empresa</span>
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div class="workshop-bank-balance" id="workshop-balance-display">0 €</div>
+                                    <div class="workshop-bank-sub">Cuenta de Sociedad Activa</div>
+                                </div>
+
+                                <div class="workshop-action-grid">
+                                    <div class="workshop-action-btn deposit" id="workshop-deposit-trigger">
+                                        <i class="fas fa-arrow-down"></i>
+                                        <span>Ingresar Fondos</span>
+                                    </div>
+                                    <div class="workshop-action-btn withdraw" id="workshop-withdraw-trigger">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>Retirar Fondos</span>
+                                    </div>
+                                </div>
+
+                                <div class="workshop-info-pill">
+                                    <i class="fas fa-info-circle"></i>
+                                    <div>
+                                        <strong>Sistema de Facturación ONX:</strong> El 80% de cada factura emitida por los mecánicos ingresa directamente a esta cuenta bancaria para suministros y salarios. El 20% se abona al empleado como comisión directa.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Personal -->
+                            <div class="workshop-section" id="workshop-sec-employees">
+                                <div class="workshop-hire-bar">
+                                    <button class="workshop-hire-btn" id="workshop-hire-trigger">
+                                        <i class="fas fa-user-plus"></i> Contratar Ciudadano Cercano
+                                    </button>
+                                </div>
+                                <div id="workshop-employees-list"></div>
+                            </div>
+
+                            <!-- Tab 3: Sueldos -->
+                            <div class="workshop-section" id="workshop-sec-salaries">
+                                <div style="font-size: 1.1vh; color: #94a3b8; margin-bottom: 1vh; padding: 0 0.2vh;">
+                                    Ajusta el salario por hora en euros (€) de cada puesto del taller:
+                                </div>
+                                <div id="workshop-salaries-list"></div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Diálogo -->
+                        <div class="workshop-modal-overlay" id="workshop-modal">
+                            <div class="workshop-modal-box">
+                                <div class="workshop-modal-title" id="workshop-modal-title">Título Modal</div>
+                                <div id="workshop-modal-body"></div>
+                                <div class="workshop-modal-buttons">
+                                    <button class="workshop-modal-btn cancel" id="workshop-modal-cancel">Cancelar</button>
+                                    <button class="workshop-modal-btn confirm" id="workshop-modal-confirm">Confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="phone-currentcall-container">
@@ -1141,6 +1227,7 @@
         <script src="./js/trucker.js"></script>
         <script src="./js/gallery.js"></script>
         <script src="./js/camera.js"></script>
+        <script src="./js/workshop.js"></script>
         <script type="text/javascript">$('#whatsapp-openedchat-message').emojioneArea({inline: true, searchPosition: "bottom", shortnames: true})</script>
         <!-- <script type="text/javascript">$('#tweet-new-message').emojioneArea({pickerPostion: 'bottom' ,inline: true, shortnames: true})</script> -->
     </body>

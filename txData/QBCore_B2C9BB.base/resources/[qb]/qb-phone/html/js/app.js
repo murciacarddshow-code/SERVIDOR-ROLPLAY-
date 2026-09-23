@@ -64,7 +64,15 @@ QB.Phone.Functions.SetupApplications = function(data) {
         var applicationSlot = $(".phone-applications").find('[data-appslot="'+app.slot+'"]');
         var blockedapp = IsAppJobBlocked(app.blockedjobs, QB.Phone.Data.PlayerJob.name)
 
-        if ((!app.job || app.job === QB.Phone.Data.PlayerJob.name) && !blockedapp) {
+        var isBossCheck = true;
+        if (app.isboss) {
+            var jobName = QB.Phone.Data.PlayerJob ? QB.Phone.Data.PlayerJob.name : '';
+            var isBoss = QB.Phone.Data.PlayerJob ? QB.Phone.Data.PlayerJob.isboss : false;
+            var isMechJob = (jobName === 'bennys' || jobName === 'canals' || jobName === 'mechanic' || (QB.Phone.Data.PlayerJob && QB.Phone.Data.PlayerJob.type === 'mechanic'));
+            isBossCheck = (isBoss && isMechJob);
+        }
+
+        if ((!app.job || app.job === QB.Phone.Data.PlayerJob.name) && !blockedapp && isBossCheck) {
             $(applicationSlot).css({"background-color":app.color});
             var icon = '<i class="ApplicationIcon '+app.icon+'" style="'+app.style+'"></i>';
             if (app.app == "meos") {
@@ -228,6 +236,8 @@ $(document).on('click', '.phone-application', function(e){
                         setUpCameraApp(url)
                     })
                     QB.Phone.Functions.Close();
+                } else if (PressedApplication == "workshop") {
+                    SetupWorkshopApp();
                 }
 
                 
