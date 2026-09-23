@@ -29,7 +29,9 @@ client_scripts {
     'client/cl_job_center.lua',
     'client/cl_jobs_engine.lua',
     'client/cl_pokemon.lua',
-    'client/cl_chat_rp.lua'
+    'client/cl_chat_rp.lua',
+    'client/cl_player_ids.lua',
+    'client/cl_ipl_loader.lua'
 }
 
 server_scripts {

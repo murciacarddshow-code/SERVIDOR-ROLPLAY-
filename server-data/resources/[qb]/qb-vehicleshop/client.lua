@@ -427,6 +427,18 @@ end
 function Init()
     Initialized = true
 
+    -- Cargar interior y colisiones de PDM (Simeon Showroom)
+    RequestIpl("shr_int")
+    RequestIpl("shutter_open")
+    RemoveIpl("shutter_closed")
+    RequestIpl("csr_beforeMission")
+    local simeonInterior = GetInteriorAtCoords(-45.67, -1098.34, 26.42)
+    if IsValidInterior(simeonInterior) then
+        PinInteriorInMemory(simeonInterior)
+        RefreshInterior(simeonInterior)
+    end
+    RequestCollisionAtCoord(-45.67, -1098.34, 26.42)
+
     -- Filter out deleted/invalid showroom vehicles before spawning them
     local currentVehicles = exports['qb-core']:GetShared('Vehicles') or sharedVehicles
     if currentVehicles and next(currentVehicles) then
