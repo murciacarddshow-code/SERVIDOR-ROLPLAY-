@@ -1,1 +1,447 @@
-<script src="index.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Spain Rol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="admin-app" style="display: none;">
+        <!-- Panel Principal -->
+        <div class="dashboard-container">
+            
+            <!-- Barra Superior (Header) -->
+            <header class="dashboard-header">
+                <div class="header-branding">
+                    <div class="logo-badge">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h2>SPAIN ROL <span>ADMINISTRATION</span></h2>
+                        <p class="subtitle">Panel de Control & Moderación v2.0</p>
+                    </div>
+                </div>
+
+                <div class="header-stats">
+                    <div class="stat-pill">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Online: <strong id="stat-online-count">0</strong></span>
+                    </div>
+                    <div class="stat-pill admin-badge">
+                        <i class="fa-solid fa-crown"></i>
+                        <span id="stat-admin-name">Administrador</span>
+                    </div>
+                    <button id="btn-close-app" class="btn-close" title="Cerrar panel (ESC)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Cuerpo del Dashboard -->
+            <div class="dashboard-body">
+                <!-- Barra de Navegación Lateral -->
+                <aside class="dashboard-sidebar">
+                    <nav class="nav-menu">
+                        <button class="nav-btn active" data-tab="tab-players">
+                            <i class="fa-solid fa-user-group"></i>
+                            <span>Jugadores</span>
+                        </button>
+                        <button class="nav-btn" data-tab="tab-staff">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Opciones Staff</span>
+                        </button>
+                        <button class="nav-btn" data-tab="tab-vehicles">
+                            <i class="fa-solid fa-car"></i>
+                            <span>Vehículos</span>
+                        </button>
+                        <button class="nav-btn" data-tab="tab-server">
+                            <i class="fa-solid fa-cloud-sun"></i>
+                            <span>Mundo & Clima</span>
+                        </button>
+                    </nav>
+
+                    <div class="sidebar-footer">
+                        <div class="server-status">
+                            <div class="status-dot"></div>
+                            <span>Servidor Activo (30120)</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Área de Contenido Principal -->
+                <main class="dashboard-content">
+
+                    <!-- PESTAÑA: JUGADORES -->
+                    <section id="tab-players" class="content-tab active">
+                        <div class="section-toolbar">
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="input-player-search" placeholder="Buscar por ID, nombre de personaje o cuenta...">
+                                <button id="btn-clear-search" class="btn-icon" style="display: none;">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <button id="btn-refresh-players" class="btn-secondary">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                                <span>Actualizar</span>
+                            </button>
+                        </div>
+
+                        <!-- Lista de Jugadores Grid -->
+                        <div class="players-scroll-wrapper">
+                            <div id="players-list-grid" class="players-grid">
+                                <!-- Se llena dinámicamente desde JS -->
+                            </div>
+                            <div id="no-players-alert" class="empty-state" style="display: none;">
+                                <i class="fa-solid fa-user-slash"></i>
+                                <p>No se encontraron jugadores que coincidan con la búsqueda.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PESTAÑA: OPCIONES STAFF -->
+                    <section id="tab-staff" class="content-tab">
+                        <div class="section-title">
+                            <h3><i class="fa-solid fa-user-shield"></i> Acciones Personales de Administrador</h3>
+                            <p>Herramientas y modos de ayuda directa para la moderación del servidor.</p>
+                        </div>
+
+                        <div class="cards-grid">
+                            <div class="admin-card">
+                                <h4><i class="fa-solid fa-person-burst"></i> Modos Rápidos</h4>
+                                <div class="card-actions">
+                                    <button class="action-btn toggle-btn" id="btn-toggle-godmode">
+                                        <i class="fa-solid fa-shield"></i>
+                                        <span>Modo Dios</span>
+                                        <div class="toggle-indicator"></div>
+                                    </button>
+                                    <button class="action-btn toggle-btn" id="btn-toggle-noclip">
+                                        <i class="fa-solid fa-ghost"></i>
+                                        <span>NoClip (Volar)</span>
+                                        <div class="toggle-indicator"></div>
+                                    </button>
+                                    <button class="action-btn toggle-btn" id="btn-toggle-invisible">
+                                        <i class="fa-solid fa-eye-slash"></i>
+                                        <span>Invisibilidad</span>
+                                        <div class="toggle-indicator"></div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="admin-card">
+                                <h4><i class="fa-solid fa-heart-pulse"></i> Salud & Teletransporte</h4>
+                                <div class="card-actions">
+                                    <button class="action-btn" id="btn-self-revive">
+                                        <i class="fa-solid fa-suitcase-medical"></i>
+                                        <span>Revivir & Curarme</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-self-tpm">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span>Ir al Marcador (TPM)</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-self-skin">
+                                        <i class="fa-solid fa-shirt"></i>
+                                        <span>Abrir Menú Ropa (/skin)</span>
+                                    </button>
+                                    <button class="action-btn btn-danger-action" id="btn-self-suicide">
+                                        <i class="fa-solid fa-skull"></i>
+                                        <span>Suicidarme</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PESTAÑA: VEHÍCULOS -->
+                    <section id="tab-vehicles" class="content-tab">
+                        <div class="section-title">
+                            <h3><i class="fa-solid fa-car"></i> Gestión & Spawn de Vehículos</h3>
+                            <p>Aparece, modifica y administra vehículos de forma instantánea.</p>
+                        </div>
+
+                        <div class="cards-grid">
+                            <div class="admin-card">
+                                <h4><i class="fa-solid fa-plus"></i> Generador de Vehículo</h4>
+                                <div class="spawn-form">
+                                    <input type="text" id="input-spawn-veh" placeholder="Ejemplo: adder, sultan, panto, t20...">
+                                    <button id="btn-spawn-vehicle" class="btn-primary">
+                                        <i class="fa-solid fa-key"></i> Aparecer
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="admin-card">
+                                <h4><i class="fa-solid fa-wrench"></i> Herramientas de Vehículo</h4>
+                                <div class="card-actions">
+                                    <button class="action-btn" id="btn-veh-repair">
+                                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                                        <span>Reparar Vehículo</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-veh-clean">
+                                        <i class="fa-solid fa-soap"></i>
+                                        <span>Limpiar Suciedad</span>
+                                    </button>
+                                    <button class="action-btn" id="btn-veh-maxtune">
+                                        <i class="fa-solid fa-gauge-high"></i>
+                                        <span>Tuning Máximo (Max Performance)</span>
+                                    </button>
+                                    <button class="action-btn btn-danger-action" id="btn-veh-delete">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                        <span>Eliminar Vehículo (/dv)</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PESTAÑA: MUNDO & CLIMA -->
+                    <section id="tab-server" class="content-tab">
+                        <div class="section-title">
+                            <h3><i class="fa-solid fa-cloud-sun"></i> Clima, Hora y Servidor</h3>
+                            <p>Control del entorno y herramientas globales.</p>
+                        </div>
+
+                        <div class="cards-grid">
+                            <div class="admin-card">
+                                <h4><i class="fa-solid fa-cloud"></i> Clima</h4>
+                                <div class="weather-grid">
+                                    <button class="btn-weather" data-weather="EXTRASUNNY"><i class="fa-solid fa-sun"></i> Despejado</button>
+                                    <button class="btn-weather" data-weather="CLEAR"><i class="fa-solid fa-cloud-sun"></i> Claro</button>
+                                    <button class="btn-weather" data-weather="CLOUDS"><i class="fa-solid fa-cloud"></i> Nublado</button>
+                                    <button class="btn-weather" data-weather="RAIN"><i class="fa-solid fa-cloud-showers-heavy"></i> Lluvia</button>
+                                    <button class="btn-weather" data-weather="THUNDER"><i class="fa-solid fa-bolt"></i> Tormenta</button>
+                                    <button class="btn-weather" data-weather="FOGGY"><i class="fa-solid fa-smog"></i> Niebla</button>
+                                </div>
+                            </div>
+
+                            <div class="admin-card">
+                                <h4><i class="fa-solid fa-clock"></i> Hora del Día</h4>
+                                <div class="time-grid">
+                                    <button class="btn-time" data-hour="9" data-minute="0"><i class="fa-solid fa-sun"></i> Mañana (09:00)</button>
+                                    <button class="btn-time" data-hour="12" data-minute="0"><i class="fa-solid fa-sun-plant-wilt"></i> Mediodía (12:00)</button>
+                                    <button class="btn-time" data-hour="19" data-minute="0"><i class="fa-solid fa-mountain-sun"></i> Atardecer (19:00)</button>
+                                    <button class="btn-time" data-hour="0" data-minute="0"><i class="fa-solid fa-moon"></i> Noche (00:00)</button>
+                                </div>
+                            </div>
+
+                            <div class="admin-card full-width">
+                                <h4><i class="fa-solid fa-bullhorn"></i> Anuncio Global para Todos los Jugadores</h4>
+                                <div class="announcement-form">
+                                    <input type="text" id="input-global-announcement" placeholder="Escribe el mensaje del anuncio oficial...">
+                                    <button id="btn-send-announcement" class="btn-primary">
+                                        <i class="fa-solid fa-paper-plane"></i> Enviar a Todos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </main>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- MODAL FLOTANTE: GESTIÓN ESPECÍFICA DE JUGADOR SELECCIONADO -->
+        <!-- ======================================================== -->
+        <div id="modal-player-actions" class="modal-overlay" style="display: none;">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <div class="player-summary">
+                        <div class="player-avatar-circle">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="player-info-text">
+                            <div class="player-name-row">
+                                <h3 id="modal-p-charname">Nombre Personaje</h3>
+                                <span class="id-tag" id="modal-p-id">ID: 1</span>
+                            </div>
+                            <p class="account-tag"><i class="fa-brands fa-steam"></i> <span id="modal-p-account">Cuenta</span> | CID: <span id="modal-p-citizenid">CID</span></p>
+                        </div>
+                    </div>
+                    <button class="btn-close-modal" id="btn-close-player-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Datos Rápidos del Jugador -->
+                <div class="player-badges-row">
+                    <div class="badge-item">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>Trabajo: <strong id="modal-p-job">Desempleado</strong></span>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fa-solid fa-money-bill-wave text-green"></i>
+                        <span>Efectivo: <strong id="modal-p-cash">$0</strong></span>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fa-solid fa-building-columns text-blue"></i>
+                        <span>Banco: <strong id="modal-p-bank">$0</strong></span>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fa-solid fa-heart-pulse text-red"></i>
+                        <span>Salud: <strong id="modal-p-health">100%</strong></span>
+                    </div>
+                </div>
+
+                <!-- Matriz de Acciones para el Jugador -->
+                <div class="modal-actions-container">
+                    <h4 class="actions-group-title">ACCIONES DE GESTIÓN Y ECONOMÍA</h4>
+                    <div class="actions-button-grid">
+                        <button class="btn-action-tile btn-money-give" id="btn-act-givemoney">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Dar Dinero</span>
+                        </button>
+                        <button class="btn-action-tile btn-money-take" id="btn-act-removemoney">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span>Quitar Dinero</span>
+                        </button>
+                        <button class="btn-action-tile btn-job" id="btn-act-setjob">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span>Dar Trabajo (Job)</span>
+                        </button>
+                        <button class="btn-action-tile btn-revive" id="btn-act-revive">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                            <span>Revivir & Curar</span>
+                        </button>
+                    </div>
+
+                    <h4 class="actions-group-title">TELETRANSPORTE Y CONTROL</h4>
+                    <div class="actions-button-grid">
+                        <button class="btn-action-tile" id="btn-act-goto">
+                            <i class="fa-solid fa-person-walking-arrow-right"></i>
+                            <span>Ir al Jugador</span>
+                        </button>
+                        <button class="btn-action-tile" id="btn-act-bring">
+                            <i class="fa-solid fa-magnet"></i>
+                            <span>Traer Jugador</span>
+                        </button>
+                        <button class="btn-action-tile" id="btn-act-freeze">
+                            <i class="fa-solid fa-snowflake"></i>
+                            <span id="label-act-freeze">Congelar</span>
+                        </button>
+                        <button class="btn-action-tile" id="btn-act-inventory">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <span>Ver Inventario</span>
+                        </button>
+                        <button class="btn-action-tile" id="btn-act-skin">
+                            <i class="fa-solid fa-shirt"></i>
+                            <span>Dar Menú Ropa</span>
+                        </button>
+                        <button class="btn-action-tile btn-danger-action" id="btn-act-kill">
+                            <i class="fa-solid fa-skull"></i>
+                            <span>Matar</span>
+                        </button>
+                    </div>
+
+                    <h4 class="actions-group-title text-red">SANCIONES</h4>
+                    <div class="actions-button-grid">
+                        <button class="btn-action-tile btn-kick" id="btn-act-kick">
+                            <i class="fa-solid fa-door-open"></i>
+                            <span>Expulsar (Kick)</span>
+                        </button>
+                        <button class="btn-action-tile btn-ban" id="btn-act-ban">
+                            <i class="fa-solid fa-gavel"></i>
+                            <span>Banear Jugador</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SUB-MODAL: DAR / QUITAR DINERO -->
+        <!-- ======================================================== -->
+        <div id="submodal-money" class="modal-overlay submodal" style="display: none;">
+            <div class="submodal-card">
+                <h3 id="submodal-money-title"><i class="fa-solid fa-coins"></i> Gestión de Dinero</h3>
+                <div class="form-group">
+                    <label>Tipo de Dinero:</label>
+                    <div class="radio-chips">
+                        <label class="chip"><input type="radio" name="money-type" value="cash" checked> <span>Efectivo</span></label>
+                        <label class="chip"><input type="radio" name="money-type" value="bank"> <span>Banco</span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad ($):</label>
+                    <input type="number" id="input-money-amount" placeholder="Ej: 50000" min="1">
+                </div>
+                <div class="submodal-footer">
+                    <button class="btn-secondary" id="btn-cancel-money">Cancelar</button>
+                    <button class="btn-primary" id="btn-confirm-money">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SUB-MODAL: ASIGNAR TRABAJO (SET JOB) -->
+        <!-- ======================================================== -->
+        <div id="submodal-job" class="modal-overlay submodal" style="display: none;">
+            <div class="submodal-card">
+                <h3><i class="fa-solid fa-briefcase"></i> Asignar Trabajo (Job)</h3>
+                <div class="form-group">
+                    <label>Selecciona el Trabajo:</label>
+                    <select id="select-job-name">
+                        <option value="unemployed">Desempleado (Paro)</option>
+                        <option value="police">Policía Nacional</option>
+                        <option value="ambulance">Médico / EMS (112)</option>
+                        <option value="mechanic">Mecánico de Taller</option>
+                        <option value="cardealer">Compra-Venta de Coches</option>
+                        <option value="taxi">Taxista</option>
+                        <option value="tow">Grúa de Servicio</option>
+                        <option value="trucker">Camionero</option>
+                        <option value="garbage">Basurero</option>
+                        <option value="reporter">Periodista</option>
+                        <option value="lawyer">Abogado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rango / Grado:</label>
+                    <select id="select-job-grade">
+                        <option value="0">Grado 0 (Novato / Aprendiz)</option>
+                        <option value="1">Grado 1 (Empleado)</option>
+                        <option value="2">Grado 2 (Veterano)</option>
+                        <option value="3">Grado 3 (Subjefe / Encargado)</option>
+                        <option value="4" selected>Grado 4 (Jefe / Director)</option>
+                    </select>
+                </div>
+                <div class="submodal-footer">
+                    <button class="btn-secondary" id="btn-cancel-job">Cancelar</button>
+                    <button class="btn-primary" id="btn-confirm-job">Asignar Trabajo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SUB-MODAL: EXPULSAR / BANEAR -->
+        <!-- ======================================================== -->
+        <div id="submodal-punish" class="modal-overlay submodal" style="display: none;">
+            <div class="submodal-card">
+                <h3 id="submodal-punish-title"><i class="fa-solid fa-gavel"></i> Sancionar Jugador</h3>
+                <div class="form-group" id="group-ban-time" style="display: none;">
+                    <label>Duración:</label>
+                    <select id="select-ban-duration">
+                        <option value="3600">1 Hora</option>
+                        <option value="86400">1 Día (24 Horas)</option>
+                        <option value="604800">1 Semana</option>
+                        <option value="2592000">1 Mes</option>
+                        <option value="2147483647">Permanente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Motivo de la sanción:</label>
+                    <input type="text" id="input-punish-reason" placeholder="Ej: No respetar rol de entorno / RDM">
+                </div>
+                <div class="submodal-footer">
+                    <button class="btn-secondary" id="btn-cancel-punish">Cancelar</button>
+                    <button class="btn-primary btn-danger-action" id="btn-confirm-punish">Aplicar Sanción</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="index.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

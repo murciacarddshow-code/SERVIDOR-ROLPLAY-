@@ -1298,64 +1298,6 @@ RegisterNUICallback('ClearGeneralAlerts', function(data, cb)
     end)
 end)
 
--- =========================================================================
--- NUI CALLBACKS: GESTIÓN DE TALLER MÓVIL
--- =========================================================================
-
-RegisterNUICallback('GetWorkshopData', function(_, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetWorkshopData', function(data)
-        cb(data)
-    end)
-end)
-
-RegisterNUICallback('WorkshopDepositMoney', function(data, cb)
-    TriggerServerEvent('qb-phone:server:WorkshopDeposit', data.amount)
-    cb('ok')
-end)
-
-RegisterNUICallback('WorkshopWithdrawMoney', function(data, cb)
-    TriggerServerEvent('qb-phone:server:WorkshopWithdraw', data.amount)
-    cb('ok')
-end)
-
-RegisterNUICallback('WorkshopSetGrade', function(data, cb)
-    TriggerServerEvent('qb-phone:server:WorkshopSetGrade', data.citizenid, data.grade)
-    cb('ok')
-end)
-
-RegisterNUICallback('WorkshopFireEmployee', function(data, cb)
-    TriggerServerEvent('qb-phone:server:WorkshopFire', data.citizenid)
-    cb('ok')
-end)
-
-RegisterNUICallback('WorkshopHirePlayer', function(data, cb)
-    TriggerServerEvent('qb-phone:server:WorkshopHire', data.playerId)
-    cb('ok')
-end)
-
-RegisterNUICallback('WorkshopUpdateSalary', function(data, cb)
-    TriggerServerEvent('qb-phone:server:WorkshopUpdateSalary', data.grade, data.salary)
-    cb('ok')
-end)
-
-RegisterNUICallback('WorkshopGetClosePlayers', function(_, cb)
-    local ped = PlayerPedId()
-    local coords = GetEntityCoords(ped)
-    local closePlayers = {}
-    local players = QBCore.Functions.GetPlayersFromCoords(coords, 5.0)
-
-    for _, playerId in ipairs(players) do
-        if playerId ~= PlayerId() then
-            local serverId = GetPlayerServerId(playerId)
-            closePlayers[#closePlayers + 1] = {
-                id = serverId,
-                name = GetPlayerName(playerId)
-            }
-        end
-    end
-    cb(closePlayers)
-end)
-
 RegisterNUICallback('TransferMoney', function(data, cb)
     data.amount = tonumber(data.amount)
     if tonumber(PhoneData.PlayerData.money.bank) >= data.amount then

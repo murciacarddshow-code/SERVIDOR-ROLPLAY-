@@ -142,6 +142,18 @@ RegisterNUICallback('chooseAppa', function(data, cb)
     SetCamActive(cam2, false)
     DestroyCam(cam2, true)
     SetEntityVisible(ped, true)
+
+    local pos = GetEntityCoords(ped)
+    local heading = GetEntityHeading(ped)
+    NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.2, heading, true, false)
+    SetEntityInvincible(ped, false)
+    SetEntityMaxHealth(ped, 200)
+    SetEntityHealth(ped, 200)
+    ClearPedBloodDamage(ped)
+    TriggerServerEvent('hospital:server:SetDeathStatus', false)
+    TriggerServerEvent('hospital:server:SetLaststandStatus', false)
+    TriggerServerEvent('hospital:server:resetHungerThirst')
+
     cb('ok')
 end)
 
@@ -152,13 +164,26 @@ local function PreSpawnPlayer()
 end
 
 local function PostSpawnPlayer(ped)
-    FreezeEntityPosition(ped, false)
+    local playerPed = PlayerPedId()
+    FreezeEntityPosition(playerPed, false)
     RenderScriptCams(false, true, 500, true, true)
     SetCamActive(cam, false)
     DestroyCam(cam, true)
     SetCamActive(cam2, false)
     DestroyCam(cam2, true)
-    SetEntityVisible(PlayerPedId(), true)
+    SetEntityVisible(playerPed, true)
+    
+    -- Corrección: Asegurar vida completa y quitar muerte al aparecer
+    local pos = GetEntityCoords(playerPed)
+    local heading = GetEntityHeading(playerPed)
+    NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.2, heading, true, false)
+    SetEntityInvincible(playerPed, false)
+    SetEntityMaxHealth(playerPed, 200)
+    SetEntityHealth(playerPed, 200)
+    ClearPedBloodDamage(playerPed)
+    TriggerServerEvent('hospital:server:SetDeathStatus', false)
+    TriggerServerEvent('hospital:server:SetLaststandStatus', false)
+    
     Wait(500)
     DoScreenFadeIn(250)
 end

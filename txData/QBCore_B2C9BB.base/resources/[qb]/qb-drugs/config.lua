@@ -170,6 +170,22 @@ Config = {
             min = 18,
             max = 40,
         },
+        ['xtcbaggy'] = {
+            min = 20,
+            max = 45,
+        },
+        ['heroin_syringe'] = {
+            min = 35,
+            max = 65,
+        },
+        ['mushrooms'] = {
+            min = 15,
+            max = 30,
+        },
+        ['blue_meth'] = {
+            min = 50,
+            max = 90,
+        },
     },
 
     -- Delivery Config

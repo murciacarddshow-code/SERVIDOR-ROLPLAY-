@@ -1,16 +1,10 @@
 {
   "version": 2,
-  "global": {
-    "serverName": "Spain Rol v2.0 Oficial"
-  },
-  "fxRunner": {
-    "serverDataPath": "C:/Users/minir/.gemini/antigravity/scratch/FiveM_Server/server-data",
-    "cfgPath": "C:/Users/minir/.gemini/antigravity/scratch/FiveM_Server/server-data/server.cfg"
-  },
   "general": {
-    "serverName": "PRUEBA"
+    "serverName": "Spain Rol v2.0"
   },
   "server": {
-    "dataPath": "C:/Users/minir/.gemini/antigravity/scratch/FiveM_Server/txData/QBCore_B2C9BB.base/"
+    "dataPath": "C:/Users/PcVIP/Documents/GitHub/SERVIDOR-ROLPLAY-/txData/QBCore_B2C9BB.base/",
+    "cfgPath": "C:/Users/PcVIP/Documents/GitHub/SERVIDOR-ROLPLAY-/txData/QBCore_B2C9BB.base/server.cfg"
   }
 }

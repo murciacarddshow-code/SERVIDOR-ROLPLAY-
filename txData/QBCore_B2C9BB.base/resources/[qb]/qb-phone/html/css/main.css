@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 
 @media all and (max-height: 812px) {
     :root { font-size: 13px; }
@@ -17,10 +17,6 @@
 }
 
 /* CSS Reset */
-* {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-}
-
 body {
     margin: 0;
     padding: 0;
@@ -333,18 +329,14 @@ body {
     margin-top: 1.5vh;
     border-radius: 1.35vh;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-    opacity: 0.98;
-    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    opacity: 0.96;
+    transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .phone-application:hover {
-    transform: translateY(-2px) scale(1.08);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
-}
-
-.phone-application:active {
-    transform: scale(0.94);
+    transform: scale(1.08);
+    opacity: 1.0;
 }
 
 .phone-footer-applications {
@@ -352,12 +344,12 @@ body {
     width: 26.5vh;
     left: 1.25vh;
     bottom: 4.8vh;
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(28px) saturate(190%);
-    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
     border-radius: 2.2vh;
     padding: 0.1vh 0 0.9vh 0;
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.35), inset 0 0 0 0.8px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 0 0 0.8px rgba(255, 255, 255, 0.35);
 }
 
 .phone-home-applications {
@@ -377,58 +369,51 @@ body {
 /* Home Applications END */
 
 
-/* Phone Notification (ONX Dynamic Banner Style) */
+/* Phone Notification */
 
 .phone-notification-container {
     position: absolute;
-    height: 5.2vh;
-    width: 25vh;
-    background: rgba(18, 20, 24, 0.94);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    height: 5.5vh;
+    width: 22vh;
+    background-color: rgba(39, 39, 39, 0.9);
     margin: 0 auto;
     left: 0;
     right: 0;
     top: -8%;
-    border-radius: 2.6vh;
+    border-radius: 3vh;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    z-index: 160;
+    box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.11);
+    z-index: 140;
 }
 
 .notification-icon {
     position: absolute;
     height: 100%;
-    width: 4.5vh;
+    width: 5vh;
     text-align: center;
-    line-height: 5.2vh;
-    color: #58a6ff;
-    font-size: 2vh;
+    line-height: 5.7vh;
+    color: #e74c3c;
+    font-size: 2.5vh;
 }
 
 .notification-title {
     position: absolute;
-    top: 0.9vh;
-    left: 4.6vh;
+    top: 1vh;
+    left: 4.5vh;
     font-size: 1.1vh;
-    font-weight: 600;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #ffffff;
-    letter-spacing: 0.2px;
 }
 
 .notification-text {
     position: absolute;
-    top: 2.5vh;
-    left: 4.6vh;
-    font-size: 0.95vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: rgba(255, 255, 255, 0.75);
-    width: 19vh;
+    top: 2.7vh;
+    left: 4.5vh;
+    font-size: 1vh;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(255, 255, 255);
+    width: 16vh;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 /* Phone Notification END */

@@ -2,7 +2,7 @@ QBCore = {}
 QBCore.Config = {}
 
 QBCore.Config.MaxPlayers = GetConvarInt('sv_maxclients', 48) -- Gets max players from config file, default 48
-QBCore.Config.DefaultSpawn = vector4(-1037.86, -2737.95, 20.17, 327.42)
+QBCore.Config.DefaultSpawn = vector4(-1035.71, -2731.87, 12.86, 0.0)
 QBCore.Config.UpdateInterval = 5                             -- how often to update player data in minutes
 QBCore.Config.StatusInterval = 5000                          -- how often to check hunger/thirst status in milliseconds
 
@@ -36,7 +36,7 @@ QBCore.Config.Player.PlayerDefaults = {
         lastname = 'Lastname',
         birthdate = '00-00-0000',
         gender = 0,
-        nationality = 'USA',
+        nationality = 'Espana',
         phone = function() return QBCore.Functions.CreatePhoneNumber() end,
         account = function() return QBCore.Functions.CreateAccountNumber() end
     },

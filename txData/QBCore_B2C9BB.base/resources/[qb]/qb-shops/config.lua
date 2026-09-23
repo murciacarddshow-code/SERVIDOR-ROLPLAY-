@@ -83,6 +83,16 @@ Config.Products = {
         { name = 'weapon_snspistol',     price = 1500, amount = 5,   requiredLicense = 'weapon' },
         { name = 'weapon_vintagepistol', price = 4000, amount = 5,   requiredLicense = 'weapon' },
     },
+    ['pokevault'] = {
+        { name = 'pokemon_booster_151',       price = 45,  amount = 200 },
+        { name = 'pokemon_booster_charizard', price = 55,  amount = 200 },
+        { name = 'pokemon_booster_prismatic', price = 60,  amount = 200 },
+        { name = 'pokemon_booster_vintage',   price = 350, amount = 50 },
+        { name = 'pokemon_etb_151',           price = 380, amount = 30 },
+        { name = 'pokemon_mystery_box',       price = 500, amount = 25 },
+        { name = 'pokemon_binder',            price = 40,  amount = 50 },
+        { name = 'pokemon_protective_sleeve', price = 15,  amount = 200 },
+    },
     ['blackmarket'] = {
         { name = 'security_card_01',  price = 5000, amount = 50 },
         { name = 'security_card_02',  price = 5000, amount = 50 },
@@ -162,18 +172,6 @@ Config.Products = {
         { name = 'repairkit',         price = 5000, amount = 50 },
         { name = 'advancedrepairkit', price = 5000, amount = 50 },
         { name = 'tirerepairkit',     price = 5000, amount = 50 },
-        { name = 'veh_door',          price = 250,  amount = 50 },
-        { name = 'veh_hood',          price = 350,  amount = 50 },
-        { name = 'veh_trunk',         price = 300,  amount = 50 },
-        { name = 'veh_wheel',         price = 150,  amount = 50 },
-        { name = 'turbo_racing',      price = 7500, amount = 50 },
-        { name = 'engine_stage1',     price = 3500, amount = 50 },
-        { name = 'engine_stage2',     price = 6000, amount = 50 },
-        { name = 'engine_stage3',     price = 9500, amount = 50 },
-        { name = 'racing_brakes',     price = 4500, amount = 50 },
-        { name = 'racing_transmission', price = 5500, amount = 50 },
-        { name = 'drift_suspension',  price = 4000, amount = 50 },
-        { name = 'nos_tank',          price = 2500, amount = 50 },
     }
 }
 
@@ -616,20 +614,19 @@ Config.Locations = {
         ['blipcolor'] = 0,
         ['delivery'] = vector4(249.0, -50.64, 69.94, 60.71)
     },
-    ['ammunation6'] = {
-        ['label'] = 'Ammunation',
-        ['type'] = 'weapon',
+    ['pokevault'] = {
+        ['label'] = 'PokéVault TCG Shop (Murcia Card Show)',
         ['coords'] = vector4(23.0, -1105.67, 29.8, 162.91),
-        ['ped'] = 's_m_y_ammucity_01',
-        ['scenario'] = 'WORLD_HUMAN_COP_IDLES',
+        ['ped'] = 'a_m_y_smartcaspat_01',
+        ['scenario'] = 'WORLD_HUMAN_STAND_MOBILE',
         ['radius'] = 1.5,
-        ['targetIcon'] = 'fas fa-gun',
-        ['targetLabel'] = 'Open Ammunation',
-        ['products'] = Config.Products['weapons'],
+        ['targetIcon'] = 'fas fa-gem',
+        ['targetLabel'] = 'Comprar Sobres y Cartas Pokémon',
+        ['products'] = Config.Products['pokevault'],
         ['showblip'] = true,
-        ['blipsprite'] = 110,
-        ['blipscale'] = 0.6,
-        ['blipcolor'] = 0,
+        ['blipsprite'] = 605,
+        ['blipscale'] = 0.85,
+        ['blipcolor'] = 46,
         ['delivery'] = vector4(-5.82, -1107.48, 29.0, 164.32)
     },
     ['ammunation7'] = {
@@ -828,14 +825,6 @@ Config.Locations = {
         ['products'] = Config.Products['mechanic'],
         ['delivery'] = vector4(119.3033, 6626.7358, 31.9558, 46.1566),
         ['requiredJob'] = 'beeker'
-    },
-
-    ['canals'] = {
-        ['label'] = 'Canals Customs Shop',
-        ['coords'] = vector4(-1156.40, -1525.20, 4.37, 215.0),
-        ['products'] = Config.Products['mechanic'],
-        ['delivery'] = vector4(-1163.50, -1512.20, 4.37, 125.0),
-        ['requiredJob'] = 'canals'
     },
 
     ['prison'] = {

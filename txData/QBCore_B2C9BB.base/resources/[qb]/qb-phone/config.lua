@@ -171,18 +171,6 @@ Config.PhoneApplications = {
         slot = 15,
         Alerts = 0,
     },
-    ['workshop'] = {
-        app = 'workshop',
-        color = '#d35400',
-        icon = 'fas fa-wrench',
-        tooltipText = 'Gestión Taller',
-        tooltipPos = 'bottom',
-        job = false,
-        isboss = true,
-        blockedjobs = {},
-        slot = 16,
-        Alerts = 0,
-    },
 }
 Config.MaxSlots = 20
 

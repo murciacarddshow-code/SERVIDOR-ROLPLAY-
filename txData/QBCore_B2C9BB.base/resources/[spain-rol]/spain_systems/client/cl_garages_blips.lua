@@ -16,67 +16,11 @@ local garages = {
 }
 
 local mechanicShops = {
-    {
-        name = "Benny's Original Motor Works",
-        coords = vector3(-211.73, -1325.28, 30.89),
-        sprite = 402,
-        color = 46,
-        bays = {
-            { name = "Benny's - Bahía 1 (Elevador Principal)", coords = vector3(-211.73, -1325.28, 30.89) },
-            { name = "Benny's - Bahía 2 (Puesto Tuning y Chapa)", coords = vector3(-205.50, -1318.80, 31.0) },
-            { name = "Benny's - Bahía 3 (Puesta a Punto Rápida)", coords = vector3(-223.10, -1329.50, 30.89) }
-        }
-    },
-    {
-        name = "Canals Customs (Taller Vespucci)",
-        coords = vector3(-1158.80, -1519.80, 4.37),
-        sprite = 446,
-        color = 18, -- Cyan / Azul Canals
-        bays = {
-            { name = "Canals - Bahía 1 (Elevador Principal)", coords = vector3(-1158.80, -1519.80, 4.37) },
-            { name = "Canals - Bahía 2 (Puesto Competición y Motor)", coords = vector3(-1153.20, -1514.50, 4.37) },
-            { name = "Canals - Bahía 3 (Alineación y Ruedas)", coords = vector3(-1164.50, -1524.20, 4.37) }
-        }
-    },
-    {
-        name = "Los Santos Customs (Centro)",
-        coords = vector3(-338.44, -136.75, 39.0),
-        sprite = 72,
-        color = 46,
-        bays = {
-            { name = "LSC - Bahía 1 (Foso Principal)", coords = vector3(-338.44, -136.75, 39.0) },
-            { name = "LSC - Bahía 2 (Cabina de Modificación)", coords = vector3(-324.11, -147.11, 39.10) },
-            { name = "LSC - Bahía 3 (Inspección y Ruedas)", coords = vector3(-342.10, -145.50, 39.0) }
-        }
-    },
-    {
-        name = "Los Santos Customs (Aeropuerto)",
-        coords = vector3(-1155.54, -2007.18, 13.18),
-        sprite = 72,
-        color = 46,
-        bays = {
-            { name = "LSC Aeropuerto - Bahía 1", coords = vector3(-1155.54, -2007.18, 13.18) },
-            { name = "LSC Aeropuerto - Bahía 2", coords = vector3(-1146.40, -2002.05, 13.19) }
-        }
-    },
-    {
-        name = "Taller Harmony Repair",
-        coords = vector3(1175.05, 2640.22, 37.75),
-        sprite = 446,
-        color = 5,
-        bays = {
-            { name = "Harmony - Bahía 1", coords = vector3(1175.05, 2640.22, 37.75) }
-        }
-    },
-    {
-        name = "Taller Paleto Bay",
-        coords = vector3(110.82, 6626.34, 31.79),
-        sprite = 446,
-        color = 5,
-        bays = {
-            { name = "Paleto - Bahía 1", coords = vector3(110.82, 6626.34, 31.79) }
-        }
-    }
+    { name = "Taller Benny's Original Motor Works", coords = vector3(-211.34, -1323.98, 30.89) },
+    { name = "Taller Los Santos Customs (Centro)", coords = vector3(-338.44, -136.75, 39.0) },
+    { name = "Taller Los Santos Customs (Aeropuerto)", coords = vector3(-1155.54, -2007.18, 13.18) },
+    { name = "Taller Mecánico Harmony Repair", coords = vector3(1175.05, 2640.22, 37.75) },
+    { name = "Taller Mecánico Paleto Bay", coords = vector3(110.82, 6626.34, 31.79) },
 }
 
 -- Crear Blips de Garajes y Talleres
@@ -94,13 +38,13 @@ CreateThread(function()
         EndTextCommandSetBlipName(blip)
     end
 
-    -- Talleres Mecánicos con Blips y Sprites Propios
+    -- Talleres Mecánicos
     for _, t in ipairs(mechanicShops) do
         local blip = AddBlipForCoord(t.coords.x, t.coords.y, t.coords.z)
-        SetBlipSprite(blip, t.sprite or 446)
+        SetBlipSprite(blip, 446) -- Icono de llave inglesa
         SetBlipDisplay(blip, 4)
         SetBlipScale(blip, 0.8)
-        SetBlipColour(blip, t.color or 5)
+        SetBlipColour(blip, 5) -- Amarillo
         SetBlipAsShortRange(blip, true)
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentSubstringPlayerName(t.name)
@@ -108,7 +52,7 @@ CreateThread(function()
     end
 end)
 
--- Reparación y puesta a punto en bahías de talleres mecánicos
+-- Reparación rápida en talleres mecánicos
 CreateThread(function()
     while true do
         local wait = 1000
@@ -118,30 +62,25 @@ CreateThread(function()
             local veh = GetVehiclePedIsIn(playerPed, false)
             if GetPedInVehicleSeat(veh, -1) == playerPed then
                 local coords = GetEntityCoords(veh)
-                local inBay = false
-                local activeBay = nil
+                local inShop = false
+                local currentShop = nil
 
                 for _, shop in ipairs(mechanicShops) do
-                    if shop.bays then
-                        for _, bay in ipairs(shop.bays) do
-                            if #(coords - bay.coords) < 4.0 then
-                                inBay = true
-                                activeBay = bay
-                                break
-                            end
-                        end
+                    if #(coords - shop.coords) < 15.0 then
+                        inShop = true
+                        currentShop = shop
+                        break
                     end
-                    if inBay then break end
                 end
 
-                if inBay and activeBay then
+                if inShop then
                     wait = 0
-                    DrawMarker(36, activeBay.coords.x, activeBay.coords.y, activeBay.coords.z + 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.8, 1.8, 1.0, 240, 200, 0, 150, false, false, 2, true, nil, nil, false)
+                    DrawMarker(36, currentShop.coords.x, currentShop.coords.y, currentShop.coords.z + 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.8, 1.8, 1.0, 240, 200, 0, 150, false, false, 2, true, nil, nil, false)
                     
-                    QBCore.Functions.DrawText3D(activeBay.coords.x, activeBay.coords.y, activeBay.coords.z + 1.1, string.format("~y~[E]~s~ %s (Puesta a Punto)", activeBay.name))
+                    QBCore.Functions.DrawText3D(currentShop.coords.x, currentShop.coords.y, currentShop.coords.z + 1.2, "~y~[E]~s~ Reparar y Limpiar Vehículo")
 
                     if IsControlJustPressed(0, 38) then -- Tecla E
-                        QBCore.Functions.Progressbar("repair_taller", "Mecánicos realizando puesta a punto en bahía...", 4000, false, true, {
+                        QBCore.Functions.Progressbar("repair_taller", "Mecánicos realizando puesta a punto...", 4000, false, true, {
                             disableMovement = true,
                             disableCarMovement = true,
                             disableMouse = false,
@@ -156,7 +95,7 @@ CreateThread(function()
                             for i = 0, 7 do
                                 SetVehicleTyreFixed(veh, i)
                             end
-                            QBCore.Functions.Notify("🔧 " .. activeBay.name .. ": Vehículo reparado y listo para rodar.", "success", 4000)
+                            QBCore.Functions.Notify("🔧 Vehículo reparado y lavado al 100% por los mecánicos.", "success", 4000)
                         end)
                     end
                 end

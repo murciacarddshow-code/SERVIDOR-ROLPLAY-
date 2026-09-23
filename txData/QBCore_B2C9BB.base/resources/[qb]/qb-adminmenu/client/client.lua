@@ -25,14 +25,269 @@ local menu13 = MenuV:CreateMenu(false, Lang:t('menu.vehicle_models'), menuLocati
 local menu14 = MenuV:CreateMenu(false, Lang:t('menu.entity_view_options'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test14')
 local menu15 = MenuV:CreateMenu(false, Lang:t('menu.spawn_weapons'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test15')
 
+local isGodmode = false
+local isInvisible = false
+
 RegisterNetEvent('qb-admin:client:openMenu', function()
     QBCore.Functions.TriggerCallback('qb-admin:isAdmin', function(isAdmin)
         if not isAdmin then
             QBCore.Functions.Notify("No tienes permisos de Administrador.", "error", 4000)
             return
         end
-        MenuV:OpenMenu(menu1)
+        local pData = QBCore.Functions.GetPlayerData()
+        local adminName = "Administrador"
+        if pData and pData.charinfo and pData.charinfo.firstname then
+            adminName = pData.charinfo.firstname .. ' ' .. pData.charinfo.lastname
+        else
+            adminName = GetPlayerName(PlayerId())
+        end
+
+        SetNuiFocus(true, true)
+        SendNUIMessage({
+            action = 'open',
+            adminName = adminName,
+            toggles = {
+                godmode = isGodmode,
+                noclip = IsNoClipping or false,
+                invisible = isInvisible
+            }
+        })
     end)
+end)
+
+-- =========================================================================
+-- SPAIN ROL - NUI CALLBACKS (RATÓN & ACCIONES DIRECTAS)
+-- =========================================================================
+
+RegisterNUICallback('close', function(_, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('getPlayers', function(_, cb)
+    QBCore.Functions.TriggerCallback('qb-admin:server:getDetailedPlayers', function(players)
+        cb({ players = players or {} })
+    end)
+end)
+
+RegisterNUICallback('modifyMoney', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    local amount = tonumber(data.amount)
+    local moneyType = tostring(data.moneyType or 'cash')
+
+    if data.actionType == 'give' then
+        TriggerServerEvent('qb-admin:server:giveMoney', targetId, moneyType, amount)
+    else
+        TriggerServerEvent('qb-admin:server:removeMoney', targetId, moneyType, amount)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('setJob', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    local job = tostring(data.job or 'unemployed')
+    local grade = tonumber(data.grade) or 0
+    TriggerServerEvent('qb-admin:server:setJob', targetId, job, grade)
+    cb('ok')
+end)
+
+RegisterNUICallback('killPlayer', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:kill', { id = targetId })
+    cb('ok')
+end)
+
+RegisterNUICallback('revivePlayer', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:revive', { id = targetId })
+    cb('ok')
+end)
+
+RegisterNUICallback('teleportToPlayer', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:goto', { id = targetId })
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('bringPlayer', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:bring', { id = targetId })
+    cb('ok')
+end)
+
+RegisterNUICallback('toggleFreeze', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:toggleFreezePlayer', targetId)
+    cb('ok')
+end)
+
+RegisterNUICallback('openInventory', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:inventory', { id = targetId })
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('giveSkin', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:cloth', { id = targetId })
+    cb('ok')
+end)
+
+RegisterNUICallback('kickPlayer', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    local reason = tostring(data.reason or 'Expulsado por administración')
+    TriggerServerEvent('qb-admin:server:kick', { id = targetId }, reason)
+    cb('ok')
+end)
+
+RegisterNUICallback('banPlayer', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    local duration = tonumber(data.duration) or 2147483647
+    local reason = tostring(data.reason or 'Baneado por administración')
+    TriggerServerEvent('qb-admin:server:ban', { id = targetId }, duration, reason)
+    cb('ok')
+end)
+
+-- Opciones de Administrador
+RegisterNUICallback('toggleGodmode', function(data, cb)
+    isGodmode = data.enabled
+    local ped = PlayerPedId()
+    SetEntityInvincible(ped, isGodmode)
+    SetPlayerInvincible(PlayerId(), isGodmode)
+    QBCore.Functions.Notify(isGodmode and "Modo Dios: ACTIVADO" or "Modo Dios: DESACTIVADO", isGodmode and "success" or "error")
+    cb('ok')
+end)
+
+RegisterNUICallback('toggleNoclip', function(_, cb)
+    TriggerEvent('qb-admin:client:ToggleNoClip')
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('toggleInvisible', function(data, cb)
+    isInvisible = data.enabled
+    local ped = PlayerPedId()
+    SetEntityVisible(ped, not isInvisible, 0)
+    SetLocalPlayerVisibleLocally(true)
+    QBCore.Functions.Notify(isInvisible and "Invisibilidad: ACTIVADA" or "Invisibilidad: DESACTIVADA", "primary")
+    cb('ok')
+end)
+
+RegisterNUICallback('selfRevive', function(_, cb)
+    TriggerEvent('hospital:client:Revive')
+    local ped = PlayerPedId()
+    SetEntityHealth(ped, 200)
+    ClearPedBloodDamage(ped)
+    QBCore.Functions.Notify("Te has revivido y curado por completo.", "success")
+    cb('ok')
+end)
+
+RegisterNUICallback('selfTPM', function(_, cb)
+    TriggerEvent('QBCore:Command:GoToMarker')
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('selfSkin', function(_, cb)
+    SetNuiFocus(false, false)
+    TriggerEvent('qb-clothing:client:openMenu')
+    cb('ok')
+end)
+
+RegisterNUICallback('selfSuicide', function(_, cb)
+    SetEntityHealth(PlayerPedId(), 0)
+    cb('ok')
+end)
+
+-- Opciones de Vehículos
+RegisterNUICallback('spawnVehicle', function(data, cb)
+    local model = tostring(data.model or ''):lower()
+    SetNuiFocus(false, false)
+    if model ~= '' then
+        TriggerServerEvent('QBCore:CallCommand', 'car', { model })
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('repairVehicle', function(_, cb)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh ~= 0 then
+        SetVehicleFixed(veh)
+        SetVehicleDeformationFixed(veh)
+        SetVehicleUndriveable(veh, false)
+        SetVehicleEngineHealth(veh, 1000.0)
+        SetVehicleBodyHealth(veh, 1000.0)
+        SetVehiclePetrolTankHealth(veh, 1000.0)
+        QBCore.Functions.Notify("Vehículo reparado al 100%.", "success")
+    else
+        QBCore.Functions.Notify("Debes estar subido a un vehículo.", "error")
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('cleanVehicle', function(_, cb)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh ~= 0 then
+        SetVehicleDirtLevel(veh, 0.0)
+        WashDecalsFromVehicle(veh, 1.0)
+        QBCore.Functions.Notify("Vehículo limpiado.", "success")
+    else
+        QBCore.Functions.Notify("Debes estar subido a un vehículo.", "error")
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('maxTuneVehicle', function(_, cb)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh ~= 0 then
+        SetVehicleModKit(veh, 0)
+        for i = 0, 49 do
+            local max = GetNumVehicleMods(veh, i) - 1
+            if max >= 0 then
+                SetVehicleMod(veh, i, max, false)
+            end
+        end
+        ToggleVehicleMod(veh, 18, true) -- Turbo
+        SetVehicleWindowTint(veh, 1)
+        QBCore.Functions.Notify("Tuning de rendimiento máximo aplicado.", "success")
+    else
+        QBCore.Functions.Notify("Debes estar subido a un vehículo.", "error")
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('deleteVehicle', function(_, cb)
+    TriggerEvent('QBCore:Command:DeleteVehicle')
+    cb('ok')
+end)
+
+-- Clima y Mundo
+RegisterNUICallback('setWeather', function(data, cb)
+    local weather = tostring(data.weather or 'CLEAR')
+    TriggerServerEvent('qb-weathersync:server:setWeather', weather)
+    QBCore.Functions.Notify("Clima cambiado a " .. weather, "primary")
+    cb('ok')
+end)
+
+RegisterNUICallback('setTime', function(data, cb)
+    local hour = tonumber(data.hour) or 12
+    local minute = tonumber(data.minute) or 0
+    TriggerServerEvent('qb-weathersync:server:setTime', hour, minute)
+    QBCore.Functions.Notify(("Hora del servidor ajustada a %02d:%02d"):format(hour, minute), "primary")
+    cb('ok')
+end)
+
+RegisterNUICallback('sendAnnouncement', function(data, cb)
+    local msg = tostring(data.message or '')
+    if msg ~= '' then
+        TriggerServerEvent('qb-admin:server:globalAnnouncement', msg)
+    end
+    cb('ok')
 end)
 
 RegisterKeyMapping('admin', 'Abrir Panel de Administrador (F10)', 'keyboard', 'F10')

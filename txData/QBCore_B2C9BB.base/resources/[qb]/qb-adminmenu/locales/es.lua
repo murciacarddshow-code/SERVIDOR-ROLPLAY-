@@ -101,7 +101,7 @@ local Translations = {
         entity_del_error = 'Error al eliminar la entidad',
     },
     menu = {
-        admin_menu = 'Menú de administración',
+        admin_menu = 'SPAIN ROL | PANEL STAFF',
         admin_options = 'Opciones de administración',
         online_players = 'Jugadores en línea',
         manage_server = 'Administrar servidor',

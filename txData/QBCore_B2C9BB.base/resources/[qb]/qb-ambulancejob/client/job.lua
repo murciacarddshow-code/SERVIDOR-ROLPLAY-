@@ -122,23 +122,31 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     exports.spawnmanager:setAutoSpawn(false)
     local ped = PlayerPedId()
     local player = PlayerId()
-    CreateThread(function()
-        Wait(5000)
-        local ped = PlayerPedId()
-        local player = PlayerId()
-        SetEntityMaxHealth(ped, 200)
-        SetEntityHealth(ped, 200)
-        SetPlayerHealthRechargeMultiplier(player, 0.0)
-        SetPlayerHealthRechargeLimit(player, 0.0)
-    end)
+    
+    -- Resurrección y salud inmediata para evitar spawnear muerto
+    local coords = GetEntityCoords(ped)
+    local heading = GetEntityHeading(ped)
+    NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z + 0.2, heading, true, false)
+    SetEntityInvincible(ped, false)
+    ClearPedBloodDamage(ped)
+    SetEntityMaxHealth(ped, 200)
+    SetEntityHealth(ped, 200)
+    SetPlayerHealthRechargeMultiplier(player, 0.0)
+    isDead = false
+    InLaststand = false
+    deathTime = 0
+    ClearPedTasksImmediately(ped)
+    
+    TriggerServerEvent('hospital:server:SetDeathStatus', false)
+    TriggerServerEvent('hospital:server:SetLaststandStatus', false)
+    TriggerServerEvent('hospital:server:resetHungerThirst')
+
     CreateThread(function()
         Wait(1000)
         QBCore.Functions.GetPlayerData(function(PlayerData)
             PlayerJob = PlayerData.job
             onDuty = PlayerData.job.onduty
-            SetPedArmour(PlayerPedId(), PlayerData.metadata['armor'])
-            TriggerServerEvent('hospital:server:SetDeathStatus', false)
-            TriggerServerEvent('hospital:server:SetLaststandStatus', false)
+            SetPedArmour(PlayerPedId(), PlayerData.metadata['armor'] or 0)
             if PlayerJob.name == 'ambulance' and onDuty then
                 TriggerServerEvent('hospital:server:AddDoctor', PlayerJob.name)
             end

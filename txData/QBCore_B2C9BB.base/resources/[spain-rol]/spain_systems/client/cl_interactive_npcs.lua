@@ -8,13 +8,21 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local spawnedPeds = {}
 
 local npcList = {
-    -- ARMERO AMMU-NATION (Plaza Legion)
+    -- DEPENDIENTE POKÉVAULT SHOP (Plaza Legion / Innocence Blvd)
     {
-        model = `s_m_y_ammucity_01`,
+        model = `a_m_y_smartcaspat_01`,
         coords = vector4(22.58, -1105.47, 29.8, 160.0),
-        scenario = 'WORLD_HUMAN_COP_IDLES',
-        type = 'armory',
-        text = '~r~[E]~s~ Hablar con Armero (Comprar Armamento)'
+        scenario = 'WORLD_HUMAN_STAND_MOBILE',
+        type = 'pokevault',
+        text = '~y~[E]~s~ Hablar con Dependiente PokéVault'
+    },
+    -- TASADOR Y COMPRADOR OFICIAL DE CARTAS POKÉMON (PokéVault - Murcia Card Show)
+    {
+        model = `a_m_y_business_02`,
+        coords = vector4(20.35, -1106.35, 29.8, 160.0),
+        scenario = 'WORLD_HUMAN_CLIPBOARD',
+        type = 'pokevault_buyer',
+        text = '~g~[E]~s~ Hablar con Tasador Oficial (Vender Cartas Pokémon)'
     },
     -- ARMERO AMMU-NATION (Vinewood)
     {
@@ -116,6 +124,41 @@ CreateThread(function()
             type = data.type,
             text = data.text
         }
+
+        -- Soporte opcional para servidores con qb-target activo
+        if GetResourceState('qb-target') == 'started' then
+            if data.type == 'pokevault_buyer' then
+                exports['qb-target']:AddTargetEntity(ped, {
+                    options = {
+                        {
+                            type = 'client',
+                            event = 'spain_pokemon:client:openBuyerMenu',
+                            icon = 'fas fa-sack-dollar',
+                            label = 'Tasar y Vender Cartas Pokémon',
+                        },
+                        {
+                            type = 'client',
+                            event = 'spain_pokemon:client:showPriceList',
+                            icon = 'fas fa-clipboard-list',
+                            label = 'Ver Cotizaciones de Cartas',
+                        }
+                    },
+                    distance = 2.0
+                })
+            elseif data.type == 'pokevault' then
+                exports['qb-target']:AddTargetEntity(ped, {
+                    options = {
+                        {
+                            type = 'client',
+                            event = 'spain_pokemon:client:openMainStoreMenu',
+                            icon = 'fas fa-store',
+                            label = 'Atención PokéVault TCG',
+                        }
+                    },
+                    distance = 2.0
+                })
+            end
+        end
     end
 end)
 
@@ -135,6 +178,10 @@ CreateThread(function()
                 if IsControlJustPressed(0, 38) then -- Tecla E
                     if npc.type == 'armory' then
                         TriggerEvent('qb-shops:client:openShop', 'weapons')
+                    elseif npc.type == 'pokevault' then
+                        TriggerEvent('spain_pokemon:client:openMainStoreMenu')
+                    elseif npc.type == 'pokevault_buyer' then
+                        TriggerEvent('spain_pokemon:client:openBuyerMenu')
                     elseif npc.type == 'badulake' then
                         TriggerEvent('qb-shops:client:openShop', 'normal')
                     elseif npc.type == 'hospital_reception' then

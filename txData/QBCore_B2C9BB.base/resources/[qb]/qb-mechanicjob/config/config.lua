@@ -81,17 +81,17 @@ Config.Shops = {
     },
     bennys = { -- Default Bennys Location
         managed = true,
-        shopLabel = 'Benny\'s Original Motor Works',
+        shopLabel = 'Benny\'s Motorworks',
         showBlip = true,
-        blipSprite = 402,
+        blipSprite = 72,
         blipColor = 46,
         blipCoords = vector3(-211.73, -1325.28, 30.89),
         duty = vector3(-202.92, -1313.74, 31.70),
         stash = vector3(-199.58, -1314.65, 31.08),
         paint = vector3(-202.42, -1322.16, 31.29),
         vehicles = {
-            withdraw = vector3(-205.81, -1304.59, 31.29),
-            spawn = vector4(-207.83, -1300.86, 31.29, 178.5),
+            withdraw = vector3(0, 0, 0),
+            spawn = vector4(-370.51, -107.88, 38.35, 72.56),
             list = { 'flatbed', 'towtruck', 'minivan', 'blista' }
         },
     },
@@ -108,22 +108,6 @@ Config.Shops = {
         vehicles = {
             withdraw = vector3(107.08, 6614.90, 31.96),
             spawn = vector4(110.91, 6609.32, 31.81, 315.11),
-            list = { 'flatbed', 'towtruck', 'minivan', 'blista' }
-        },
-    },
-    canals = { -- Canals Customs (Kyle Rass / ONX Style)
-        managed = true,
-        shopLabel = 'Canals Customs',
-        showBlip = true,
-        blipSprite = 446,
-        blipColor = 18,
-        blipCoords = vector3(-1158.80, -1519.80, 4.37),
-        duty = vector3(-1153.30, -1523.50, 4.37),
-        stash = vector3(-1156.40, -1525.20, 4.37),
-        paint = vector3(-1159.90, -1516.40, 4.37),
-        vehicles = {
-            withdraw = vector3(-1163.50, -1512.20, 4.37),
-            spawn = vector4(-1166.70, -1508.50, 4.37, 125.0),
             list = { 'flatbed', 'towtruck', 'minivan', 'blista' }
         },
     },

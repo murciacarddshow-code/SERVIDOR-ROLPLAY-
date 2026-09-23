@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spain Rol - Tablet de Compra-Venta Oficial</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="tablet-wrapper" class="hidden">
+        <!-- Tablet Device Frame -->
+        <div class="ipad-frame">
+            <!-- Camera & Ambient Sensor -->
+            <div class="camera-lens"></div>
+
+            <!-- Tablet Screen Surface -->
+            <div class="tablet-screen">
+                
+                <!-- Status Bar Top -->
+                <header class="status-bar">
+                    <div class="status-left">
+                        <span class="live-clock" id="status-clock">12:00</span>
+                        <span class="dealer-badge-pill" id="dealer-tag">MOTORS SUR</span>
+                        <span class="city-location" id="dealer-location">Davis Car Lot</span>
+                    </div>
+                    <div class="status-center">
+                        <div class="user-greeting">
+                            <span class="user-icon">👤</span>
+                            <span id="user-display-name">Conectando...</span>
+                            <span class="bank-pill">🏦 <strong id="user-bank-amount">0 €</strong></span>
+                        </div>
+                    </div>
+                    <div class="status-right">
+                        <span class="status-icon">5G 📶</span>
+                        <span class="status-icon">🛜</span>
+                        <span class="status-icon" id="battery-indicator">🔋 98%</span>
+                        <button class="btn-close-device" id="btn-close-tablet" title="Cerrar Tablet (ESC)">✕</button>
+                    </div>
+                </header>
+
+                <!-- Tablet Main Body (Sidebar + Content) -->
+                <div class="tablet-main">
+                    
+                    <!-- Navigation Sidebar -->
+                    <aside class="tablet-sidebar">
+                        <div class="dealer-brand">
+                            <div class="brand-logo-circle">🚗</div>
+                            <div class="brand-info">
+                                <h2 id="sidebar-dealer-name">COMPRA-VENTA</h2>
+                                <p>Red Oficial San Andreas</p>
+                            </div>
+                        </div>
+
+                        <nav class="nav-links">
+                            <button class="nav-btn active" data-tab="tab-catalog">
+                                <span class="nav-icon">🏎️</span>
+                                <span class="nav-text">Catálogo Ocasión</span>
+                            </button>
+                            <button class="nav-btn" data-tab="tab-sell">
+                                <span class="nav-icon">💵</span>
+                                <span class="nav-text">Vender mi Coche</span>
+                            </button>
+                            <button class="nav-btn boss-only hidden" id="nav-btn-boss" data-tab="tab-boss">
+                                <span class="nav-icon">👔</span>
+                                <span class="nav-text">Gestión Empresa</span>
+                                <span class="boss-indicator-tag">BOSS</span>
+                            </button>
+                            <button class="nav-btn" data-tab="tab-history">
+                                <span class="nav-icon">📋</span>
+                                <span class="nav-text">Operaciones</span>
+                            </button>
+                        </nav>
+
+                        <div class="sidebar-footer">
+                            <div class="system-status-indicator">
+                                <span class="status-dot-pulse"></span>
+                                <span>Red Concesionarios Online</span>
+                            </div>
+                            <button class="btn-exit-app" id="btn-exit-bottom">
+                                <span>Apagar Terminal</span> ⏻
+                            </button>
+                        </div>
+                    </aside>
+
+                    <!-- Content Dynamic Area -->
+                    <main class="tablet-content">
+                        
+                        <!-- TAB 1: VEHICLE CATALOG -->
+                        <section class="tab-view active" id="tab-catalog">
+                            <div class="tab-header-row">
+                                <div class="title-block">
+                                    <h1>Vehículos de Ocasión Garantizados</h1>
+                                    <p>Entrega directa con matrícula nueva y estacionamiento en tu garaje oficial</p>
+                                </div>
+                                <div class="catalog-filters">
+                                    <div class="search-input-box">
+                                        <span class="search-icon">🔍</span>
+                                        <input type="text" id="catalog-search" placeholder="Buscar por modelo o marca...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Category Pills -->
+                            <div class="category-pills-bar">
+                                <button class="pill-btn active" data-category="all">Todos (Stock)</button>
+                                <button class="pill-btn" data-category="super">Superdeportivos</button>
+                                <button class="pill-btn" data-category="sports">Deportivos</button>
+                                <button class="pill-btn" data-category="sedans">Sedanes</button>
+                                <button class="pill-btn" data-category="suvs">SUVs y 4x4</button>
+                                <button class="pill-btn" data-category="bikes">Motocicletas</button>
+                                <button class="pill-btn" data-category="vans">Furgonetas</button>
+                            </div>
+
+                            <!-- Vehicle Cards Grid -->
+                            <div class="vehicles-grid" id="catalog-grid">
+                                <!-- Cards injected dynamically via JS -->
+                            </div>
+                        </section>
+
+                        <!-- TAB 2: SELL MY VEHICLE -->
+                        <section class="tab-view" id="tab-sell">
+                            <div class="tab-header-row">
+                                <div class="title-block">
+                                    <h1>Tasación y Venta de Vehículos Propios</h1>
+                                    <p>Vende tus vehículos al instante. El dinero se ingresa de inmediato en tu cuenta bancaria</p>
+                                </div>
+                                <div class="valuation-guarantee-badge">
+                                    <span>🛡️ Tasación Oficial: 70% Valor Mercado</span>
+                                </div>
+                            </div>
+
+                            <div class="owned-vehicles-container" id="owned-vehicles-list">
+                                <!-- Owned cards injected dynamically via JS -->
+                            </div>
+                        </section>
+
+                        <!-- TAB 3: BOSS MANAGEMENT & EMPLOYEES -->
+                        <section class="tab-view" id="tab-boss">
+                            <div class="tab-header-row">
+                                <div class="title-block">
+                                    <h1>Panel de Administración y Jerarquía</h1>
+                                    <p>Control de fondos de sociedad, plantilla de personal y gestión de compras</p>
+                                </div>
+                                <div class="boss-quick-actions">
+                                    <button class="btn-primary" id="btn-open-hire-modal">
+                                        <span>➕</span> Contratar Empleado
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Stat Cards -->
+                            <div class="stats-row">
+                                <div class="stat-card">
+                                    <div class="stat-icon-bg">🏦</div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">Cuenta Bancaria de la Empresa</span>
+                                        <h2 id="society-bank-balance">0 €</h2>
+                                    </div>
+                                    <div class="bank-action-buttons">
+                                        <button class="btn-subtle" id="btn-deposit-society">Ingresar</button>
+                                        <button class="btn-subtle btn-danger" id="btn-withdraw-society">Retirar</button>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon-bg">👥</div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">Plantilla Contratada</span>
+                                        <h2 id="total-employees-count">0</h2>
+                                    </div>
+                                    <span class="stat-sub">Vendedores y Gerencia</span>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon-bg">🏷️</div>
+                                    <div class="stat-info">
+                                        <span class="stat-label">Tu Cargo Empresarial</span>
+                                        <h2 id="user-boss-grade">Director</h2>
+                                    </div>
+                                    <span class="stat-sub" id="dealership-society-name">Sociedad Anónima</span>
+                                </div>
+                            </div>
+
+                            <!-- Employees Table -->
+                            <div class="management-table-card">
+                                <div class="table-card-header">
+                                    <h3>Plantilla de Empleados y Rango</h3>
+                                    <span class="badge-count" id="employees-badge">0 empleados</span>
+                                </div>
+                                <div class="table-wrapper">
+                                    <table class="employees-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Empleado</th>
+                                                <th>ID Ciudadano</th>
+                                                <th>Rango / Jerarquía</th>
+                                                <th>Sueldo Turno</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="employees-tbody">
+                                            <!-- Injected via JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- TAB 4: HISTORY -->
+                        <section class="tab-view" id="tab-history">
+                            <div class="tab-header-row">
+                                <div class="title-block">
+                                    <h1>Historial de Transacciones</h1>
+                                    <p>Registro de operaciones recientes en este concesionario</p>
+                                </div>
+                            </div>
+                            <div class="history-list" id="history-container">
+                                <!-- Injected via JS -->
+                            </div>
+                        </section>
+
+                    </main>
+                </div>
+
+                <!-- MODAL: CONFIRM PURCHASE -->
+                <div class="custom-modal-overlay hidden" id="modal-confirm-buy">
+                    <div class="custom-modal-card">
+                        <div class="modal-header">
+                            <h3>Confirmación de Compra</h3>
+                            <button class="modal-close-x" id="modal-buy-close">✕</button>
+                        </div>
+                        <div class="modal-body" id="modal-buy-body">
+                            <!-- Vehicle details -->
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-secondary" id="modal-buy-cancel">Cancelar</button>
+                            <button class="btn-primary" id="modal-buy-confirm">Confirmar y Pagar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL: CONFIRM SELL -->
+                <div class="custom-modal-overlay hidden" id="modal-confirm-sell">
+                    <div class="custom-modal-card">
+                        <div class="modal-header">
+                            <h3>Tasación y Venta a la Empresa</h3>
+                            <button class="modal-close-x" id="modal-sell-close">✕</button>
+                        </div>
+                        <div class="modal-body" id="modal-sell-body">
+                            <!-- Sell details -->
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-secondary" id="modal-sell-cancel">Cancelar</button>
+                            <button class="btn-primary btn-success-action" id="modal-sell-confirm">Confirmar Venta</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL: HIRE PLAYER -->
+                <div class="custom-modal-overlay hidden" id="modal-hire-player">
+                    <div class="custom-modal-card">
+                        <div class="modal-header">
+                            <h3>Contratar Nuevo Empleado</h3>
+                            <button class="modal-close-x" id="modal-hire-close">✕</button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="modal-instruction">Selecciona un ciudadano presente en el mostrador o introduce directamente su ID del servidor o DNI (CitizenID):</p>
+                            <div style="display:flex; gap:8px; margin: 6px 0 12px 0;">
+                                <input type="text" id="input-hire-direct" placeholder="ID del jugador (ej: 1) o DNI..." style="flex:1; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); padding:10px 14px; border-radius:8px; color:#fff; font-family:inherit; font-size:0.9rem;">
+                                <button class="btn-primary" id="btn-hire-direct" style="padding:10px 18px; white-space:nowrap;">Contratar</button>
+                            </div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; margin-bottom:6px;">Ciudadanos en el Mostrador:</div>
+                            <div class="nearby-players-list" id="nearby-players-list">
+                                <!-- Nearby players injected via JS -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-secondary" id="modal-hire-cancel">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL: PROMPT MONEY -->
+                <div class="custom-modal-overlay hidden" id="modal-money-prompt">
+                    <div class="custom-modal-card">
+                        <div class="modal-header">
+                            <h3 id="modal-money-title">Gestión Bancaria</h3>
+                            <button class="modal-close-x" id="modal-money-close">✕</button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="modal-money-desc">Introduce la cantidad en euros (€):</p>
+                            <input type="number" id="input-money-amount" placeholder="Ej: 25000" min="1">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-secondary" id="modal-money-cancel">Cancelar</button>
+                            <button class="btn-primary" id="modal-money-confirm">Aceptar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+</body>
+</html>

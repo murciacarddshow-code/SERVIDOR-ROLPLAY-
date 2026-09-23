@@ -127,6 +127,7 @@ echo.
 
 cd /d "%DATA_DIR%"
 set "TXHOST_DATA_PATH=%TX_DIR%"
-"%FX_DIR%\FXServer.exe" +set citizen_dir "%FX_DIR%\citizen" +set onesync on +exec server.cfg
+set "TXHOST_TXA_PORT=40120"
+"%FX_DIR%\FXServer.exe" +set citizen_dir "%FX_DIR%\citizen"
 
 pause

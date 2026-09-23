@@ -8,9 +8,3 @@ version '1.0.0'
 client_scripts {
     'client.lua'
 }
-
-files {
-    'handling.meta'
-}
-
-data_file 'HANDLING_FILE' 'handling.meta'
