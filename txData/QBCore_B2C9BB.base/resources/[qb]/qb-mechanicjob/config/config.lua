@@ -111,4 +111,20 @@ Config.Shops = {
             list = { 'flatbed', 'towtruck', 'minivan', 'blista' }
         },
     },
+    canals = { -- Canals Customs (Kyle Rass / ONX Style)
+        managed = true,
+        shopLabel = 'Canals Customs',
+        showBlip = true,
+        blipSprite = 446,
+        blipColor = 18,
+        blipCoords = vector3(-1158.80, -1519.80, 4.37),
+        duty = vector3(-1153.30, -1523.50, 4.37),
+        stash = vector3(-1156.40, -1525.20, 4.37),
+        paint = vector3(-1159.90, -1516.40, 4.37),
+        vehicles = {
+            withdraw = vector3(-1163.50, -1512.20, 4.37),
+            spawn = vector4(-1166.70, -1508.50, 4.37, 125.0),
+            list = { 'flatbed', 'towtruck', 'minivan', 'blista' }
+        },
+    },
 }

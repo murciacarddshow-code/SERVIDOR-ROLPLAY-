@@ -7,7 +7,7 @@ RegisterNetEvent('spain_mechanic:server:sendBill', function(targetId, amount, re
     if not Mechanic then return end
 
     local jobName = Mechanic.PlayerData.job.name
-    if jobName ~= 'mechanic' and jobName ~= 'bennys' and Mechanic.PlayerData.job.type ~= 'mechanic' and not QBCore.Functions.HasPermission(src, 'admin') then
+    if jobName ~= 'mechanic' and jobName ~= 'bennys' and jobName ~= 'canals' and Mechanic.PlayerData.job.type ~= 'mechanic' and not QBCore.Functions.HasPermission(src, 'admin') then
         TriggerClientEvent('QBCore:Notify', src, 'No tienes permiso para emitir facturas de taller.', 'error')
         return
     end
@@ -73,6 +73,24 @@ end)
 QBCore.Functions.CreateUseableItem('veh_wheel', function(source, item)
     TriggerClientEvent('spain_mechanic:client:installWheel', source)
 end)
+
+-- Piezas de Rendimiento y Tuning (ONX Style)
+local perfItems = {
+    'turbo_racing',
+    'engine_stage1',
+    'engine_stage2',
+    'engine_stage3',
+    'racing_brakes',
+    'racing_transmission',
+    'drift_suspension',
+    'nos_tank'
+}
+
+for _, itemName in ipairs(perfItems) do
+    QBCore.Functions.CreateUseableItem(itemName, function(source, item)
+        TriggerClientEvent('spain_mechanic:client:installPerformancePart', source, itemName)
+    end)
+end
 
 RegisterNetEvent('spain_mechanic:server:removeRepairItem', function(itemName)
     local src = source

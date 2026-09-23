@@ -9,7 +9,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 -- Comprobar si tiene trabajo de mecánico o admin
 local function IsMechanic()
     local PlayerData = QBCore.Functions.GetPlayerData()
-    return PlayerData.job and (PlayerData.job.name == 'mechanic' or PlayerData.job.name == 'bennys' or PlayerData.job.type == 'mechanic') or QBCore.Functions.HasPermission('admin')
+    return PlayerData.job and (PlayerData.job.name == 'mechanic' or PlayerData.job.name == 'bennys' or PlayerData.job.name == 'canals' or PlayerData.job.type == 'mechanic') or QBCore.Functions.HasPermission('admin')
 end
 
 -- Abrir menú de diagnóstico y tablet de mecánico
@@ -407,4 +407,148 @@ RegisterNetEvent('spain_mechanic:client:installWheel', function()
 
     TriggerEvent('spain_mechanic:client:fixTyres', { veh = veh })
     TriggerServerEvent('spain_mechanic:server:removeRepairItem', 'veh_wheel')
+end)
+
+-- =========================================================================
+-- INSTALACIÓN DE PIEZAS DE RENDIMIENTO Y TUNING (ONX STYLE)
+-- =========================================================================
+
+local performanceConfig = {
+    ['turbo_racing'] = {
+        label = "Instalando Kit Bi-Turbo Garret...",
+        time = 7000,
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        isEngine = true,
+        action = function(veh)
+            ToggleVehicleMod(veh, 18, true)
+            QBCore.Functions.Notify('🔥 Kit Bi-Turbo Garret instalado con éxito. Presión de soplado al máximo.', 'success', 5000)
+        end
+    },
+    ['engine_stage1'] = {
+        label = "Flasheando ECU con Stage 1...",
+        time = 6000,
+        animDict = "mp_common",
+        anim = "givetake2_a",
+        isEngine = true,
+        action = function(veh)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 11, 0, false)
+            QBCore.Functions.Notify('💻 Reprogramación Stage 1 cargada en centralita con éxito.', 'success', 5000)
+        end
+    },
+    ['engine_stage2'] = {
+        label = "Montando admisión y escape deportivo Stage 2...",
+        time = 7000,
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        isEngine = true,
+        action = function(veh)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 11, 1, false)
+            QBCore.Functions.Notify('🏎️ Admisión cónica y escape deportivo Stage 2 instalados.', 'success', 5000)
+        end
+    },
+    ['engine_stage3'] = {
+        label = "Instalando bloque forjado de competición Stage 3...",
+        time = 9000,
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        isEngine = true,
+        action = function(veh)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 11, 2, false)
+            QBCore.Functions.Notify('🏁 Motor forjado de competición Stage 3 montado y equilibrado.', 'success', 5000)
+        end
+    },
+    ['racing_brakes'] = {
+        label = "Montando discos y pinzas carbocerámicas Brembo...",
+        time = 6000,
+        animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+        anim = "machinic_loop_mechandplayer",
+        isEngine = false,
+        action = function(veh)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 12, 2, false)
+            QBCore.Functions.Notify('🛑 Frenos carbocerámicos de alto rendimiento instalados.', 'success', 5000)
+        end
+    },
+    ['racing_transmission'] = {
+        label = "Instalando caja de cambios secuencial de competición...",
+        time = 7500,
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        isEngine = true,
+        action = function(veh)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 13, 2, false)
+            QBCore.Functions.Notify('⚙️ Caja secuencial de relación cerrada montada.', 'success', 5000)
+        end
+    },
+    ['drift_suspension'] = {
+        label = "Regulando suspensión roscada y ángulo de giro Drift...",
+        time = 6500,
+        animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+        anim = "machinic_loop_mechandplayer",
+        isEngine = false,
+        action = function(veh)
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 15, 3, false)
+            QBCore.Functions.Notify('💨 Kit de suspensión y ángulo de giro Drift calibrado.', 'success', 5000)
+        end
+    },
+    ['nos_tank'] = {
+        label = "Conectando botella de óxido nitroso N2O...",
+        time = 5000,
+        animDict = "mini@repair",
+        anim = "fixing_a_ped",
+        isEngine = true,
+        action = function(veh)
+            local plate = GetVehicleNumberPlateText(veh)
+            TriggerServerEvent('qb-mechanicjob:server:syncNitrous', plate, true, 100)
+            QBCore.Functions.Notify('🚀 Botella de Nitro N2O instalada y purgada al 100%.', 'success', 5000)
+        end
+    }
+}
+
+RegisterNetEvent('spain_mechanic:client:installPerformancePart', function(itemName)
+    local cfg = performanceConfig[itemName]
+    if not cfg then return end
+
+    local veh = QBCore.Functions.GetClosestVehicle()
+    if veh == 0 or #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(veh)) > 4.5 then
+        QBCore.Functions.Notify('Debes estar junto al vehículo para instalar esta pieza de rendimiento.', 'error')
+        return
+    end
+
+    if cfg.isEngine then
+        SetVehicleDoorOpen(veh, 4, false, false)
+    end
+
+    QBCore.Functions.Progressbar("perf_install", cfg.label, cfg.time, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {
+        animDict = cfg.animDict,
+        anim = cfg.anim,
+        flags = 1,
+    }, {
+        model = "imp_prop_impexp_span_03",
+        bone = 28422,
+        coords = vector3(0.06, 0.01, -0.02),
+        rotation = vector3(0.0, 0.0, 0.0),
+    }, {}, function()
+        if cfg.isEngine then
+            SetVehicleDoorShut(veh, 4, false)
+        end
+        cfg.action(veh)
+        TriggerServerEvent('spain_mechanic:server:removeRepairItem', itemName)
+    end, function()
+        if cfg.isEngine then
+            SetVehicleDoorShut(veh, 4, false)
+        end
+        QBCore.Functions.Notify('Instalación cancelada.', 'error')
+    end)
 end)

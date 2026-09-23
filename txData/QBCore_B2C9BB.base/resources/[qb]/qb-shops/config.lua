@@ -162,6 +162,18 @@ Config.Products = {
         { name = 'repairkit',         price = 5000, amount = 50 },
         { name = 'advancedrepairkit', price = 5000, amount = 50 },
         { name = 'tirerepairkit',     price = 5000, amount = 50 },
+        { name = 'veh_door',          price = 250,  amount = 50 },
+        { name = 'veh_hood',          price = 350,  amount = 50 },
+        { name = 'veh_trunk',         price = 300,  amount = 50 },
+        { name = 'veh_wheel',         price = 150,  amount = 50 },
+        { name = 'turbo_racing',      price = 7500, amount = 50 },
+        { name = 'engine_stage1',     price = 3500, amount = 50 },
+        { name = 'engine_stage2',     price = 6000, amount = 50 },
+        { name = 'engine_stage3',     price = 9500, amount = 50 },
+        { name = 'racing_brakes',     price = 4500, amount = 50 },
+        { name = 'racing_transmission', price = 5500, amount = 50 },
+        { name = 'drift_suspension',  price = 4000, amount = 50 },
+        { name = 'nos_tank',          price = 2500, amount = 50 },
     }
 }
 
@@ -816,6 +828,14 @@ Config.Locations = {
         ['products'] = Config.Products['mechanic'],
         ['delivery'] = vector4(119.3033, 6626.7358, 31.9558, 46.1566),
         ['requiredJob'] = 'beeker'
+    },
+
+    ['canals'] = {
+        ['label'] = 'Canals Customs Shop',
+        ['coords'] = vector4(-1156.40, -1525.20, 4.37, 215.0),
+        ['products'] = Config.Products['mechanic'],
+        ['delivery'] = vector4(-1163.50, -1512.20, 4.37, 125.0),
+        ['requiredJob'] = 'canals'
     },
 
     ['prison'] = {
