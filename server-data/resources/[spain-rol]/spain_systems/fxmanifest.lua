@@ -24,12 +24,14 @@ client_scripts {
     'client/cl_tuning.lua',
     'client/cl_mechanic_tablet.lua',
     'client/cl_yacht_heist.lua',
-    'client/cl_drug_routes.lua'
+    'client/cl_drug_routes.lua',
+    'client/cl_job_center.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/sv_main.lua'
+    'server/sv_main.lua',
+    'server/sv_job_center.lua'
 }
 
 lua54 'yes'
