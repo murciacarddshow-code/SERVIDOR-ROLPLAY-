@@ -155,38 +155,85 @@ RegisterNetEvent('spain_pokemon:server:finishPackOpening', function(packItem)
     TriggerClientEvent('spain_pokemon:client:cardObtained', src, cardLabel, rarity, isHit)
 end)
 
--- Comando para vender cartas repetidas al tendero de PokéVault
-QBCore.Commands.Add('venderpokecartas', 'Vender cartas Pokémon repetidas en la tienda PokéVault', {}, false, function(source, args)
-    local Player = QBCore.Functions.GetPlayer(source)
+-- =========================================================================
+-- TASACIÓN Y VENTA DE CARTAS POKÉMON MEDIANTE NPC (POKÉVAULT)
+-- =========================================================================
+
+local cardPrices = {
+    ['pokemon_card_common'] = { price = 15, label = 'Carta Común Kanto' },
+    ['pokemon_card_holo'] = { price = 65, label = 'Carta Holográfica Rara' },
+    ['pokemon_card_charizard_vmax'] = { price = 1200, label = 'Charizard VMAX Shiny' },
+    ['pokemon_card_moonbreon'] = { price = 1200, label = 'Umbreon VMAX Moonbreon' },
+    ['pokemon_card_mewtwo_gold'] = { price = 900, label = 'Mewtwo VSTAR Dorada' },
+    ['pokemon_card_psa10'] = { price = 2500, label = 'Slab Graduada PSA 10 Gem Mint' },
+}
+
+RegisterNetEvent('spain_pokemon:server:sellCards', function(cardType)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
+
+    -- Verificación de proximidad con el mostrador del Tasador de PokéVault (Legion Square)
+    local playerPed = GetPlayerPed(src)
+    local pCoords = GetEntityCoords(playerPed)
+    local shopCoords = vector3(21.5, -1106.0, 29.8)
+    if #(pCoords - shopCoords) > 15.0 then
+        TriggerClientEvent('QBCore:Notify', src, "Debes estar junto al Tasador en la tienda PokéVault para vender tus cartas.", "error")
+        return
+    end
 
     local totalCash = 0
     local soldCount = 0
 
-    local prices = {
-        ['pokemon_card_common'] = 15,
-        ['pokemon_card_holo'] = 65,
-        ['pokemon_card_charizard_vmax'] = 1200,
-        ['pokemon_card_moonbreon'] = 1200,
-        ['pokemon_card_mewtwo_gold'] = 900,
-        ['pokemon_card_psa10'] = 2500,
-    }
-
-    for cardName, price in pairs(prices) do
-        local item = Player.Functions.GetItemByName(cardName)
-        if item and item.amount > 0 then
-            local count = item.amount
-            if Player.Functions.RemoveItem(cardName, count) then
-                totalCash = totalCash + (price * count)
-                soldCount = soldCount + count
+    if cardType == 'all' then
+        for itemName, data in pairs(cardPrices) do
+            local item = Player.Functions.GetItemByName(itemName)
+            if item and item.amount > 0 then
+                local amount = item.amount
+                if Player.Functions.RemoveItem(itemName, amount) then
+                    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[itemName] or { label = data.label }, "remove")
+                    totalCash = totalCash + (data.price * amount)
+                    soldCount = soldCount + amount
+                end
             end
         end
-    end
 
-    if soldCount > 0 then
-        Player.Functions.AddMoney('cash', totalCash, 'pokevault-card-sale')
-        TriggerClientEvent('QBCore:Notify', source, "Has vendido " .. soldCount .. " cartas Pokémon en PokéVault por €" .. totalCash .. " en efectivo.", "success", 7500)
+        if soldCount > 0 then
+            Player.Functions.AddMoney('cash', totalCash, 'pokevault-card-sale')
+            TriggerClientEvent('spain_pokemon:client:saleComplete', src, soldCount, totalCash)
+        else
+            TriggerClientEvent('QBCore:Notify', src, "El tasador revisa tu cartera: 'No tienes ninguna carta Pokémon para tasar.'", "error", 6000)
+        end
     else
-        TriggerClientEvent('QBCore:Notify', source, "No tienes cartas Pokémon en tu inventario para vender.", "error")
+        local data = cardPrices[cardType]
+        if not data then return end
+
+        local item = Player.Functions.GetItemByName(cardType)
+        if item and item.amount > 0 then
+            local amount = item.amount
+            if Player.Functions.RemoveItem(cardType, amount) then
+                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[cardType] or { label = data.label }, "remove")
+                totalCash = data.price * amount
+                soldCount = amount
+                Player.Functions.AddMoney('cash', totalCash, 'pokevault-card-sale')
+                TriggerClientEvent('spain_pokemon:client:saleComplete', src, soldCount, totalCash)
+            end
+        else
+            TriggerClientEvent('QBCore:Notify', src, "El tasador: 'No tienes cartas de " .. data.label .. " en tu inventario.'", "error", 6000)
+        end
+    end
+end)
+
+-- Si algún jugador escribe el comando antiguo, se le orienta al NPC o se le abre el menú si está cerca
+QBCore.Commands.Add('venderpokecartas', 'Hablar con el tasador de PokéVault para vender cartas', {}, false, function(source, args)
+    local src = source
+    local playerPed = GetPlayerPed(src)
+    local pCoords = GetEntityCoords(playerPed)
+    local shopCoords = vector3(21.5, -1106.0, 29.8)
+
+    if #(pCoords - shopCoords) <= 5.0 then
+        TriggerClientEvent('spain_pokemon:client:openBuyerMenu', src)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "Para vender tus cartas acude a PokéVault (Plaza Legion) y habla con el Tasador Oficial en el mostrador [E].", "primary", 7500)
     end
 end)
