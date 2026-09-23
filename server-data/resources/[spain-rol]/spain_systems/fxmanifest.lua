@@ -7,7 +7,8 @@ version '1.0.0'
 
 shared_scripts {
     '@qb-core/shared/locale.lua',
-    'config.lua'
+    'config.lua',
+    'config_jobs.lua'
 }
 
 client_scripts {
@@ -25,13 +26,15 @@ client_scripts {
     'client/cl_mechanic_tablet.lua',
     'client/cl_yacht_heist.lua',
     'client/cl_drug_routes.lua',
-    'client/cl_job_center.lua'
+    'client/cl_job_center.lua',
+    'client/cl_jobs_engine.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/sv_main.lua',
-    'server/sv_job_center.lua'
+    'server/sv_job_center.lua',
+    'server/sv_jobs_engine.lua'
 }
 
 lua54 'yes'
