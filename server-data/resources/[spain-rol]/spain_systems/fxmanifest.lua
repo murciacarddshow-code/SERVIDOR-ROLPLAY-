@@ -28,7 +28,8 @@ client_scripts {
     'client/cl_drug_routes.lua',
     'client/cl_job_center.lua',
     'client/cl_jobs_engine.lua',
-    'client/cl_pokemon.lua'
+    'client/cl_pokemon.lua',
+    'client/cl_chat_rp.lua'
 }
 
 server_scripts {
@@ -36,7 +37,8 @@ server_scripts {
     'server/sv_main.lua',
     'server/sv_job_center.lua',
     'server/sv_jobs_engine.lua',
-    'server/sv_pokemon.lua'
+    'server/sv_pokemon.lua',
+    'server/sv_chat_rp.lua'
 }
 
 lua54 'yes'
