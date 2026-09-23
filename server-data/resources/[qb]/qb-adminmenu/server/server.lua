@@ -543,3 +543,80 @@ QBCore.Commands.Add('heading', 'Copy heading to clipboard (Admin only)', {}, fal
     local src = source
     TriggerClientEvent('qb-admin:client:copyToClipboard', src, 'heading')
 end, 'admin')
+
+-- =========================================================================
+-- SPAIN ROL - GESTIÓN DE ECONOMÍA (DAR Y QUITAR DINERO)
+-- =========================================================================
+
+QBCore.Functions.CreateCallback('qb-admin:server:getPlayerMoney', function(source, cb, targetId)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        cb(nil)
+        return
+    end
+    local target = QBCore.Functions.GetPlayer(tonumber(targetId))
+    if target then
+        cb({
+            cash = target.PlayerData.money['cash'] or 0,
+            bank = target.PlayerData.money['bank'] or 0,
+            crypto = target.PlayerData.money['crypto'] or 0,
+            name = (target.PlayerData.charinfo.firstname or '') .. ' ' .. (target.PlayerData.charinfo.lastname or '')
+        })
+    else
+        cb(nil)
+    end
+end)
+
+RegisterNetEvent('qb-admin:server:giveMoney', function(targetId, moneyType, amount)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        BanPlayer(src)
+        return
+    end
+    targetId = tonumber(targetId)
+    amount = tonumber(amount)
+    moneyType = tostring(moneyType or 'cash'):lower()
+
+    if not targetId or not amount or amount <= 0 then
+        TriggerClientEvent('QBCore:Notify', src, 'Cantidad o ID no válido.', 'error')
+        return
+    end
+
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if TargetPlayer then
+        TargetPlayer.Functions.AddMoney(moneyType, amount, 'Admin Give Money')
+        local pName = (TargetPlayer.PlayerData.charinfo.firstname or '') .. ' ' .. (TargetPlayer.PlayerData.charinfo.lastname or '')
+        TriggerClientEvent('QBCore:Notify', src, ('Se han entregado $%s (%s) a %s (ID: %s).'):format(amount, moneyType:upper(), pName, targetId), 'success')
+        TriggerClientEvent('QBCore:Notify', targetId, ('Un Administrador te ha entregado $%s (%s).'):format(amount, moneyType:upper()), 'success')
+        TriggerEvent('qb-log:server:CreateLog', 'adminmenu', 'Dar Dinero', 'green', string.format('**%s** (Admin: %s) dio **$%s** (%s) a **%s** (ID: %s)', GetPlayerName(src), src, amount, moneyType, GetPlayerName(targetId), targetId), true)
+    else
+        TriggerClientEvent('QBCore:Notify', src, 'El jugador con ID ' .. targetId .. ' no está conectado.', 'error')
+    end
+end)
+
+RegisterNetEvent('qb-admin:server:removeMoney', function(targetId, moneyType, amount)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        BanPlayer(src)
+        return
+    end
+    targetId = tonumber(targetId)
+    amount = tonumber(amount)
+    moneyType = tostring(moneyType or 'cash'):lower()
+
+    if not targetId or not amount or amount <= 0 then
+        TriggerClientEvent('QBCore:Notify', src, 'Cantidad o ID no válido.', 'error')
+        return
+    end
+
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if TargetPlayer then
+        TargetPlayer.Functions.RemoveMoney(moneyType, amount, 'Admin Remove Money')
+        local pName = (TargetPlayer.PlayerData.charinfo.firstname or '') .. ' ' .. (TargetPlayer.PlayerData.charinfo.lastname or '')
+        TriggerClientEvent('QBCore:Notify', src, ('Se han retirado $%s (%s) a %s (ID: %s).'):format(amount, moneyType:upper(), pName, targetId), 'success')
+        TriggerClientEvent('QBCore:Notify', targetId, ('Un Administrador te ha retirado $%s (%s).'):format(amount, moneyType:upper()), 'error')
+        TriggerEvent('qb-log:server:CreateLog', 'adminmenu', 'Quitar Dinero', 'red', string.format('**%s** (Admin: %s) retiró **$%s** (%s) a **%s** (ID: %s)', GetPlayerName(src), src, amount, moneyType, GetPlayerName(targetId), targetId), true)
+    else
+        TriggerClientEvent('QBCore:Notify', src, 'El jugador con ID ' .. targetId .. ' no está conectado.', 'error')
+    end
+end)

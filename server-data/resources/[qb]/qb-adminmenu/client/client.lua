@@ -24,6 +24,7 @@ local menu12 = MenuV:CreateMenu(false, Lang:t('menu.vehicle_categories'), menuLo
 local menu13 = MenuV:CreateMenu(false, Lang:t('menu.vehicle_models'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test13')
 local menu14 = MenuV:CreateMenu(false, Lang:t('menu.entity_view_options'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test14')
 local menu15 = MenuV:CreateMenu(false, Lang:t('menu.spawn_weapons'), menuLocation, 220, 20, 60, 'size-125', 'none', 'menuv', 'test15')
+local menu16 = MenuV:CreateMenu(false, 'Gestión de Economía', menuLocation, 16, 185, 129, 'size-125', 'none', 'menuv', 'test16')
 
 RegisterNetEvent('qb-admin:client:openMenu', function()
     QBCore.Functions.TriggerCallback('qb-admin:isAdmin', function(isAdmin)
@@ -54,6 +55,14 @@ local player_management = menu1:AddButton({
     label = Lang:t('menu.player_management'),
     value = menu4,
     description = Lang:t('desc.player_management_desc')
+})
+
+--money management
+menu1:AddButton({
+    icon = '💰',
+    label = 'Gestión de Economía',
+    value = menu16,
+    description = 'Entregar y retirar dinero por ID o a ti mismo'
 })
 
 --server management
@@ -91,6 +100,209 @@ menu1:AddButton({
 --[[
     Sub Menus for the above main menu's
 --]]
+
+-- Money Management Menu Buttons
+menu16:AddButton({
+    icon = '💵',
+    label = 'Darme Dinero a Mí Mismo',
+    description = 'Añadir efectivo, banco o cripto a tu personaje',
+    select = function()
+        local dialog = exports['qb-input']:ShowInput({
+            header = '💵 Añadirte Dinero',
+            submitText = 'Confirmar',
+            inputs = {
+                {
+                    text = 'Tipo de Cuenta',
+                    name = 'moneytype',
+                    type = 'radio',
+                    options = {
+                        { value = 'cash', text = '💵 Efectivo' },
+                        { value = 'bank', text = '💳 Banco' },
+                        { value = 'crypto', text = '🪙 Criptomoneda' }
+                    },
+                    default = 'cash'
+                },
+                {
+                    text = 'Cantidad ($)',
+                    name = 'amount',
+                    type = 'number',
+                    isRequired = true
+                }
+            }
+        })
+        if dialog and dialog.amount then
+            local amt = tonumber(dialog.amount)
+            if amt and amt > 0 then
+                TriggerServerEvent('qb-admin:server:giveMoney', GetPlayerServerId(PlayerId()), dialog.moneytype or 'cash', amt)
+            else
+                QBCore.Functions.Notify('Cantidad no válida.', 'error')
+            end
+        end
+    end
+})
+
+menu16:AddButton({
+    icon = '💸',
+    label = 'Quitarme Dinero a Mí Mismo',
+    description = 'Retirar dinero de tu personaje',
+    select = function()
+        local dialog = exports['qb-input']:ShowInput({
+            header = '💸 Quitarte Dinero',
+            submitText = 'Confirmar',
+            inputs = {
+                {
+                    text = 'Tipo de Cuenta',
+                    name = 'moneytype',
+                    type = 'radio',
+                    options = {
+                        { value = 'cash', text = '💵 Efectivo' },
+                        { value = 'bank', text = '💳 Banco' },
+                        { value = 'crypto', text = '🪙 Criptomoneda' }
+                    },
+                    default = 'cash'
+                },
+                {
+                    text = 'Cantidad ($)',
+                    name = 'amount',
+                    type = 'number',
+                    isRequired = true
+                }
+            }
+        })
+        if dialog and dialog.amount then
+            local amt = tonumber(dialog.amount)
+            if amt and amt > 0 then
+                TriggerServerEvent('qb-admin:server:removeMoney', GetPlayerServerId(PlayerId()), dialog.moneytype or 'cash', amt)
+            else
+                QBCore.Functions.Notify('Cantidad no válida.', 'error')
+            end
+        end
+    end
+})
+
+menu16:AddButton({
+    icon = '💳',
+    label = 'Dar Dinero a Jugador por ID',
+    description = 'Entregar dinero a cualquier jugador mediante su ID',
+    select = function()
+        local dialog = exports['qb-input']:ShowInput({
+            header = '💳 Dar Dinero a Jugador',
+            submitText = 'Entregar',
+            inputs = {
+                {
+                    text = 'ID del Jugador (Server ID)',
+                    name = 'targetid',
+                    type = 'number',
+                    isRequired = true
+                },
+                {
+                    text = 'Tipo de Cuenta',
+                    name = 'moneytype',
+                    type = 'radio',
+                    options = {
+                        { value = 'cash', text = '💵 Efectivo' },
+                        { value = 'bank', text = '💳 Banco' },
+                        { value = 'crypto', text = '🪙 Criptomoneda' }
+                    },
+                    default = 'cash'
+                },
+                {
+                    text = 'Cantidad ($)',
+                    name = 'amount',
+                    type = 'number',
+                    isRequired = true
+                }
+            }
+        })
+        if dialog and dialog.targetid and dialog.amount then
+            local tid = tonumber(dialog.targetid)
+            local amt = tonumber(dialog.amount)
+            if tid and amt and amt > 0 then
+                TriggerServerEvent('qb-admin:server:giveMoney', tid, dialog.moneytype or 'cash', amt)
+            else
+                QBCore.Functions.Notify('Datos no válidos.', 'error')
+            end
+        end
+    end
+})
+
+menu16:AddButton({
+    icon = '🧾',
+    label = 'Quitar Dinero a Jugador por ID',
+    description = 'Retirar dinero a cualquier jugador mediante su ID',
+    select = function()
+        local dialog = exports['qb-input']:ShowInput({
+            header = '🧾 Quitar Dinero a Jugador',
+            submitText = 'Retirar',
+            inputs = {
+                {
+                    text = 'ID del Jugador (Server ID)',
+                    name = 'targetid',
+                    type = 'number',
+                    isRequired = true
+                },
+                {
+                    text = 'Tipo de Cuenta',
+                    name = 'moneytype',
+                    type = 'radio',
+                    options = {
+                        { value = 'cash', text = '💵 Efectivo' },
+                        { value = 'bank', text = '💳 Banco' },
+                        { value = 'crypto', text = '🪙 Criptomoneda' }
+                    },
+                    default = 'cash'
+                },
+                {
+                    text = 'Cantidad ($)',
+                    name = 'amount',
+                    type = 'number',
+                    isRequired = true
+                }
+            }
+        })
+        if dialog and dialog.targetid and dialog.amount then
+            local tid = tonumber(dialog.targetid)
+            local amt = tonumber(dialog.amount)
+            if tid and amt and amt > 0 then
+                TriggerServerEvent('qb-admin:server:removeMoney', tid, dialog.moneytype or 'cash', amt)
+            else
+                QBCore.Functions.Notify('Datos no válidos.', 'error')
+            end
+        end
+    end
+})
+
+menu16:AddButton({
+    icon = '🔍',
+    label = 'Consultar Saldo por ID',
+    description = 'Ver el dinero actual de un jugador por su ID',
+    select = function()
+        local dialog = exports['qb-input']:ShowInput({
+            header = '🔍 Consultar Saldo',
+            submitText = 'Consultar',
+            inputs = {
+                {
+                    text = 'ID del Jugador (Server ID)',
+                    name = 'targetid',
+                    type = 'number',
+                    isRequired = true
+                }
+            }
+        })
+        if dialog and dialog.targetid then
+            local tid = tonumber(dialog.targetid)
+            if tid then
+                QBCore.Functions.TriggerCallback('qb-admin:server:getPlayerMoney', function(data)
+                    if data then
+                        QBCore.Functions.Notify(('💰 Saldo de %s (ID %s):\n💵 Efectivo: $%s\n💳 Banco: $%s\n🪙 Cripto: %s'):format(data.name, tid, data.cash, data.bank, data.crypto), 'primary', 8000)
+                    else
+                        QBCore.Functions.Notify('No se encontró al jugador con ID ' .. tid, 'error')
+                    end
+                end, tid)
+            end
+        end
+    end
+})
 
 -- Admin Options Menu Buttons
 local menu2_admin_noclip = menu2:AddCheckbox({
@@ -718,6 +930,24 @@ local function OpenPlayerMenus(player)
             label = 'Liberar de Prisión (Unjail)',
             value = 'unjail',
             description = 'Liberar inmediatamente al jugador de prisión'
+        },
+        [15] = {
+            icon = '💵',
+            label = 'Dar Dinero',
+            value = 'givemoney',
+            description = 'Entregar efectivo o saldo bancario a ' .. player.cid
+        },
+        [16] = {
+            icon = '💸',
+            label = 'Quitar Dinero',
+            value = 'removemoney',
+            description = 'Retirar efectivo o saldo bancario a ' .. player.cid
+        },
+        [17] = {
+            icon = '💳',
+            label = 'Consultar Saldo',
+            value = 'checkmoney',
+            description = 'Ver el dinero actual en efectivo, banco y cripto'
         }
     }
     for _, v in ipairs(elements) do
@@ -728,7 +958,7 @@ local function OpenPlayerMenus(player)
             description = v.description,
             select = function(btn)
                 local values = btn.Value
-                if values ~= 'ban' and values ~= 'kick' and values ~= 'perms' and values ~= 'jail' and values ~= 'unjail' then
+                if values ~= 'ban' and values ~= 'kick' and values ~= 'perms' and values ~= 'jail' and values ~= 'unjail' and values ~= 'givemoney' and values ~= 'removemoney' and values ~= 'checkmoney' then
                     TriggerServerEvent('qb-admin:server:' .. values, player)
                 elseif values == 'ban' then
                     OpenBanMenu(player)
@@ -744,6 +974,78 @@ local function OpenPlayerMenus(player)
                     end
                 elseif values == 'unjail' then
                     ExecuteCommand('unjail ' .. player.id)
+                elseif values == 'givemoney' then
+                    local dialog = exports['qb-input']:ShowInput({
+                        header = '💵 Entregar Dinero a ' .. player.cid,
+                        submitText = 'Entregar Dinero',
+                        inputs = {
+                            {
+                                text = 'Tipo de Cuenta',
+                                name = 'moneytype',
+                                type = 'radio',
+                                options = {
+                                    { value = 'cash', text = '💵 Efectivo' },
+                                    { value = 'bank', text = '💳 Banco' },
+                                    { value = 'crypto', text = '🪙 Criptomoneda' }
+                                },
+                                default = 'cash'
+                            },
+                            {
+                                text = 'Cantidad ($)',
+                                name = 'amount',
+                                type = 'number',
+                                isRequired = true
+                            }
+                        }
+                    })
+                    if dialog and dialog.amount then
+                        local amt = tonumber(dialog.amount)
+                        if amt and amt > 0 then
+                            TriggerServerEvent('qb-admin:server:giveMoney', player.id, dialog.moneytype or 'cash', amt)
+                        else
+                            QBCore.Functions.Notify('Cantidad no válida.', 'error')
+                        end
+                    end
+                elseif values == 'removemoney' then
+                    local dialog = exports['qb-input']:ShowInput({
+                        header = '💸 Quitar Dinero a ' .. player.cid,
+                        submitText = 'Quitar Dinero',
+                        inputs = {
+                            {
+                                text = 'Tipo de Cuenta',
+                                name = 'moneytype',
+                                type = 'radio',
+                                options = {
+                                    { value = 'cash', text = '💵 Efectivo' },
+                                    { value = 'bank', text = '💳 Banco' },
+                                    { value = 'crypto', text = '🪙 Criptomoneda' }
+                                },
+                                default = 'cash'
+                            },
+                            {
+                                text = 'Cantidad a descontar ($)',
+                                name = 'amount',
+                                type = 'number',
+                                isRequired = true
+                            }
+                        }
+                    })
+                    if dialog and dialog.amount then
+                        local amt = tonumber(dialog.amount)
+                        if amt and amt > 0 then
+                            TriggerServerEvent('qb-admin:server:removeMoney', player.id, dialog.moneytype or 'cash', amt)
+                        else
+                            QBCore.Functions.Notify('Cantidad no válida.', 'error')
+                        end
+                    end
+                elseif values == 'checkmoney' then
+                    QBCore.Functions.TriggerCallback('qb-admin:server:getPlayerMoney', function(data)
+                        if data then
+                            QBCore.Functions.Notify(('💰 Saldo de %s:\n💵 Efectivo: $%s | 💳 Banco: $%s | 🪙 Cripto: %s'):format(data.name, data.cash, data.bank, data.crypto), 'primary', 7500)
+                        else
+                            QBCore.Functions.Notify('No se pudo consultar el saldo.', 'error')
+                        end
+                    end, player.id)
                 end
             end
         })

@@ -34,5 +34,27 @@
     "permissions": [
       "all_permissions"
     ]
+  },
+  {
+    "$schema": 1,
+    "name": "inferno",
+    "master": false,
+    "password_hash": "$2a$11$HsVZNU2wsBg7e6LaaKQsXOyGkpo58vyuAt4cgMfwr3SYgpgy0Zvd6",
+    "password_temporary": true,
+    "providers": {
+      "citizenfx": {
+        "id": "inferno",
+        "identifier": "fivem:13710036",
+        "data": {}
+      },
+      "discord": {
+        "id": "495882595700310018",
+        "identifier": "discord:495882595700310018",
+        "data": {}
+      }
+    },
+    "permissions": [
+      "all_permissions"
+    ]
   }
 ]

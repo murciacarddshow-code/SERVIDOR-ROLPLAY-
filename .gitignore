@@ -15,7 +15,7 @@ server-data/db/
 txData/*/cache/
 txData/*/logs/
 txData/default/logs/
-txData/default/data/*.backup.json
+txData/default/data/*.json
 *.log
 *.tmp
 .system_generated/

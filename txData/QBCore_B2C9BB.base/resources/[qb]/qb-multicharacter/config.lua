@@ -1,12 +1,12 @@
 Config = {}
-Config.Interior = vector3(-763.2816, 330.0418, 199.4865)              -- Interior to load where characters are previewed
-Config.DefaultSpawn = vector4(-1035.71, -2731.87, 13.76, 330.0)         -- Default spawn coords at Airport terminal
-Config.PedCoords = vector4(-763.2816, 330.0418, 199.4865, 177.7942)   -- Create preview ped at these coordinates
-Config.HiddenCoords = vector4(-779.0154, 326.1801, 196.0860, 91.0454) -- Hides your actual ped while you are in selection
-Config.CamCoords = vector4(-763.1219, 326.8112, 200, 357.0954)        -- Camera coordinates for character preview screen
+Config.Interior = vector3(-1037.86, -2737.95, 20.17)              -- Interior to load where characters are previewed (Aeropuerto LSIA)
+Config.DefaultSpawn = vector4(-1037.86, -2737.95, 20.17, 327.42)         -- Default spawn coords at Airport terminal
+Config.PedCoords = vector4(-1037.86, -2737.95, 20.17, 327.42)   -- Create preview ped at Airport terminal
+Config.HiddenCoords = vector4(-1045.0, -2750.0, 15.0, 0.0) -- Hides your actual ped while you are in selection
+Config.CamCoords = vector4(-1035.6, -2734.5, 20.6, 147.42)        -- Camera coordinates for character preview screen
 Config.EnableDeleteButton = true                                      -- Define if the player can delete the character or not
 Config.customNationality = false                                      -- Defines if Nationality input is custom of blocked to the list of Countries
-Config.SkipSelection = false                                          -- Skip the spawn selection and spawns the player at the last location
+Config.SkipSelection = true                                          -- Skip the spawn selection and spawns the player at the last location / airport
 
 Config.DefaultNumberOfCharacters = 5                                  -- Define maximum amount of default characters (maximum 5 characters defined by default)
 Config.PlayersNumberOfCharacters = {                                  -- Define maximum amount of player characters by rockstar license (you can find this license in your server's database in the player table)

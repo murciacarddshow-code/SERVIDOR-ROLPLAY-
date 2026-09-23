@@ -16,7 +16,7 @@ echo [1/3] Verificando Base de Datos MariaDB (Puerto 3306)...
 netstat -ano | findstr :3306 >nul
 if %errorlevel% neq 0 (
     echo Iniciando MariaDB en segundo plano...
-    start "" /b "%DB_DIR%\bin\mysqld.exe" --defaults-file="%DB_DIR%\my.ini"
+    start /min "MariaDB Portable" "%DB_DIR%\bin\mysqld.exe" --defaults-file="%DB_DIR%\my.ini"
     timeout /t 3 /nobreak >nul
 ) else (
     echo Base de Datos MariaDB ya activa en el puerto 3306.

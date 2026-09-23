@@ -138,11 +138,14 @@ end)
 RegisterNetEvent('qb-multicharacter:client:chooseChar', function()
     SetNuiFocus(false, false)
     DoScreenFadeOut(10)
-    Wait(1000)
-    local interior = GetInteriorAtCoords(Config.Interior.x, Config.Interior.y, Config.Interior.z - 18.9)
-    LoadInterior(interior)
-    while not IsInteriorReady(interior) do
-        Wait(1000)
+    local interior = GetInteriorAtCoords(Config.Interior.x, Config.Interior.y, Config.Interior.z)
+    if interior ~= 0 then
+        LoadInterior(interior)
+        while not IsInteriorReady(interior) do
+            Wait(100)
+        end
+    else
+        RequestCollisionAtCoord(Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z)
     end
     FreezeEntityPosition(PlayerPedId(), true)
     SetEntityCoords(PlayerPedId(), Config.HiddenCoords.x, Config.HiddenCoords.y, Config.HiddenCoords.z)

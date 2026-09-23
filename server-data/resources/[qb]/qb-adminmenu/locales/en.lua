@@ -103,7 +103,7 @@ local Translations = {
         entity_del_error      = 'Error deleting entity',
     },
     menu = {
-        admin_menu = 'Admin Menu',
+        admin_menu = 'SPAIN ROL | STAFF PANEL',
         admin_options = 'Admin Options',
         online_players = 'Online Players',
         manage_server = 'Manage Server',
