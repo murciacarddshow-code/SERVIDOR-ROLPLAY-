@@ -60,10 +60,18 @@ netstat -ano | findstr :3306 >nul
 if %errorlevel% neq 0 (
     echo Iniciando motor MariaDB en segundo plano...
     start "" /b "%DB_DIR%\bin\mysqld.exe" --defaults-file="%DB_DIR%\my.ini"
-    ping 127.0.0.1 -n 4 >nul
-    netstat -ano | findstr :3306 >nul
-    if %errorlevel% equ 0 (
-        echo [OK] Base de datos MariaDB iniciada correctamente.
+    set "DB_READY=0"
+    for /L %%i in (1,1,8) do (
+        ping 127.0.0.1 -n 2 >nul
+        netstat -ano | findstr :3306 >nul
+        if !errorlevel! equ 0 (
+            set "DB_READY=1"
+            goto DB_CHECK_DONE
+        )
+    )
+    :DB_CHECK_DONE
+    if "!DB_READY!"=="1" (
+        echo [OK] Base de datos MariaDB iniciada y respondiendo en el puerto 3306.
     ) else (
         echo [ERROR] No se pudo arrancar MariaDB. Revisa posibles bloqueos de puerto.
     )

@@ -1,4 +1,4 @@
-﻿Config = Config or {}
+Config = Config or {}
 
 Config.WomanPlayerModels = {
     'mp_f_freemode_01',
