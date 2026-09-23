@@ -8,13 +8,13 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local spawnedPeds = {}
 
 local npcList = {
-    -- ARMERO AMMU-NATION (Plaza Legion)
+    -- DEPENDIENTE POKÉVAULT SHOP (Plaza Legion / Innocence Blvd)
     {
-        model = `s_m_y_ammucity_01`,
+        model = `a_m_y_smartcaspat_01`,
         coords = vector4(22.58, -1105.47, 29.8, 160.0),
-        scenario = 'WORLD_HUMAN_COP_IDLES',
-        type = 'armory',
-        text = '~r~[E]~s~ Hablar con Armero (Comprar Armamento)'
+        scenario = 'WORLD_HUMAN_STAND_MOBILE',
+        type = 'pokevault',
+        text = '~y~[E]~s~ Hablar con Dependiente PokéVault (Sobres y Cartas Pokémon)'
     },
     -- ARMERO AMMU-NATION (Vinewood)
     {
@@ -135,6 +135,8 @@ CreateThread(function()
                 if IsControlJustPressed(0, 38) then -- Tecla E
                     if npc.type == 'armory' then
                         TriggerEvent('qb-shops:client:openShop', 'weapons')
+                    elseif npc.type == 'pokevault' then
+                        TriggerEvent('qb-shops:client:openShop', 'pokevault')
                     elseif npc.type == 'badulake' then
                         TriggerEvent('qb-shops:client:openShop', 'normal')
                     elseif npc.type == 'hospital_reception' then

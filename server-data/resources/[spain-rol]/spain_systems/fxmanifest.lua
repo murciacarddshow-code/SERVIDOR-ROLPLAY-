@@ -27,14 +27,16 @@ client_scripts {
     'client/cl_yacht_heist.lua',
     'client/cl_drug_routes.lua',
     'client/cl_job_center.lua',
-    'client/cl_jobs_engine.lua'
+    'client/cl_jobs_engine.lua',
+    'client/cl_pokemon.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/sv_main.lua',
     'server/sv_job_center.lua',
-    'server/sv_jobs_engine.lua'
+    'server/sv_jobs_engine.lua',
+    'server/sv_pokemon.lua'
 }
 
 lua54 'yes'
