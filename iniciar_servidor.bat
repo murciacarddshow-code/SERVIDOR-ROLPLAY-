@@ -14,6 +14,27 @@ set "FX_DIR=%SERVER_ROOT%server"
 set "DATA_DIR=%SERVER_ROOT%server-data"
 set "TX_DIR=%SERVER_ROOT%txData"
 
+:: 0. Sincronizacion automatica con GitHub
+set "GIT_CMD="
+where git >nul 2>&1
+if %errorlevel% equ 0 (
+    set "GIT_CMD=git"
+) else (
+    for /d %%D in ("%LOCALAPPDATA%\GitHubDesktop\app-*") do (
+        if exist "%%D\resources\app\git\cmd\git.exe" set "GIT_CMD=%%D\resources\app\git\cmd\git.exe"
+    )
+)
+if defined GIT_CMD (
+    echo [SYNC] Comprobando y descargando cambios de companeros desde GitHub...
+    "%GIT_CMD%" pull origin main --autostash >nul 2>&1
+    if !errorlevel! equ 0 (
+        echo [OK] Servidor al dia con la version de GitHub.
+    ) else (
+        echo [INFO] Modo local / cambios conservados con exito.
+    )
+    echo.
+)
+
 :: 1. Verificacion y configuracion dinamica de my.ini
 set "DATA_DIR_SLASH=%DB_DIR:\=/%/data"
 powershell -NoProfile -Command "(Get-Content '%DB_DIR%\my.ini') -replace '^datadir=.*', 'datadir=\"%DATA_DIR_SLASH%\"' | Set-Content '%DB_DIR%\my.ini'" >nul 2>&1
