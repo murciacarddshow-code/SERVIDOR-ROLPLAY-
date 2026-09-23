@@ -267,7 +267,12 @@
                             <button class="modal-close-x" id="modal-hire-close">✕</button>
                         </div>
                         <div class="modal-body">
-                            <p class="modal-instruction">Selecciona a un ciudadano presente en el concesionario para incorporarlo al equipo como <strong>Empleado en Prácticas (Grado 0)</strong>:</p>
+                            <p class="modal-instruction">Selecciona un ciudadano presente en el mostrador o introduce directamente su ID del servidor o DNI (CitizenID):</p>
+                            <div style="display:flex; gap:8px; margin: 6px 0 12px 0;">
+                                <input type="text" id="input-hire-direct" placeholder="ID del jugador (ej: 1) o DNI..." style="flex:1; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); padding:10px 14px; border-radius:8px; color:#fff; font-family:inherit; font-size:0.9rem;">
+                                <button class="btn-primary" id="btn-hire-direct" style="padding:10px 18px; white-space:nowrap;">Contratar</button>
+                            </div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; margin-bottom:6px;">Ciudadanos en el Mostrador:</div>
                             <div class="nearby-players-list" id="nearby-players-list">
                                 <!-- Nearby players injected via JS -->
                             </div>

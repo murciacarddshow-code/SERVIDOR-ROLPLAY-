@@ -488,9 +488,16 @@ document.getElementById('btn-open-hire-modal').onclick = () => {
             });
         }
 
+        document.getElementById('input-hire-direct').value = '';
         document.getElementById('modal-hire-player').classList.remove('hidden');
     })
     .catch(() => {});
+};
+
+document.getElementById('btn-hire-direct').onclick = () => {
+    const val = document.getElementById('input-hire-direct').value.trim();
+    if (!val) return;
+    hirePlayer(val);
 };
 
 window.hirePlayer = function(targetId) {

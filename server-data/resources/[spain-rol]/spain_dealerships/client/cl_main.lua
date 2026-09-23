@@ -219,21 +219,9 @@ RegisterNUICallback('fireEmployee', function(data, cb)
 end)
 
 RegisterNUICallback('getNearbyPlayers', function(data, cb)
-    local players = {}
-    local ped = PlayerPedId()
-    local pCoords = GetEntityCoords(ped)
-
-    for _, v in pairs(QBCore.Functions.GetPlayersFromCoords(pCoords, 10.0)) do
-        local targetPed = GetPlayerPed(v)
-        if targetPed ~= ped then
-            local serverId = GetPlayerServerId(v)
-            players[#players + 1] = {
-                id = serverId,
-                name = GetPlayerName(v)
-            }
-        end
-    end
-    cb(players)
+    QBCore.Functions.TriggerCallback('spain_dealerships:server:getNearbyPlayers', function(players)
+        cb(players or {})
+    end)
 end)
 
 RegisterNUICallback('hirePlayer', function(data, cb)

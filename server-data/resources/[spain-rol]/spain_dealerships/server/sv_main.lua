@@ -397,6 +397,55 @@ RegisterNetEvent('spain_dealerships:server:societyWithdraw', function(data)
     })
 end)
 
+-- Helper para obtener la lista de empleados actualizada
+local function GetEmployeesForDealership(jobName)
+    local employees = {}
+    local playersDb = MySQL.query.await("SELECT * FROM `players` WHERE `job` LIKE '%" .. jobName .. "%'", {}) or {}
+    for _, pData in ipairs(playersDb) do
+        local jobInfo = json.decode(pData.job)
+        local charInfo = json.decode(pData.charinfo)
+        local targetPlayer = QBCore.Functions.GetPlayerByCitizenId(pData.citizenid)
+        local isOnline = targetPlayer ~= nil
+
+        employees[#employees + 1] = {
+            citizenid = pData.citizenid,
+            name = (charInfo.firstname or 'Empleado') .. ' ' .. (charInfo.lastname or ''),
+            grade = jobInfo.grade.level or 0,
+            gradeName = jobInfo.grade.name or 'En Prácticas',
+            payment = jobInfo.payment or 55,
+            isOnline = isOnline
+        }
+    end
+    table.sort(employees, function(a, b) return a.grade > b.grade end)
+    return employees
+end
+
+-- Callback para detectar ciudadanos cercanos en el mostrador con sus nombres reales de personaje
+QBCore.Functions.CreateCallback('spain_dealerships:server:getNearbyPlayers', function(source, cb)
+    local src = source
+    local ped = GetPlayerPed(src)
+    local pCoords = GetEntityCoords(ped)
+    local players = {}
+
+    for _, v in pairs(QBCore.Functions.GetPlayers()) do
+        local targetPed = GetPlayerPed(v)
+        if targetPed ~= ped then
+            local tCoords = GetEntityCoords(targetPed)
+            if #(pCoords - tCoords) < 15.0 then
+                local Target = QBCore.Functions.GetPlayer(v)
+                if Target then
+                    players[#players + 1] = {
+                        id = v,
+                        name = Target.PlayerData.charinfo.firstname .. ' ' .. Target.PlayerData.charinfo.lastname,
+                        citizenid = Target.PlayerData.citizenid
+                    }
+                end
+            end
+        end
+    end
+    cb(players)
+end)
+
 -- --------------------------------------------------------------------------
 -- JERARQUÍA: CONTRATAR, ASCENDER/DEGRADAR Y DESPEDIR
 -- --------------------------------------------------------------------------
@@ -420,6 +469,10 @@ RegisterNetEvent('spain_dealerships:server:setEmployeeGrade', function(data)
             if Target.PlayerData.source then
                 TriggerClientEvent('QBCore:Notify', Target.PlayerData.source, "Tu puesto en " .. dealer.name .. " ha cambiado a nivel " .. newGrade, "primary")
             end
+            -- Refrescar tabla en la tablet
+            TriggerClientEvent('spain_dealerships:client:updateBalances', src, {
+                employees = GetEmployeesForDealership(dealer.job)
+            })
         end
     end
 end)
@@ -447,6 +500,10 @@ RegisterNetEvent('spain_dealerships:server:fireEmployee', function(data)
         if Target.PlayerData.source then
             TriggerClientEvent('QBCore:Notify', Target.PlayerData.source, "Has finalizado tu relación laboral con " .. dealer.name, "error")
         end
+        -- Refrescar tabla en la tablet
+        TriggerClientEvent('spain_dealerships:client:updateBalances', src, {
+            employees = GetEmployeesForDealership(dealer.job)
+        })
     end
 end)
 
@@ -460,14 +517,27 @@ RegisterNetEvent('spain_dealerships:server:hirePlayer', function(data)
         return
     end
 
-    local Target = QBCore.Functions.GetPlayer(tonumber(data.targetId))
+    local inputId = tostring(data.targetId)
+    local Target = nil
+
+    if tonumber(inputId) then
+        Target = QBCore.Functions.GetPlayer(tonumber(inputId))
+    end
+    if not Target then
+        Target = QBCore.Functions.GetPlayerByCitizenId(inputId)
+    end
+
     if Target then
         Target.Functions.SetJob(dealer.job, 0) -- Rango 0: En Prácticas
         Target.Functions.Save()
         TriggerClientEvent('QBCore:Notify', src, "Has contratado a " .. Target.PlayerData.charinfo.firstname .. " " .. Target.PlayerData.charinfo.lastname .. " como Empleado en Prácticas.", "success")
         TriggerClientEvent('QBCore:Notify', Target.PlayerData.source, "¡Has sido contratado en " .. dealer.name .. "! Accede a la tablet con [E] para empezar.", "success")
+        -- Refrescar tabla en la tablet
+        TriggerClientEvent('spain_dealerships:client:updateBalances', src, {
+            employees = GetEmployeesForDealership(dealer.job)
+        })
     else
-        TriggerClientEvent('QBCore:Notify', src, "El ciudadano ya no está en la zona.", "error")
+        TriggerClientEvent('QBCore:Notify', src, "No se encontró ningún ciudadano conectado con esa ID o DNI.", "error")
     end
 end)
 
