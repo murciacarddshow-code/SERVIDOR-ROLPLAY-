@@ -614,21 +614,6 @@ Config.Locations = {
         ['blipcolor'] = 0,
         ['delivery'] = vector4(249.0, -50.64, 69.94, 60.71)
     },
-    ['pokevault'] = {
-        ['label'] = 'PokéVault TCG Shop (Murcia Card Show)',
-        ['coords'] = vector4(23.0, -1105.67, 29.8, 162.91),
-        ['ped'] = 'a_m_y_smartcaspat_01',
-        ['scenario'] = 'WORLD_HUMAN_STAND_MOBILE',
-        ['radius'] = 1.5,
-        ['targetIcon'] = 'fas fa-gem',
-        ['targetLabel'] = 'Comprar Sobres y Cartas Pokémon',
-        ['products'] = Config.Products['pokevault'],
-        ['showblip'] = true,
-        ['blipsprite'] = 605,
-        ['blipscale'] = 0.85,
-        ['blipcolor'] = 46,
-        ['delivery'] = vector4(-5.82, -1107.48, 29.0, 164.32)
-    },
     ['ammunation7'] = {
         ['label'] = 'Ammunation',
         ['type'] = 'weapon',

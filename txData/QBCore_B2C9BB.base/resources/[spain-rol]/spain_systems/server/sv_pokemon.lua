@@ -224,15 +224,179 @@ RegisterNetEvent('spain_pokemon:server:sellCards', function(cardType)
     end
 end)
 
--- Si algún jugador escribe el comando antiguo, se le orienta al NPC o se le abre el menú si está cerca
+-- =========================================================================
+-- CALLBACKS NATIVOS DE LA NUEVA INTERFAZ POKÉVAULT NUI
+-- =========================================================================
+
+local allPokemonItems = {
+    'pokemon_booster_151',
+    'pokemon_booster_charizard',
+    'pokemon_booster_prismatic',
+    'pokemon_booster_vintage',
+    'pokemon_etb_151',
+    'pokemon_mystery_box',
+    'pokemon_binder',
+    'pokemon_protective_sleeve',
+    'pokemon_card_common',
+    'pokemon_card_holo',
+    'pokemon_card_charizard_vmax',
+    'pokemon_card_moonbreon',
+    'pokemon_card_mewtwo_gold',
+    'pokemon_card_psa10'
+}
+
+local function getPlayerPokemonInventory(Player)
+    local inv = {}
+    for _, itemName in ipairs(allPokemonItems) do
+        local itm = Player.Functions.GetItemByName(itemName)
+        inv[itemName] = (itm and itm.amount) or 0
+    end
+    return inv
+end
+
+local shopPrices = {
+    ['pokemon_booster_151'] = 45,
+    ['pokemon_booster_charizard'] = 55,
+    ['pokemon_booster_prismatic'] = 60,
+    ['pokemon_booster_vintage'] = 350,
+    ['pokemon_etb_151'] = 380,
+    ['pokemon_mystery_box'] = 500,
+    ['pokemon_binder'] = 40,
+    ['pokemon_protective_sleeve'] = 15,
+}
+
+-- 1. Obtener Datos del Jugador para la NUI
+QBCore.Functions.CreateCallback('spain_pokemon:server:getShopData', function(source, cb)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return cb(nil) end
+
+    local cash = Player.PlayerData.money['cash'] or 0
+    local bank = Player.PlayerData.money['bank'] or 0
+    local inv = getPlayerPokemonInventory(Player)
+
+    cb({
+        cash = cash,
+        bank = bank,
+        inventory = inv
+    })
+end)
+
+-- 2. Compra Ilimitada de Sobres y Artículos desde la NUI
+QBCore.Functions.CreateCallback('spain_pokemon:server:buyItem', function(source, cb, data)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return cb({ success = false, message = "Error de sesión del jugador." }) end
+
+    local item = data.item
+    local amount = tonumber(data.amount) or 1
+    local payment = data.payment == 'bank' and 'bank' or 'cash'
+
+    if not shopPrices[item] or amount <= 0 or amount > 100 then
+        return cb({ success = false, message = "Artículo o cantidad inválida." })
+    end
+
+    local unitPrice = shopPrices[item]
+    local totalPrice = unitPrice * amount
+    local currentMoney = Player.PlayerData.money[payment] or 0
+
+    if currentMoney < totalPrice then
+        local paymentLabel = payment == 'cash' and 'efectivo' or 'tu cuenta bancaria'
+        return cb({ success = false, message = "No tienes suficiente dinero en " .. paymentLabel .. " (Total: €" .. totalPrice .. ")." })
+    end
+
+    if Player.Functions.RemoveMoney(payment, totalPrice, 'pokevault-purchase') then
+        Player.Functions.AddItem(item, amount)
+        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[item] or { label = item }, "add")
+        
+        local itemLabel = (QBCore.Shared.Items[item] and QBCore.Shared.Items[item].label) or item
+        TriggerClientEvent('QBCore:Notify', source, "Has adquirido " .. amount .. "x " .. itemLabel .. " por €" .. totalPrice .. " (" .. (payment == 'cash' and "Efectivo" or "Banco") .. ").", "success", 5000)
+
+        cb({
+            success = true,
+            cash = Player.PlayerData.money['cash'] or 0,
+            bank = Player.PlayerData.money['bank'] or 0,
+            inventory = getPlayerPokemonInventory(Player)
+        })
+    else
+        cb({ success = false, message = "Fallo al procesar el cobro económico." })
+    end
+end)
+
+-- 3. Tasación y Venta Dinámica desde la NUI
+QBCore.Functions.CreateCallback('spain_pokemon:server:sellCardsNui', function(source, cb, data)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return cb({ success = false, message = "Error de sesión." }) end
+
+    local cardType = data.type
+    local reqAmount = tonumber(data.amount)
+    local totalCash = 0
+    local soldCount = 0
+
+    if cardType == 'all' then
+        for itemName, pData in pairs(cardPrices) do
+            local item = Player.Functions.GetItemByName(itemName)
+            if item and item.amount > 0 then
+                local amt = item.amount
+                if Player.Functions.RemoveItem(itemName, amt) then
+                    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[itemName] or { label = pData.label }, "remove")
+                    totalCash = totalCash + (pData.price * amt)
+                    soldCount = soldCount + amt
+                end
+            end
+        end
+
+        if soldCount > 0 then
+            Player.Functions.AddMoney('cash', totalCash, 'pokevault-card-sale')
+            TriggerClientEvent('spain_pokemon:client:saleComplete', source, soldCount, totalCash)
+            cb({
+                success = true,
+                count = soldCount,
+                cash = totalCash,
+                newCash = Player.PlayerData.money['cash'] or 0,
+                newBank = Player.PlayerData.money['bank'] or 0,
+                inventory = getPlayerPokemonInventory(Player)
+            })
+        else
+            cb({ success = false, message = "No tienes ninguna carta Pokémon para tasar." })
+        end
+    else
+        local pData = cardPrices[cardType]
+        if not pData then return cb({ success = false, message = "Tipo de carta desconocido." }) end
+
+        local item = Player.Functions.GetItemByName(cardType)
+        if item and item.amount > 0 then
+            local toSell = (reqAmount and reqAmount > 0 and reqAmount <= item.amount) and reqAmount or item.amount
+            if Player.Functions.RemoveItem(cardType, toSell) then
+                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[cardType] or { label = pData.label }, "remove")
+                totalCash = pData.price * toSell
+                soldCount = toSell
+                Player.Functions.AddMoney('cash', totalCash, 'pokevault-card-sale')
+                TriggerClientEvent('spain_pokemon:client:saleComplete', source, soldCount, totalCash)
+                cb({
+                    success = true,
+                    count = soldCount,
+                    cash = totalCash,
+                    newCash = Player.PlayerData.money['cash'] or 0,
+                    newBank = Player.PlayerData.money['bank'] or 0,
+                    inventory = getPlayerPokemonInventory(Player)
+                })
+            else
+                cb({ success = false, message = "Error al descontar las cartas del inventario." })
+            end
+        else
+            cb({ success = false, message = "No tienes cartas de " .. pData.label .. " en tu inventario." })
+        end
+    end
+end)
+
+-- Si algún jugador escribe el comando antiguo, se le abre la NUI del tasador
 QBCore.Commands.Add('venderpokecartas', 'Hablar con el tasador de PokéVault para vender cartas', {}, false, function(source, args)
     local src = source
     local playerPed = GetPlayerPed(src)
     local pCoords = GetEntityCoords(playerPed)
     local shopCoords = vector3(21.5, -1106.0, 29.8)
 
-    if #(pCoords - shopCoords) <= 5.0 then
-        TriggerClientEvent('spain_pokemon:client:openBuyerMenu', src)
+    if #(pCoords - shopCoords) <= 6.0 then
+        TriggerClientEvent('spain_pokemon:client:openPokeVaultNui', src, 'tab-sell')
     else
         TriggerClientEvent('QBCore:Notify', src, "Para vender tus cartas acude a PokéVault (Plaza Legion) y habla con el Tasador Oficial en el mostrador [E].", "primary", 7500)
     end

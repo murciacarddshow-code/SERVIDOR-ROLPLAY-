@@ -19,8 +19,7 @@
     "$schema": 1,
     "name": "vwrz8269",
     "master": false,
-    "password_hash": "$2a$11$HsVZNU2wsBg7e6LaaKQsXOyGkpo58vyuAt4cgMfwr3SYgpgy0Zvd6",
-    "password_temporary": true,
+    "password_hash": "$2a$11$Z7QGdFM1mYJVEDt3BW9AleGarTw1iqaSRRywiN7W8KvnVomdKCQIa",
     "providers": {
       "citizenfx": {
         "id": "MINIRULOLALEYNDA",

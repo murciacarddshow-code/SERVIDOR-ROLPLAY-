@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéVault TCG - Murcia Card Show</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app" class="pokevault-container" style="display: none;">
+        <!-- Backdrop Blur -->
+        <div class="pv-backdrop"></div>
+
+        <!-- Main Window -->
+        <div class="pv-window">
+            <!-- Header Bar -->
+            <header class="pv-header">
+                <div class="pv-brand">
+                    <div class="pv-logo">
+                        <div class="pokeball-icon">
+                            <span class="pokeball-center"></span>
+                        </div>
+                    </div>
+                    <div class="pv-title-group">
+                        <div class="pv-tagline">MURCIA CARD SHOW &bull; SPAIN ROL</div>
+                        <h1 class="pv-title">POKÉVAULT <span>TCG STORE</span></h1>
+                    </div>
+                </div>
+
+                <!-- Live Balances -->
+                <div class="pv-balances">
+                    <div class="balance-card cash-card" title="Dinero en Efectivo">
+                        <span class="material-symbols-outlined icon">payments</span>
+                        <div class="balance-info">
+                            <span class="balance-label">EFECTIVO</span>
+                            <span class="balance-amount" id="player-cash">€0</span>
+                        </div>
+                    </div>
+                    <div class="balance-card bank-card" title="Saldo en Tarjeta de Banco">
+                        <span class="material-symbols-outlined icon">credit_card</span>
+                        <div class="balance-info">
+                            <span class="balance-label">BANCO</span>
+                            <span class="balance-amount" id="player-bank">€0</span>
+                        </div>
+                    </div>
+                    <button class="pv-close-btn" id="btn-close" title="Cerrar (ESC)">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="pv-nav">
+                <button class="nav-tab active" data-tab="tab-shop">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                    <span>TIENDA DE SOBRES</span>
+                    <span class="tab-badge">STOCK &infin;</span>
+                </button>
+                <button class="nav-tab" data-tab="tab-sell">
+                    <span class="material-symbols-outlined">currency_exchange</span>
+                    <span>TASADOR & VENTA</span>
+                    <span class="tab-badge highlight" id="badge-sell-count">0</span>
+                </button>
+                <button class="nav-tab" data-tab="tab-mycards">
+                    <span class="material-symbols-outlined">style</span>
+                    <span>MIS SOBRES & CARTAS</span>
+                    <span class="tab-badge" id="badge-my-packs">0</span>
+                </button>
+                <button class="nav-tab" data-tab="tab-market">
+                    <span class="material-symbols-outlined">trending_up</span>
+                    <span>COTIZACIONES OFICIALES</span>
+                </button>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="pv-content">
+                <!-- TAB 1: TIENDA DE SOBRES -->
+                <section class="tab-pane active" id="tab-shop">
+                    <div class="section-toolbar">
+                        <div class="toolbar-title">
+                            <h2>CATÁLOGO DE PRODUCTOS PRECINTADOS</h2>
+                            <p>Compra sobres, cajas de colección y accesorios con stock ilimitado</p>
+                        </div>
+                        <div class="payment-method-selector">
+                            <span class="pm-label">PAGAR CON:</span>
+                            <div class="pm-options">
+                                <label class="pm-option active" id="pm-cash">
+                                    <input type="radio" name="payment-method" value="cash" checked>
+                                    <span class="material-symbols-outlined">payments</span> Efectivo
+                                </label>
+                                <label class="pm-option" id="pm-bank">
+                                    <input type="radio" name="payment-method" value="bank">
+                                    <span class="material-symbols-outlined">credit_card</span> Banco
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="products-grid" id="products-grid">
+                        <!-- Rendered dynamically by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- TAB 2: TASADOR OFICIAL -->
+                <section class="tab-pane" id="tab-sell">
+                    <!-- Valuation Banner -->
+                    <div class="appraiser-banner">
+                        <div class="appraiser-avatar">
+                            <span class="material-symbols-outlined appraiser-icon">shield_person</span>
+                        </div>
+                        <div class="appraiser-info">
+                            <div class="appraiser-badge">TASADOR AUTORIZADO PSA & MURCIA CARD SHOW</div>
+                            <h3>COMPRAVENTA OFICIAL DE CARTAS POKÉMON</h3>
+                            <p id="appraiser-summary">Analizando tu cartera de coleccionista...</p>
+                        </div>
+                        <div class="appraiser-action">
+                            <button class="btn-liquidate-all" id="btn-liquidate-all" disabled>
+                                <span class="material-symbols-outlined">bolt</span>
+                                <div>
+                                    <span class="btn-subtext">LIQUIDAR TODAS LAS CARTAS</span>
+                                    <span class="btn-maintext" id="liquidate-total">€0 EN EFECTIVO</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="section-heading">
+                        <h4>CARTAS COLECCIONABLES EN TU INVENTARIO</h4>
+                        <span class="heading-desc">Selecciona las cartas que deseas tasar y vender por dinero en efectivo</span>
+                    </div>
+
+                    <!-- Sellable Cards Grid -->
+                    <div class="cards-sell-grid" id="cards-sell-grid">
+                        <!-- Rendered dynamically by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- TAB 3: MIS SOBRES & CARTAS -->
+                <section class="tab-pane" id="tab-mycards">
+                    <div class="mycards-section">
+                        <div class="sub-header">
+                            <span class="material-symbols-outlined">redeem</span>
+                            <h3>SOBRES PRECINTADOS EN TUS MANOS</h3>
+                            <span class="sub-badge" id="my-unopened-count">0 sobres</span>
+                        </div>
+                        <div class="packs-open-grid" id="packs-open-grid">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <div class="mycards-section mt-4">
+                        <div class="sub-header">
+                            <span class="material-symbols-outlined">auto_awesome</span>
+                            <h3>TU COLECCIÓN DE CARTAS ACTUAL</h3>
+                            <span class="sub-badge" id="my-cards-count">0 cartas</span>
+                        </div>
+                        <div class="cards-display-grid" id="cards-display-grid">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: COTIZACIONES OFICIALES -->
+                <section class="tab-pane" id="tab-market">
+                    <div class="market-header">
+                        <h2>📊 BOLSA DE VALORES TCG &bull; COTIZACIONES OFICIALES</h2>
+                        <p>Tarifas garantizadas de recompra inmediata en PokéVault (Legion Square)</p>
+                    </div>
+
+                    <div class="market-table-container">
+                        <table class="market-table">
+                            <thead>
+                                <tr>
+                                    <th>CARTA / ARTÍCULO</th>
+                                    <th>TIER DE RAREZA</th>
+                                    <th>EXPANSIÓN / PROCEDENCIA</th>
+                                    <th>PRECIO RECOMPRA</th>
+                                    <th>TENDENCIA</th>
+                                    <th>ESTADO MERCADO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="market-tbody">
+                                <tr>
+                                    <td>
+                                        <div class="market-item-cell">
+                                            <img src="nui://qb-inventory/html/images/pokemon_card_psa10.png" onerror="this.src='https://placehold.co/40x55/222/gold?text=PSA10'" alt="PSA 10">
+                                            <div>
+                                                <strong>Slab Graduada PSA 10 GEM MINT</strong>
+                                                <span>Encapsulada y Certificada Grado 10</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="rarity-pill gem">GEM MINT 10 💎</span></td>
+                                    <td>Vintage / Mystery Box</td>
+                                    <td class="price-cell">€2.500</td>
+                                    <td><span class="trend up">+14.2% ▲</span></td>
+                                    <td><span class="status-badge high-demand">MÁXIMA DEMANDA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="market-item-cell">
+                                            <img src="nui://qb-inventory/html/images/pokemon_card_charizard_vmax.png" onerror="this.src='https://placehold.co/40x55/222/red?text=Zard'" alt="Charizard">
+                                            <div>
+                                                <strong>Charizard VMAX Shiny Full Art</strong>
+                                                <span>Ultra Rara Secreta de Fuego</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="rarity-pill secret">ULTRA RARA 🔥⭐⭐⭐</span></td>
+                                    <td>Destinos Brillantes</td>
+                                    <td class="price-cell">€1.200</td>
+                                    <td><span class="trend up">+8.5% ▲</span></td>
+                                    <td><span class="status-badge high-demand">MUY BUSCADA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="market-item-cell">
+                                            <img src="nui://qb-inventory/html/images/pokemon_card_moonbreon.png" onerror="this.src='https://placehold.co/40x55/222/purple?text=Moon'" alt="Moonbreon">
+                                            <div>
+                                                <strong>Umbreon VMAX Alt Art Moonbreon</strong>
+                                                <span>Arte Alternativo de Culto</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="rarity-pill secret">ULTRA RARA 🌙⭐⭐⭐</span></td>
+                                    <td>Evoluciones Prismáticas</td>
+                                    <td class="price-cell">€1.200</td>
+                                    <td><span class="trend up">+6.1% ▲</span></td>
+                                    <td><span class="status-badge high-demand">MUY BUSCADA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="market-item-cell">
+                                            <img src="nui://qb-inventory/html/images/pokemon_card_mewtwo_gold.png" onerror="this.src='https://placehold.co/40x55/222/yellow?text=Mewtwo'" alt="Mewtwo">
+                                            <div>
+                                                <strong>Mewtwo VSTAR Secreta Oro</strong>
+                                                <span>Edición Dorada Premium</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="rarity-pill gold">SECRETA ORO 👑</span></td>
+                                    <td>Booster 151 / Mystery Box</td>
+                                    <td class="price-cell">€900</td>
+                                    <td><span class="trend up">+3.9% ▲</span></td>
+                                    <td><span class="status-badge active-market">ESTABLE ALTA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="market-item-cell">
+                                            <img src="nui://qb-inventory/html/images/pokemon_card_holo.png" onerror="this.src='https://placehold.co/40x55/222/cyan?text=Holo'" alt="Holo">
+                                            <div>
+                                                <strong>Carta Holográfica Rara Foil</strong>
+                                                <span>Gyarados, Dragonite, Alakazam...</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="rarity-pill holo">HOLO FOIL ✨</span></td>
+                                    <td>Todos los Sobres</td>
+                                    <td class="price-cell">€65</td>
+                                    <td><span class="trend stable">= 0.0%</span></td>
+                                    <td><span class="status-badge normal">LIQUIDEZ ALTA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="market-item-cell">
+                                            <img src="nui://qb-inventory/html/images/pokemon_card_common.png" onerror="this.src='https://placehold.co/40x55/222/gray?text=Common'" alt="Common">
+                                            <div>
+                                                <strong>Carta Común Kanto</strong>
+                                                <span>Pikachu, Charmander, Squirtle...</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="rarity-pill common">COMÚN</span></td>
+                                    <td>Todos los Sobres</td>
+                                    <td class="price-cell">€15</td>
+                                    <td><span class="trend stable">= 0.0%</span></td>
+                                    <td><span class="status-badge normal">ILIMITADO</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Bottom Status Footer -->
+            <footer class="pv-footer">
+                <div class="footer-left">
+                    <span class="status-indicator"></span>
+                    <span class="footer-text">CONECTADO AL SISTEMA OFICIAL MURCIA CARD SHOW &bull; POLÍTICA DE STOCK ILIMITADO ACTIVADA</span>
+                </div>
+                <div class="footer-right">
+                    <span>Spain Rol v2.0 Oficial</span>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Custom Notification Toast -->
+        <div class="pv-toast" id="pv-toast">
+            <span class="material-symbols-outlined toast-icon" id="toast-icon">check_circle</span>
+            <div class="toast-body">
+                <div class="toast-title" id="toast-title">Notificación</div>
+                <div class="toast-msg" id="toast-msg">Mensaje del sistema</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

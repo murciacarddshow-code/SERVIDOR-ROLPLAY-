@@ -43,4 +43,12 @@ server_scripts {
     'server/sv_chat_rp.lua'
 }
 
+ui_page 'html/index.html'
+
+files {
+    'html/index.html',
+    'html/css/style.css',
+    'html/js/app.js'
+}
+
 lua54 'yes'
