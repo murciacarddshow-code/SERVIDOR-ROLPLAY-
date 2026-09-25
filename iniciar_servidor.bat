@@ -35,9 +35,20 @@ if defined GIT_CMD (
     echo.
 )
 
-:: 1. Verificacion y configuracion dinamica de my.ini
+:: 1. Verificacion y configuracion dinamica de my.ini y txAdmin
 set "DATA_DIR_SLASH=%DB_DIR:\=/%/data"
 powershell -NoProfile -Command "(Get-Content '%DB_DIR%\my.ini') -replace '^datadir=.*', 'datadir=\"%DATA_DIR_SLASH%\"' | Set-Content '%DB_DIR%\my.ini'" >nul 2>&1
+
+set "ROOT_SLASH=%SERVER_ROOT:\=/%"
+if "%ROOT_SLASH:~-1%"=="/" set "ROOT_SLASH=%ROOT_SLASH:~0,-1%"
+powershell -NoProfile -Command ^
+    "$cfg = '%TX_DIR%\default\config.json';" ^
+    "if (Test-Path $cfg) {" ^
+    "  $j = Get-Content $cfg -Raw | ConvertFrom-Json;" ^
+    "  $j.server.dataPath = '%ROOT_SLASH%/txData/QBCore_B2C9BB.base/';" ^
+    "  $j.server.cfgPath = '%ROOT_SLASH%/txData/QBCore_B2C9BB.base/server.cfg';" ^
+    "  $j | ConvertTo-Json -Depth 5 | Set-Content $cfg;" ^
+    "}" >nul 2>&1
 
 :: 2. Comprobar binarios de FXServer
 if not exist "%FX_DIR%\FXServer.exe" (

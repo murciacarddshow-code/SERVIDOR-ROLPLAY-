@@ -1,10 +1,10 @@
 {
-  "version": 2,
-  "general": {
-    "serverName": "Spain Rol v2.0"
-  },
-  "server": {
-    "dataPath": "C:/Users/PcVIP/Documents/GitHub/SERVIDOR-ROLPLAY-/txData/QBCore_B2C9BB.base/",
-    "cfgPath": "C:/Users/PcVIP/Documents/GitHub/SERVIDOR-ROLPLAY-/txData/QBCore_B2C9BB.base/server.cfg"
-  }
+    "version":  2,
+    "general":  {
+                    "serverName":  "Spain Rol v2.0"
+                },
+    "server":  {
+                   "dataPath":  "C:/Users/minir/.gemini/antigravity/scratch/FiveM_Server/txData/QBCore_B2C9BB.base/",
+                   "cfgPath":  "C:/Users/minir/.gemini/antigravity/scratch/FiveM_Server/txData/QBCore_B2C9BB.base/server.cfg"
+               }
 }

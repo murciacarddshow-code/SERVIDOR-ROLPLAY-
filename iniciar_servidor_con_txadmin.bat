@@ -22,6 +22,17 @@ if %errorlevel% neq 0 (
     echo Base de Datos MariaDB ya activa en el puerto 3306.
 )
 
+set "ROOT_SLASH=%SERVER_ROOT:\=/%"
+if "%ROOT_SLASH:~-1%"=="/" set "ROOT_SLASH=%ROOT_SLASH:~0,-1%"
+powershell -NoProfile -Command ^
+    "$cfg = '%TX_DIR%\default\config.json';" ^
+    "if (Test-Path $cfg) {" ^
+    "  $j = Get-Content $cfg -Raw | ConvertFrom-Json;" ^
+    "  $j.server.dataPath = '%ROOT_SLASH%/txData/QBCore_B2C9BB.base/';" ^
+    "  $j.server.cfgPath = '%ROOT_SLASH%/txData/QBCore_B2C9BB.base/server.cfg';" ^
+    "  $j | ConvertTo-Json -Depth 5 | Set-Content $cfg;" ^
+    "}" >nul 2>&1
+
 echo [2/3] Liberando procesos previos...
 taskkill /f /im FXServer.exe >nul 2>&1
 timeout /t 1 /nobreak >nul
