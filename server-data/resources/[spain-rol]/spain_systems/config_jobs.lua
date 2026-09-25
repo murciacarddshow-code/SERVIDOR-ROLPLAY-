@@ -86,11 +86,14 @@ JobsConfig.Stations = {
             spawn = vector4(63.2, -1578.4, 29.3, 140.0)
         },
         tasks = {
-            { coords = vector3(112.5, -1300.2, 29.2), label = "Entrega en Portal Residencial", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 4000 },
-            { coords = vector3(-228.4, -915.2, 32.3), label = "Paquete Certificado en Oficinas", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 },
+            { coords = vector3(112.5, -1300.2, 29.2), label = "Entrega en Portal Residencial Strawberry", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 4000 },
+            { coords = vector3(-228.4, -915.2, 32.3), label = "Paquete Certificado en Edificio Alta", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 },
             { coords = vector3(-630.2, -236.4, 38.0), label = "Entrega Exprés en Joyería Rockford", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 },
             { coords = vector3(321.4, 180.2, 103.5), label = "Caja Urgente en Estudio Vinewood", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 4500 },
-            { coords = vector3(-1380.5, -500.1, 33.1), label = "Envío Prioritario en Mansión Del Perro", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 }
+            { coords = vector3(-1380.5, -500.1, 33.1), label = "Envío Prioritario en Mansión Del Perro", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 },
+            { coords = vector3(1142.1, -440.5, 66.8), label = "Correspondencia en Barrio Mirror Park", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 },
+            { coords = vector3(-1080.2, -1260.4, 5.5), label = "Entrega en Paseo Canales Vespucci", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 4500 },
+            { coords = vector3(890.3, -2105.1, 30.5), label = "Envío Industrial en Docks del Puerto", animDict = "mp_common", animClip = "givetake2_a", duration = 4500 }
         },
         minigame = 'easy',
         pay = { min = 110, max = 220 }
@@ -112,10 +115,13 @@ JobsConfig.Stations = {
             spawn = vector4(-560.8, 281.2, 82.2, 265.0)
         },
         tasks = {
-            { coords = vector3(-680.1, 310.5, 83.2), label = "Pizza Cuatro Quesos Caliente", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
-            { coords = vector3(-850.4, 150.2, 65.8), label = "Pedido Familiar con Bebidas", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
-            { coords = vector3(-1100.8, -250.4, 37.8), label = "Pizza Calzone en Apartamento Vespucci", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
-            { coords = vector3(-1350.2, -750.8, 22.4), label = "Entrega en Paseo de la Playa", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 }
+            { coords = vector3(-680.1, 310.5, 83.2), label = "Pizza Cuatro Quesos en Dorset Dr", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
+            { coords = vector3(-850.4, 150.2, 65.8), label = "Pedido Familiar en Cougar Ave", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
+            { coords = vector3(-1100.8, -250.4, 37.8), label = "Pizza Calzone en Vespucci Boulevard", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
+            { coords = vector3(-1350.2, -750.8, 22.4), label = "Entrega al Paso en Paseo de la Playa", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
+            { coords = vector3(-340.2, 420.5, 110.2), label = "Cena Especial en Vinewood Hills", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
+            { coords = vector3(290.4, -620.1, 43.5), label = "Pizza Pepperoni en Pillbox Medical", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 },
+            { coords = vector3(-1480.2, -1005.4, 6.2), label = "Pedido Romántico en Muelle Marina", animDict = "mp_common", animClip = "givetake2_a", duration = 4000 }
         },
         minigame = 'easy',
         pay = { min = 95, max = 200 }
@@ -185,9 +191,12 @@ JobsConfig.Stations = {
             spawn = vector4(2739.4, 1580.2, 30.4, 355.0)
         },
         tasks = {
-            { coords = vector3(2680.2, 1610.5, 24.5), label = "Transformador de Alta Tensión", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
-            { coords = vector3(1705.4, 1495.2, 84.1), label = "Caja de Fusibles en Torre Eléctrica", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
-            { coords = vector3(890.1, -120.4, 78.5), label = "Poste de Alumbrado Urbano Averiado", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 }
+            { coords = vector3(2680.2, 1610.5, 24.5), label = "Transformador Palmer-Taylor", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
+            { coords = vector3(1705.4, 1495.2, 84.1), label = "Caja de Fusibles en Torre Eólica", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
+            { coords = vector3(890.1, -120.4, 78.5), label = "Poste de Alta Tensión en Vinewood Racetrack", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
+            { coords = vector3(-120.4, -605.2, 35.8), label = "Armario Distribuidor en Downtown LS", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
+            { coords = vector3(-1550.2, -410.5, 36.2), label = "Subestación de Barrio Del Perro", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 },
+            { coords = vector3(590.2, -2800.5, 6.1), label = "Nodo Eléctrico Submarino Elysian Island", animDict = "amb@world_human_welding@male@base", animClip = "base", duration = 6500 }
         },
         minigame = 'medium',
         pay = { min = 135, max = 270 }
@@ -209,9 +218,12 @@ JobsConfig.Stations = {
             spawn = vector4(-333.5, -1538.4, 27.5, 345.0)
         },
         tasks = {
-            { coords = vector3(-250.2, -1450.8, 30.2), label = "Contenedor de Basura Orgánica", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
-            { coords = vector3(-150.4, -1350.1, 29.5), label = "Contenedor Comercial de Plásticos", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
-            { coords = vector3(120.5, -1280.4, 28.8), label = "Punto Limpio de Callejon", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 }
+            { coords = vector3(-250.2, -1450.8, 30.2), label = "Contenedor de Basura Orgánica South LS", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
+            { coords = vector3(-150.4, -1350.1, 29.5), label = "Contenedor Comercial en Carson Ave", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
+            { coords = vector3(120.5, -1280.4, 28.8), label = "Punto Limpio Callejón Innocence", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
+            { coords = vector3(415.2, -980.5, 29.4), label = "Recogida de Residuos Legion Square", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
+            { coords = vector3(-610.4, -940.2, 21.8), label = "Contenedores de Little Seoul Market", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 },
+            { coords = vector3(1030.1, -330.4, 67.2), label = "Vaciado de Contenedores en Mirror Park", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 }
         },
         minigame = 'easy',
         pay = { min = 110, max = 220 }
@@ -233,9 +245,12 @@ JobsConfig.Stations = {
             spawn = vector4(85.4, -1398.2, 29.0, 180.0)
         },
         tasks = {
+            { coords = vector3(21.5, -1106.0, 29.8), label = "Suministro Oficial Tienda PokéVault (Legion)", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5500 },
             { coords = vector3(-150.2, -250.4, 43.5), label = "Entrega Blindada: Cajas Selladas PSA 10", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5500 },
             { coords = vector3(-780.5, 180.2, 72.8), label = "Maletín con Cartas Vintage Primera Edición", animDict = "mp_common", animClip = "givetake2_a", duration = 5500 },
-            { coords = vector3(-1450.8, -200.4, 48.2), label = "Custodia de Mystery Boxes para Evento", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5500 }
+            { coords = vector3(-1450.8, -200.4, 48.2), label = "Custodia de Mystery Boxes para Evento", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5500 },
+            { coords = vector3(120.4, -620.5, 44.2), label = "Coleccionista VIP en Pillbox Hill", animDict = "mp_common", animClip = "givetake2_a", duration = 5000 },
+            { coords = vector3(-1020.5, -1350.8, 5.5), label = "Despacho de Envíos en Muelle Vespucci", animDict = "anim@heists@box_carry@", animClip = "idle", duration = 5000 }
         },
         minigame = 'medium',
         pay = { min = 145, max = 290 }

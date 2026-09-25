@@ -2,7 +2,8 @@
 -- SPAIN ROL - MOTOR CLIENTE DE TRABAJOS DINÁMICOS
 -- =========================================================================
 -- Gestiona las sedes de los trabajos, NPCs capataces, turnos de servicio,
--- asignación de vehículos, bucle continuo de misiones con minijuegos y horas extras.
+-- asignación de vehículos con llaves automáticas, tablet NUI moderna,
+-- bucle continuo de misiones con rutas GPS activas, minijuegos y horas extras.
 
 local QBCore = exports['qb-core']:GetCoreObject()
 local spawnedBosses = {}
@@ -13,6 +14,7 @@ local isOnDuty = false
 local currentTask = nil
 local currentTaskBlip = nil
 local isDoingTask = false
+local isSpawningVehicle = false
 
 -- Función auxiliar para texto 3D
 local function DrawText3D(x, y, z, text)
@@ -39,7 +41,7 @@ local function ClearTaskBlip()
     end
 end
 
--- Generación y asignación de la siguiente tarea
+-- Generación y asignación de la siguiente tarea con ruta GPS inmediata
 local function AssignNextTask()
     if not isOnDuty or not activeJobKey then return end
     local station = JobsConfig.Stations[activeJobKey]
@@ -47,7 +49,7 @@ local function AssignNextTask()
 
     ClearTaskBlip()
 
-    -- Elegir una tarea aleatoria distinta a la actual
+    -- Elegir una tarea aleatoria de la lista
     local randomIndex = math.random(1, #station.tasks)
     local nextTask = station.tasks[randomIndex]
     currentTask = {
@@ -59,25 +61,45 @@ local function AssignNextTask()
     currentTaskBlip = AddBlipForCoord(nextTask.coords.x, nextTask.coords.y, nextTask.coords.z)
     SetBlipSprite(currentTaskBlip, 1)
     SetBlipColour(currentTaskBlip, 5) -- Amarillo de objetivo
-    SetBlipScale(currentTaskBlip, 0.85)
+    SetBlipScale(currentTaskBlip, 0.9)
     SetBlipRoute(currentTaskBlip, true)
     SetBlipRouteColour(currentTaskBlip, 5)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString("📍 Tarea Laboral: " .. nextTask.label)
+    AddTextComponentString("📍 Parada Laboral: " .. nextTask.label)
     EndTextCommandSetBlipName(currentTaskBlip)
 
-    TriggerEvent('QBCore:Notify', "Nueva tarea asignada: " .. nextTask.label .. ". Sigue el GPS.", "primary", 6000)
+    -- Fijar el Waypoint nativo de GTA V para que la línea del GPS aparezca en el minimap del vehículo
+    SetNewWaypoint(nextTask.coords.x, nextTask.coords.y)
+
+    PlaySoundFrontend(-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1)
+    TriggerEvent('QBCore:Notify', "📍 RUTA ASIGNADA: " .. nextTask.label .. ". Sigue la línea del GPS en tu radar.", "primary", 7000)
 end
 
--- Aparición del vehículo de empresa
+-- Aparición segura del vehículo de empresa (Anti-Duplicado y Llaves Automáticas)
 local function SpawnCompanyVehicle(station)
     if not station.vehicle or not station.vehicle.model then return end
+    if isSpawningVehicle then return end
+    isSpawningVehicle = true
 
+    -- 1. Eliminar vehículo anterior del empleado si aún existe
     if currentWorkVehicle and DoesEntityExist(currentWorkVehicle) then
-        QBCore.Functions.DeleteVehicle(currentWorkVehicle)
+        local oldNet = NetworkGetNetworkIdFromEntity(currentWorkVehicle)
+        TriggerServerEvent('spain_jobs:server:deleteWorkVehicle', oldNet)
+        SetEntityAsMissionEntity(currentWorkVehicle, true, true)
+        DeleteVehicle(currentWorkVehicle)
         currentWorkVehicle = nil
     end
 
+    local spawnCoords = station.vehicle.spawn
+
+    -- 2. Limpieza preventiva del punto de spawn para evitar que se solapen vehículos existentes
+    local existingVeh = GetClosestVehicle(spawnCoords.x, spawnCoords.y, spawnCoords.z, 3.5, 0, 70)
+    if existingVeh ~= 0 and DoesEntityExist(existingVeh) then
+        SetEntityAsMissionEntity(existingVeh, true, true)
+        DeleteVehicle(existingVeh)
+    end
+
+    -- 3. Carga del modelo
     local modelHash = joaat(station.vehicle.model)
     RequestModel(modelHash)
     local timeout = 0
@@ -87,19 +109,43 @@ local function SpawnCompanyVehicle(station)
     end
 
     if HasModelLoaded(modelHash) then
-        local spawnCoords = station.vehicle.spawn
         local veh = CreateVehicle(modelHash, spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w, true, false)
         SetVehicleOnGroundProperly(veh)
-        SetVehicleNumberPlateText(veh, "EMPRESA")
-        exports['qb-vehiclekeys']:SetOwner(QBCore.Functions.GetPlate(veh))
-        SetVehicleEngineOn(veh, true, true, false)
-        currentWorkVehicle = veh
+        local plate = "EMP" .. tostring(math.random(1000, 9999))
+        SetVehicleNumberPlateText(veh, plate)
+        local cleanPlate = QBCore.Functions.GetPlate(veh) or plate
 
-        TriggerEvent('QBCore:Notify', "Tu vehículo de empresa ha sido preparado.", "success")
+        -- Desbloqueo total de puertas e inmovilizador desactivado
+        SetVehicleDoorsLocked(veh, 1) -- 1 = Unlocked
+        SetVehicleDoorsLockedForAllPlayers(veh, false)
+        SetVehicleNeedsToBeHotwired(veh, false)
+
+        -- Entrega de llaves nativas (Cliente y Servidor directo)
+        local netId = NetworkGetNetworkIdFromEntity(veh)
+        TriggerEvent("qb-vehiclekeys:client:AddKeys", cleanPlate)
+        TriggerEvent("vehiclekeys:client:SetOwner", cleanPlate)
+        TriggerServerEvent('spain_jobs:server:giveWorkVehicleKeys', netId, cleanPlate)
+        TriggerServerEvent('spain_jobs:server:giveWorkKeys', cleanPlate)
+
+        -- Subir al trabajador directamente al asiento del conductor
+        local ped = PlayerPedId()
+        TaskWarpPedIntoVehicle(ped, veh, -1)
+
+        Wait(150)
+        SetVehicleEngineOn(veh, true, true, false)
+        SetModelAsNoLongerNeeded(modelHash)
+
+        currentWorkVehicle = veh
+        isSpawningVehicle = false
+
+        TriggerEvent('QBCore:Notify', "Tu vehículo de empresa ha sido preparado. Tienes las llaves entregadas y el motor en marcha.", "success", 7000)
+    else
+        isSpawningVehicle = false
+        TriggerEvent('QBCore:Notify', "Error al cargar el vehículo de empresa.", "error")
     end
 end
 
--- Menú con el Capataz en la Sede Laboral
+-- Menú con el Capataz en la Sede Laboral (Apertura de la Tablet NUI)
 local function OpenBossMenu(stationKey)
     local station = JobsConfig.Stations[stationKey]
     if not station then return end
@@ -108,72 +154,25 @@ local function OpenBossMenu(stationKey)
     local playerJob = (PlayerData.job and PlayerData.job.name) or 'unemployed'
 
     if playerJob ~= station.job then
-        local menuInfo = {
-            {
-                header = station.boss.label,
-                isMenuHeader = true
-            },
-            {
-                header = "ℹ️ Información del Puesto",
-                txt = "Hola ciudadano. Esta es la sede oficial de <strong>" .. station.name .. "</strong>.<br>Para incorporarte a nuestra plantilla, firma tu contrato primero en la <strong>Oficina de Empleo junto al Concesionario Central</strong>.",
-                isMenuHeader = true
-            },
-            {
-                header = "⬅️ Entendido, volver",
-                params = {
-                    event = "qb-menu:client:closeMenu"
-                }
-            }
-        }
-        exports['qb-menu']:openMenu(menuInfo)
+        TriggerEvent('QBCore:Notify', "ℹ️ Hola ciudadano. Esta es la sede oficial de <strong>" .. station.name .. "</strong>.<br>Para incorporarte a nuestra plantilla, firma tu contrato primero en la <strong>Oficina de Empleo</strong>.", "primary", 8000)
         return
     end
 
-    local menu = {
-        {
-            header = "👔 " .. station.boss.label .. " (" .. station.name .. ")",
-            isMenuHeader = true
-        }
-    }
-
-    if not isOnDuty then
-        table.insert(menu, {
-            header = "🟢 Iniciar Jornada Laboral (Entrar de Turno)",
-            txt = "Comenzar a recibir tareas de trabajo continuas, vehículo de empresa y acumular horas extras.",
-            params = {
-                event = "spain_jobs:client:startShift",
-                args = { stationKey = stationKey }
-            }
-        })
-    else
-        table.insert(menu, {
-            header = "🔴 Finalizar Jornada Laboral (Terminar Turno)",
-            txt = "Guardar tu vehículo, liquidar tus pagos y salir de servicio.",
-            params = {
-                event = "spain_jobs:client:stopShift",
-                args = { stationKey = stationKey }
-            }
-        })
-        if station.vehicle then
-            table.insert(menu, {
-                header = "🚗 Solicitar / Reponer Vehículo de Trabajo",
-                txt = "Pedir un nuevo vehículo si el anterior sufrió algún desperfecto.",
-                params = {
-                    event = "spain_jobs:client:respawnVehicle",
-                    args = { stationKey = stationKey }
-                }
-            })
+    QBCore.Functions.TriggerCallback('spain_jobs:server:getJobDashboardData', function(workerData)
+        if not workerData then
+            TriggerEvent('QBCore:Notify', "No se ha podido conectar con el terminal laboral.", "error")
+            return
         end
-    end
 
-    table.insert(menu, {
-        header = "❌ Cerrar",
-        params = {
-            event = "qb-menu:client:closeMenu"
-        }
-    })
-
-    exports['qb-menu']:openMenu(menu)
+        workerData.currentTaskIndex = currentTask and currentTask.index or 0
+        SetNuiFocus(true, true)
+        SendNUIMessage({
+            action = 'openJobTablet',
+            stationKey = stationKey,
+            station = station,
+            worker = workerData
+        })
+    end, stationKey)
 end
 
 -- Eventos de Gestión de Turno
@@ -181,6 +180,11 @@ RegisterNetEvent('spain_jobs:client:startShift', function(data)
     local stationKey = data.stationKey
     local station = JobsConfig.Stations[stationKey]
     if not station then return end
+
+    if isOnDuty then
+        TriggerEvent('QBCore:Notify', "Ya te encuentras de servicio activo.", "primary")
+        return
+    end
 
     activeJobKey = stationKey
     isOnDuty = true
@@ -193,7 +197,7 @@ RegisterNetEvent('spain_jobs:client:startShift', function(data)
 
     TriggerEvent('QBCore:Notify', "¡Has iniciado tu turno de trabajo en " .. station.name .. "! Buen servicio.", "success", 5000)
 
-    -- Asignar primera tarea del bucle continuo
+    -- Asignar primera tarea del bucle continuo con ruta GPS
     Wait(1500)
     AssignNextTask()
 end)
@@ -205,8 +209,12 @@ RegisterNetEvent('spain_jobs:client:stopShift', function()
     ClearTaskBlip()
     currentTask = nil
 
+    -- Borrado garantizado del vehículo de trabajo tanto en cliente como en OneSync
     if currentWorkVehicle and DoesEntityExist(currentWorkVehicle) then
-        QBCore.Functions.DeleteVehicle(currentWorkVehicle)
+        local netId = NetworkGetNetworkIdFromEntity(currentWorkVehicle)
+        TriggerServerEvent('spain_jobs:server:deleteWorkVehicle', netId)
+        SetEntityAsMissionEntity(currentWorkVehicle, true, true)
+        DeleteVehicle(currentWorkVehicle)
         currentWorkVehicle = nil
     end
 
@@ -214,13 +222,51 @@ RegisterNetEvent('spain_jobs:client:stopShift', function()
     TriggerServerEvent('spain_jobs:server:setDuty', false, activeJobKey)
     activeJobKey = nil
 
-    TriggerEvent('QBCore:Notify', "Has finalizado tu jornada laboral. Tu salario y horas extras acumuladas han sido liquidadas.", "primary", 6000)
+    TriggerEvent('QBCore:Notify', "Has finalizado tu jornada laboral. Tu vehículo ha sido retirado y tu liquidación procesada.", "primary", 7000)
 end)
 
 RegisterNetEvent('spain_jobs:client:respawnVehicle', function(data)
     local station = JobsConfig.Stations[data.stationKey]
     if station then
         SpawnCompanyVehicle(station)
+    end
+end)
+
+-- NUI CALLBACKS DE LA TABLET DE EMPLEO (SPAIN WORKS PRO)
+RegisterNUICallback('closeJobDashboard', function(_, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+RegisterNUICallback('startShiftFromNui', function(data, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+    Wait(200)
+    TriggerEvent('spain_jobs:client:startShift', { stationKey = data.stationKey })
+end)
+
+RegisterNUICallback('stopShiftFromNui', function(data, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+    Wait(200)
+    TriggerEvent('spain_jobs:client:stopShift')
+end)
+
+RegisterNUICallback('respawnVehicleFromNui', function(data, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+    Wait(200)
+    TriggerEvent('spain_jobs:client:respawnVehicle', { stationKey = data.stationKey })
+end)
+
+RegisterNUICallback('setGpsToTask', function(_, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+    if currentTask and currentTask.data and currentTask.data.coords then
+        SetNewWaypoint(currentTask.data.coords.x, currentTask.data.coords.y)
+        TriggerEvent('QBCore:Notify', "Ruta GPS remarcada hacia: " .. currentTask.data.label, "success", 4000)
+    else
+        TriggerEvent('QBCore:Notify', "No tienes ninguna parada activa en este momento.", "error")
     end
 end)
 
@@ -326,8 +372,8 @@ local function InitJobStations()
                                 action = function()
                                     OpenBossMenu(sKey)
                                 end,
-                                icon = "fas fa-user-tie",
-                                label = "Hablar con " .. sData.boss.label
+                                icon = "fas fa-tablet-screen-button",
+                                label = "Tablet Laboral de " .. sData.boss.label
                             }
                         },
                         distance = 2.5
@@ -354,7 +400,7 @@ CreateThread(function()
             if dist < 5.0 then
                 sleep = 0
                 if dist < 2.3 then
-                    DrawText3D(bCoords.x, bCoords.y, bCoords.z + 1.0, "~y~[E]~s~ Hablar con " .. sData.boss.label)
+                    DrawText3D(bCoords.x, bCoords.y, bCoords.z + 1.0, "~y~[E]~s~ Tablet de " .. sData.boss.label)
                     if IsControlJustReleased(0, 38) then
                         OpenBossMenu(sKey)
                     end
@@ -366,15 +412,22 @@ CreateThread(function()
         if isOnDuty and currentTask and not isDoingTask then
             local tCoords = currentTask.data.coords
             local distTask = #(pCoords - tCoords)
-            if distTask < 15.0 then
+            if distTask < 80.0 then
                 sleep = 0
-                -- Marcador visual en el suelo
-                DrawMarker(2, tCoords.x, tCoords.y, tCoords.z + 0.5, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.45, 0.45, 0.45, 255, 204, 0, 180, false, true, 2, false, nil, nil, false)
+                -- Baliza de luz cilíndrica 3D visible a larga distancia
+                DrawMarker(1, tCoords.x, tCoords.y, tCoords.z - 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.8, 1.8, 4.0, 255, 204, 0, 90, false, false, 2, false, nil, nil, false)
+                -- Marcador chevron pulsante en lo alto
+                DrawMarker(2, tCoords.x, tCoords.y, tCoords.z + 1.2, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.5, 0.5, 0.5, 255, 204, 0, 180, false, true, 2, false, nil, nil, false)
 
-                if distTask < 2.5 then
-                    DrawText3D(tCoords.x, tCoords.y, tCoords.z + 0.8, "~g~[E]~s~ Realizar Tarea: " .. currentTask.data.label)
-                    if IsControlJustReleased(0, 38) then
-                        ExecuteCurrentTask()
+                if distTask < 6.0 then
+                    local inVeh = IsPedInAnyVehicle(playerPed, false)
+                    if inVeh then
+                        DrawText3D(tCoords.x, tCoords.y, tCoords.z + 1.2, "~y~[🅿️ Estaciona y Desciende]~s~ para realizar: " .. currentTask.data.label)
+                    else
+                        DrawText3D(tCoords.x, tCoords.y, tCoords.z + 1.0, "~g~[E]~s~ Realizar Tarea: " .. currentTask.data.label)
+                        if IsControlJustReleased(0, 38) then
+                            ExecuteCurrentTask()
+                        end
                     end
                 end
             end

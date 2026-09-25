@@ -34,6 +34,67 @@ RegisterNetEvent('spain_jobs:server:setDuty', function(onDuty, stationKey)
     end
 end)
 
+-- Entrega de llaves del vehículo de trabajo
+RegisterNetEvent('spain_jobs:server:giveWorkKeys', function(plate)
+    local src = source
+    if not plate then return end
+    if exports['qb-vehiclekeys'] and exports['qb-vehiclekeys'].GiveKeys then
+        exports['qb-vehiclekeys']:GiveKeys(src, plate)
+    end
+end)
+
+RegisterNetEvent('spain_jobs:server:giveWorkVehicleKeys', function(vehNetId, plate)
+    local src = source
+    if not plate then return end
+    local Player = QBCore.Functions.GetPlayer(src)
+    if Player and vehNetId and vehNetId ~= 0 then
+        local cid = Player.PlayerData.citizenid
+        if activeWorkers[cid] then
+            activeWorkers[cid].vehNetId = vehNetId
+        end
+    end
+
+    if exports['qb-vehiclekeys'] and exports['qb-vehiclekeys'].GiveKeys then
+        exports['qb-vehiclekeys']:GiveKeys(src, plate)
+    end
+end)
+
+-- Borrado garantizado del vehículo de trabajo en el servidor
+RegisterNetEvent('spain_jobs:server:deleteWorkVehicle', function(vehNetId)
+    local src = source
+    if vehNetId and vehNetId ~= 0 then
+        local entity = NetworkGetEntityFromNetworkId(vehNetId)
+        if DoesEntityExist(entity) then
+            DeleteEntity(entity)
+        end
+    end
+end)
+
+-- Callback para alimentar la nueva tablet NUI de trabajos (Spain Works Pro)
+QBCore.Functions.CreateCallback('spain_jobs:server:getJobDashboardData', function(source, cb, stationKey)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return cb(nil) end
+
+    local cid = Player.PlayerData.citizenid
+    local station = JobsConfig.Stations[stationKey]
+    local session = activeWorkers[cid]
+
+    local workerData = {
+        name = Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname,
+        citizenid = cid,
+        job = Player.PlayerData.job.name,
+        jobLabel = Player.PlayerData.job.label or "Empleado",
+        grade = Player.PlayerData.job.grade.name or "Operario",
+        onDuty = (session ~= nil),
+        tasksCount = session and session.tasksCount or 0,
+        overtimeCash = session and session.overtimeCash or 0,
+        minutesWorked = session and math.floor((os.time() - session.startTime) / 60) or 0,
+        station = station or {}
+    }
+
+    cb(workerData)
+end)
+
 -- Evento al Completar una Tarea de Trabajo en el Mundo
 RegisterNetEvent('spain_jobs:server:completeTask', function(stationKey, taskIndex)
     local src = source
@@ -121,6 +182,12 @@ AddEventHandler('playerDropped', function()
     local src = source
     for cid, session in pairs(activeWorkers) do
         if session.src == src then
+            if session.vehNetId and session.vehNetId ~= 0 then
+                local entity = NetworkGetEntityFromNetworkId(session.vehNetId)
+                if DoesEntityExist(entity) then
+                    DeleteEntity(entity)
+                end
+            end
             activeWorkers[cid] = nil
             break
         end

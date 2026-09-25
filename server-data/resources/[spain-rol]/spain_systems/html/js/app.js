@@ -163,8 +163,38 @@ function playSound(type) {
         gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
         osc.start(now);
         osc.stop(now + 0.35);
+    } else if (type === 'fanfare') {
+        // Fanfarria ascendente para cartas secretas y PSA 10
+        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.type = 'triangle';
+            const noteTime = now + (idx * 0.07);
+            noteOsc.frequency.setValueAtTime(freq, noteTime);
+            noteGain.gain.setValueAtTime(0.18, noteTime);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.4);
+            noteOsc.start(noteTime);
+            noteOsc.stop(noteTime + 0.4);
+        });
+    } else if (type === 'engine') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.linearRampToValueAtTime(260, now + 0.3);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
     }
 }
+
+// Variables de Estado de la Tablet de Empleos y Revelación
+let currentJobData = null;
+let isJobTabletOpen = false;
+let isCardRevealOpen = false;
+let isShiftActionPending = false; // Debounce guard
 
 // Inicialización de la Interfaz
 document.addEventListener('DOMContentLoaded', () => {
@@ -172,6 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initPaymentSelector();
     initCloseButton();
     renderProducts();
+    initJobTabletEvents();
+    initCardRevealEvents();
 });
 
 // Mensajes desde FiveM Client
@@ -203,15 +235,27 @@ window.addEventListener('message', (event) => {
         updateBalancesUI();
         renderSellTab();
         renderMyCardsTab();
+    } else if (data.action === 'revealCard') {
+        openCardReveal(data.card);
+    } else if (data.action === 'openJobTablet') {
+        openJobTablet(data);
+    } else if (data.action === 'closeJobTablet') {
+        closeJobTablet();
     } else if (data.action === 'close') {
         closeUI();
     }
 });
 
-// Cerrar con Tecla ESC
+// Cerrar con Tecla ESC (Manejador jerárquico inteligente)
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' || e.keyCode === 27) {
-        closeUI();
+        if (isCardRevealOpen) {
+            closeCardReveal();
+        } else if (isJobTabletOpen) {
+            closeJobTablet();
+        } else if (document.getElementById('app').style.display !== 'none') {
+            closeUI();
+        }
     }
 });
 
@@ -626,4 +670,226 @@ function showToast(type, title, msg) {
     toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
     }, 4500);
+}
+
+/* =========================================================================
+   POKÉVAULT - SISTEMA DE REVELACIÓN DE CARTA (3D PULL REVEAL)
+   ========================================================================= */
+function initCardRevealEvents() {
+    const btnStash = document.getElementById('btn-stash-card');
+    if (btnStash) {
+        btnStash.addEventListener('click', () => {
+            closeCardReveal();
+        });
+    }
+}
+
+function openCardReveal(card) {
+    if (!card) return;
+    isCardRevealOpen = true;
+
+    const modal = document.getElementById('card-reveal-modal');
+    const tagline = document.getElementById('reveal-pack-origin');
+    const title = document.getElementById('reveal-title');
+    const rarity = document.getElementById('reveal-rarity');
+    const img = document.getElementById('reveal-card-img');
+    const cardName = document.getElementById('reveal-card-name');
+    const marketVal = document.getElementById('reveal-market-val');
+
+    tagline.textContent = card.packOrigin || 'SOBRE PRECINTADO';
+    title.textContent = card.isHit ? '🔥 ¡¡HITAZO DE COLECCIÓN!! 🔥' : '¡NUEVA CARTA OBTENIDA!';
+    rarity.textContent = card.rarity || 'COMÚN';
+    img.src = card.image || 'nui://qb-inventory/html/images/pokemon_card_common.png';
+    cardName.textContent = card.name || 'Carta Pokémon';
+    marketVal.textContent = '€' + (card.marketValue || 0).toLocaleString('es-ES');
+
+    modal.style.display = 'flex';
+
+    if (card.isHit) {
+        playSound('fanfare');
+    } else {
+        playSound('buy');
+    }
+}
+
+function closeCardReveal() {
+    const modal = document.getElementById('card-reveal-modal');
+    if (modal) modal.style.display = 'none';
+    isCardRevealOpen = false;
+
+    fetch(`https://${GetParentResourceName()}/closeCardReveal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+    });
+}
+
+/* =========================================================================
+   TABLET CORPORATIVA DE EMPLEOS (SPAIN WORKS PRO)
+   ========================================================================= */
+function initJobTabletEvents() {
+    const btnClose = document.getElementById('job-btn-close');
+    const btnStart = document.getElementById('btn-start-shift');
+    const btnStop = document.getElementById('btn-stop-shift');
+    const btnRespawn = document.getElementById('btn-respawn-veh');
+    const btnGps = document.getElementById('btn-gps-task');
+
+    if (btnClose) {
+        btnClose.addEventListener('click', () => {
+            closeJobTablet();
+        });
+    }
+
+    if (btnStart) {
+        btnStart.addEventListener('click', () => {
+            if (isShiftActionPending || !currentJobData) return;
+            isShiftActionPending = true;
+            playSound('engine');
+            closeJobTablet();
+
+            fetch(`https://${GetParentResourceName()}/startShiftFromNui`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stationKey: currentJobData.stationKey })
+            });
+
+            setTimeout(() => { isShiftActionPending = false; }, 1500);
+        });
+    }
+
+    if (btnStop) {
+        btnStop.addEventListener('click', () => {
+            if (isShiftActionPending || !currentJobData) return;
+            isShiftActionPending = true;
+            playSound('click');
+            closeJobTablet();
+
+            fetch(`https://${GetParentResourceName()}/stopShiftFromNui`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stationKey: currentJobData.stationKey })
+            });
+
+            setTimeout(() => { isShiftActionPending = false; }, 1500);
+        });
+    }
+
+    if (btnRespawn) {
+        btnRespawn.addEventListener('click', () => {
+            if (!currentJobData) return;
+            playSound('click');
+            closeJobTablet();
+
+            fetch(`https://${GetParentResourceName()}/respawnVehicleFromNui`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stationKey: currentJobData.stationKey })
+            });
+        });
+    }
+
+    if (btnGps) {
+        btnGps.addEventListener('click', () => {
+            playSound('click');
+            closeJobTablet();
+
+            fetch(`https://${GetParentResourceName()}/setGpsToTask`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+        });
+    }
+}
+
+function openJobTablet(data) {
+    if (!data) return;
+    currentJobData = data;
+    isJobTabletOpen = true;
+
+    const station = data.station || {};
+    const worker = data.worker || {};
+
+    // Encabezado
+    document.getElementById('job-station-name').textContent = station.name || "Sede Laboral";
+    document.getElementById('job-company-tag').textContent = (station.name || "EMPLEO OFICIAL").toUpperCase() + " • SPAIN ROL";
+
+    // Credencial
+    document.getElementById('job-worker-name').textContent = worker.name || "Ciudadano";
+    document.getElementById('job-worker-role').textContent = (worker.grade || "Operario") + " (" + (worker.jobLabel || station.name || "Empresa") + ")";
+    document.getElementById('job-worker-cid').textContent = "EXPEDIENTE: " + (worker.citizenid || "DESCONOCIDO");
+
+    // Estado de Turno
+    const dutyPill = document.getElementById('job-duty-status');
+    const dutyText = document.getElementById('job-duty-text');
+    const btnStart = document.getElementById('btn-start-shift');
+    const btnStop = document.getElementById('btn-stop-shift');
+    const btnRespawn = document.getElementById('btn-respawn-veh');
+    const btnGps = document.getElementById('btn-gps-task');
+
+    if (worker.onDuty) {
+        dutyPill.classList.add('on-duty');
+        dutyText.textContent = "EN SERVICIO ACTIVO";
+        btnStart.style.display = 'none';
+        btnStop.style.display = 'flex';
+        btnRespawn.style.display = station.vehicle ? 'flex' : 'none';
+        btnGps.style.display = 'flex';
+    } else {
+        dutyPill.classList.remove('on-duty');
+        dutyText.textContent = "FUERA DE SERVICIO";
+        btnStart.style.display = 'flex';
+        btnStop.style.display = 'none';
+        btnRespawn.style.display = 'none';
+        btnGps.style.display = 'none';
+    }
+
+    // Métricas en vivo
+    const payRange = (station.pay && station.pay.min && station.pay.max) 
+        ? `€${station.pay.min} - €${station.pay.max}` 
+        : "€120 - €240";
+    document.getElementById('job-metric-pay').textContent = payRange;
+    document.getElementById('job-metric-overtime').textContent = '€' + (worker.overtimeCash || 0).toLocaleString('es-ES');
+    document.getElementById('job-metric-tasks').textContent = worker.tasksCount || 0;
+    document.getElementById('job-metric-time').textContent = (worker.minutesWorked || 0) + ' min';
+
+    // Itinerario y Cuadrante de Paradas
+    const routesList = document.getElementById('job-routes-list');
+    const routeBadge = document.getElementById('job-route-count');
+    routesList.innerHTML = '';
+
+    const tasks = station.tasks || [];
+    routeBadge.textContent = `${tasks.length} Paradas Programadas`;
+
+    tasks.forEach((t, idx) => {
+        const item = document.createElement('div');
+        item.className = 'route-card';
+
+        const isCurrent = (worker.currentTaskIndex === idx + 1);
+        item.innerHTML = `
+            <div class="route-card-left">
+                <div class="route-num">${idx + 1}</div>
+                <div>
+                    <div class="route-label">${t.label}</div>
+                    <div class="route-tag">Duración estimada: ~${Math.round((t.duration || 5000) / 1000)}s &bull; GPS Verificado</div>
+                </div>
+            </div>
+            ${isCurrent ? '<span class="route-badge-active">📍 ACTIVA EN GPS</span>' : '<span class="route-tag">En espera</span>'}
+        `;
+        routesList.appendChild(item);
+    });
+
+    document.getElementById('job-dashboard').style.display = 'flex';
+    playSound('click');
+}
+
+function closeJobTablet() {
+    const dashboard = document.getElementById('job-dashboard');
+    if (dashboard) dashboard.style.display = 'none';
+    isJobTabletOpen = false;
+
+    fetch(`https://${GetParentResourceName()}/closeJobDashboard`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+    });
 }

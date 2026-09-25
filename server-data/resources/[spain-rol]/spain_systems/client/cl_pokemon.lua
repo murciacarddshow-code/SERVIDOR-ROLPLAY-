@@ -4,9 +4,25 @@
 
 local QBCore = exports['qb-core']:GetCoreObject()
 
--- Evento de Apertura de Sobre con Animación y Efectos
+-- Evento de Apertura de Sobre con Animación, Prop Físico y Revelación Visual
 RegisterNetEvent('spain_pokemon:client:openPack', function(packItem, packLabel)
     local ped = PlayerPedId()
+
+    -- Cargar modelo del prop (paquete / sobre)
+    local propModel = `prop_cs_package_01`
+    RequestModel(propModel)
+    local timeout = 0
+    while not HasModelLoaded(propModel) and timeout < 50 do
+        Wait(20)
+        timeout = timeout + 1
+    end
+
+    local packProp = nil
+    if HasModelLoaded(propModel) then
+        local pCoords = GetEntityCoords(ped)
+        packProp = CreateObject(propModel, pCoords.x, pCoords.y, pCoords.z, true, true, false)
+        AttachEntityToEntity(packProp, ped, GetPedBoneIndex(ped, 60309), 0.12, 0.03, 0.05, -30.0, 90.0, 0.0, true, true, false, true, 1, true)
+    end
 
     -- Animación de rasgar/abrir el sobre
     local animDict = "mp_common"
@@ -18,16 +34,24 @@ RegisterNetEvent('spain_pokemon:client:openPack', function(packItem, packLabel)
 
     TaskPlayAnim(ped, animDict, animClip, 8.0, -8.0, 3500, 49, 0, false, false, false)
 
-    QBCore.Functions.Progressbar("open_pokemon_booster", "Abriendo " .. packLabel .. "...", 3500, false, true, {
+    QBCore.Functions.Progressbar("open_pokemon_booster", "Desprecintando " .. packLabel .. "...", 3500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Completado
         ClearPedTasks(ped)
+        if packProp and DoesEntityExist(packProp) then
+            DeleteObject(packProp)
+            packProp = nil
+        end
         TriggerServerEvent('spain_pokemon:server:finishPackOpening', packItem)
     end, function() -- Cancelado
         ClearPedTasks(ped)
+        if packProp and DoesEntityExist(packProp) then
+            DeleteObject(packProp)
+            packProp = nil
+        end
         TriggerEvent('QBCore:Notify', "Apertura de sobre cancelada.", "error")
     end)
 end)
@@ -128,6 +152,20 @@ RegisterNUICallback('openPackFromNui', function(data, cb)
     cb('ok')
     Wait(200)
     TriggerEvent('spain_pokemon:client:openPack', data.item, data.label)
+end)
+
+-- Revelación Visual Interactiva en Pantalla (NUI)
+RegisterNetEvent('spain_pokemon:client:revealCardNui', function(cardData)
+    SetNuiFocus(true, true)
+    SendNUIMessage({
+        action = 'revealCard',
+        card = cardData
+    })
+end)
+
+RegisterNUICallback('closeCardReveal', function(_, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
 end)
 
 -- Notificación de venta completada con sonido de caja registradora

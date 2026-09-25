@@ -307,6 +307,171 @@
         </div>
     </div>
 
+    <!-- MODAL DE REVELACIÓN DE CARTA POKÉMON (POKÉVAULT PULL REVEAL) -->
+    <div id="card-reveal-modal" class="card-reveal-overlay" style="display: none;">
+        <div class="reveal-backdrop"></div>
+        <div class="reveal-container">
+            <div class="reveal-burst" id="reveal-burst"></div>
+            <div class="reveal-header">
+                <span class="reveal-tagline" id="reveal-pack-origin">SOBRE PRECINTADO</span>
+                <h2 class="reveal-title" id="reveal-title">¡HAS CONSEGUIDO UNA CARTA!</h2>
+                <div class="reveal-rarity-badge" id="reveal-rarity">RARA</div>
+            </div>
+            <div class="reveal-card-wrapper" id="reveal-card-wrapper">
+                <div class="reveal-card-shimmer"></div>
+                <img id="reveal-card-img" src="" alt="Carta Pokémon" class="reveal-card-img">
+            </div>
+            <div class="reveal-details">
+                <div class="reveal-card-name" id="reveal-card-name">Nombre de Carta</div>
+                <div class="reveal-market-value">
+                    <span class="label">COTIZACIÓN ESTIMADA EN EL TASADOR:</span>
+                    <span class="value" id="reveal-market-val">€0</span>
+                </div>
+            </div>
+            <div class="reveal-actions">
+                <button class="btn-stash-card" id="btn-stash-card">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    <span>GUARDAR EN MI INVENTARIO (ESC)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLET CORPORATIVA DE EMPLEOS (SPAIN WORKS PRO) -->
+    <div id="job-dashboard" class="job-tablet-container" style="display: none;">
+        <div class="job-backdrop"></div>
+        <div class="job-tablet-window">
+            <!-- Tablet Top Bar -->
+            <header class="job-header">
+                <div class="job-brand">
+                    <div class="job-icon-circle">
+                        <span class="material-symbols-outlined" id="job-header-icon">badge</span>
+                    </div>
+                    <div class="job-title-group">
+                        <div class="job-tagline" id="job-company-tag">SISTEMA LABORAL &bull; RED DE EMPLEO SPAIN ROL</div>
+                        <h1 class="job-name" id="job-station-name">Sede Central</h1>
+                    </div>
+                </div>
+
+                <div class="job-header-right">
+                    <div class="duty-status-pill" id="job-duty-status">
+                        <span class="duty-dot"></span>
+                        <span class="duty-text" id="job-duty-text">FUERA DE SERVICIO</span>
+                    </div>
+                    <button class="job-close-btn" id="job-btn-close" title="Cerrar Tablet (ESC)">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Employee Badge & Stats Ribbon -->
+            <div class="job-ribbon">
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <div class="employee-info">
+                        <span class="employee-role" id="job-worker-role">Operario</span>
+                        <h3 class="employee-name" id="job-worker-name">Nombre de Ciudadano</h3>
+                        <span class="employee-cid" id="job-worker-cid">ID: ...</span>
+                    </div>
+                </div>
+
+                <div class="job-metrics">
+                    <div class="metric-card">
+                        <span class="metric-label">SALARIO POR PARADA</span>
+                        <span class="metric-val text-green" id="job-metric-pay">€0 - €0</span>
+                        <span class="metric-sub">Directo a cuenta bancaria</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">HORAS EXTRAS EN NEGRO</span>
+                        <span class="metric-val text-gold" id="job-metric-overtime">€0</span>
+                        <span class="metric-sub">Bolsas marcadas sin declarar</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">PARADAS COMPLETADAS</span>
+                        <span class="metric-val text-cyan" id="job-metric-tasks">0</span>
+                        <span class="metric-sub">En la jornada actual</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">TIEMPO TRABAJADO</span>
+                        <span class="metric-val" id="job-metric-time">0 min</span>
+                        <span class="metric-sub">Contador de turno</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tablet Main Body: Actions & Route Quadrant -->
+            <div class="job-body">
+                <!-- Left Actions Column -->
+                <div class="job-actions-col">
+                    <h3 class="col-title">GESTIÓN DE JORNADA Y FLOTA</h3>
+
+                    <!-- Duty Start Button -->
+                    <button class="btn-duty-action btn-start-shift" id="btn-start-shift">
+                        <div class="action-icon">
+                            <span class="material-symbols-outlined">play_circle</span>
+                        </div>
+                        <div class="action-info">
+                            <span class="action-main">INICIAR JORNADA LABORAL</span>
+                            <span class="action-sub">Recibir vehículo de empresa, llaves y ruta GPS</span>
+                        </div>
+                    </button>
+
+                    <!-- Duty Stop Button -->
+                    <button class="btn-duty-action btn-stop-shift" id="btn-stop-shift" style="display: none;">
+                        <div class="action-icon">
+                            <span class="material-symbols-outlined">stop_circle</span>
+                        </div>
+                        <div class="action-info">
+                            <span class="action-main">FINALIZAR JORNADA LABORAL</span>
+                            <span class="action-sub">Guardar vehículo, cobrar liquidación y salir</span>
+                        </div>
+                    </button>
+
+                    <!-- Respawn Vehicle Button -->
+                    <button class="btn-duty-action btn-respawn-veh" id="btn-respawn-veh" style="display: none;">
+                        <div class="action-icon">
+                            <span class="material-symbols-outlined">car_rental</span>
+                        </div>
+                        <div class="action-info">
+                            <span class="action-main">REPONER VEHÍCULO DE EMPRESA</span>
+                            <span class="action-sub">Solicitar nuevo transporte si el actual sufrió daños</span>
+                        </div>
+                    </button>
+
+                    <!-- Set GPS Button -->
+                    <button class="btn-duty-action btn-gps-task" id="btn-gps-task" style="display: none;">
+                        <div class="action-icon">
+                            <span class="material-symbols-outlined">near_me</span>
+                        </div>
+                        <div class="action-info">
+                            <span class="action-main">REMARCAR RUTA GPS ACTIVA</span>
+                            <span class="action-sub">Fijar destino de la próxima parada en el radar</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Right Routes Quadrant -->
+                <div class="job-routes-col">
+                    <div class="routes-header">
+                        <h3 class="col-title">ITINERARIO Y CUADRANTE DE PARADAS</h3>
+                        <span class="route-count-badge" id="job-route-count">0 Paradas</span>
+                    </div>
+                    <div class="routes-list" id="job-routes-list">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tablet Footer -->
+            <footer class="job-footer">
+                <span class="footer-note">⚡ SPAIN WORKS ENTERPRISE &bull; Conexión segura con el centro de control laboral</span>
+                <span class="footer-press-esc">Presiona <strong>ESC</strong> para salir</span>
+            </footer>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
 </body>
 </html>

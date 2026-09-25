@@ -556,9 +556,9 @@ document.getElementById('catalog-search').addEventListener('input', (e) => {
 document.getElementById('btn-close-tablet').addEventListener('click', closeTabletUI);
 document.getElementById('btn-exit-bottom').addEventListener('click', closeTabletUI);
 
-// Tecla ESC para cerrar
+// Tecla ESC para cerrar (exclusivamente ESC para evitar cerrar al borrar números con Backspace)
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' || e.key === 'Backspace') {
+    if (e.key === 'Escape') {
         if (appState.isOpen) {
             closeTabletUI();
         }

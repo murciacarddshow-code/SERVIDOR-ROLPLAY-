@@ -153,6 +153,19 @@ RegisterNetEvent('spain_pokemon:server:finishPackOpening', function(packItem)
     Player.Functions.AddItem(cardItem, 1, false, itemInfo)
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[cardItem] or { label = cardLabel }, "add")
     TriggerClientEvent('spain_pokemon:client:cardObtained', src, cardLabel, rarity, isHit)
+
+    -- Revelación Visual Interactiva en Pantalla (NUI 3D Shimmer)
+    local marketPrice = (cardPrices[cardItem] and cardPrices[cardItem].price) or 15
+    local cardDetails = {
+        item = cardItem,
+        name = cardLabel,
+        rarity = rarity,
+        isHit = isHit,
+        image = "nui://qb-inventory/html/images/" .. cardItem .. ".png",
+        marketValue = marketPrice,
+        packOrigin = (QBCore.Shared.Items[packItem] and QBCore.Shared.Items[packItem].label) or packItem
+    }
+    TriggerClientEvent('spain_pokemon:client:revealCardNui', src, cardDetails)
 end)
 
 -- =========================================================================
