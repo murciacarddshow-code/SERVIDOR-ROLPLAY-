@@ -124,6 +124,11 @@ RegisterNetEvent('qb-multicharacter:client:closeNUIdefault', function() -- This 
     TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
     Wait(500)
     skyCam(false)
+    if airportCam and DoesCamExist(airportCam) then
+        DestroyCam(airportCam, true)
+        airportCam = nil
+    end
+    RenderScriptCams(false, false, 1, true, true)
     DoScreenFadeIn(250)
     TriggerEvent('qb-weathersync:client:EnableSync')
     Wait(500)
@@ -271,6 +276,97 @@ RegisterNUICallback('removeBlur', function(_, cb)
     cb('ok')
 end)
 
+local airportCam = nil
+
+RegisterNUICallback('startNewCharacterAirport', function(_, cb)
+    SetTimecycleModifier('default')
+    DoScreenFadeOut(400)
+    Wait(500)
+    if DoesEntityExist(charPed) then
+        SetEntityAsMissionEntity(charPed, true, true)
+        DeleteEntity(charPed)
+    end
+    local ped = PlayerPedId()
+    local spawnCoords = Config.DefaultSpawn
+    RequestCollisionAtCoord(spawnCoords.x, spawnCoords.y, spawnCoords.z)
+    SetEntityCoords(ped, spawnCoords.x, spawnCoords.y, spawnCoords.z, false, false, false, true)
+    SetEntityHeading(ped, spawnCoords.w or 330.0)
+    FreezeEntityPosition(ped, true)
+    SetEntityVisible(ped, true)
+
+    local model = `mp_m_freemode_01`
+    RequestModel(model)
+    local t = 0
+    while not HasModelLoaded(model) and t < 50 do
+        Wait(50)
+        t = t + 1
+    end
+    if HasModelLoaded(model) then
+        SetPlayerModel(PlayerId(), model)
+        ped = PlayerPedId()
+        SetEntityCoords(ped, spawnCoords.x, spawnCoords.y, spawnCoords.z, false, false, false, true)
+        SetEntityHeading(ped, spawnCoords.w or 330.0)
+        FreezeEntityPosition(ped, true)
+        SetPedComponentVariation(ped, 0, 0, 0, 2)
+    end
+
+    if DoesCamExist(cam) then
+        DestroyCam(cam, true)
+    end
+    if airportCam and DoesCamExist(airportCam) then
+        DestroyCam(airportCam, true)
+    end
+
+    local forwardX = -math.sin(math.rad(spawnCoords.w or 330.0)) * 2.2
+    local forwardY = math.cos(math.rad(spawnCoords.w or 330.0)) * 2.2
+    local camX = spawnCoords.x + forwardX
+    local camY = spawnCoords.y + forwardY
+    local camZ = spawnCoords.z + 0.35
+
+    airportCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', camX, camY, camZ, 0.0, 0.0, 0.0, 50.00, false, 0)
+    PointCamAtCoord(airportCam, spawnCoords.x, spawnCoords.y, spawnCoords.z + 0.1)
+    SetCamActive(airportCam, true)
+    RenderScriptCams(true, false, 1, true, true)
+
+    Wait(300)
+    DoScreenFadeIn(400)
+    cb('ok')
+end)
+
+RegisterNUICallback('cancelNewCharacter', function(_, cb)
+    DoScreenFadeOut(400)
+    Wait(500)
+    if airportCam and DoesCamExist(airportCam) then
+        DestroyCam(airportCam, true)
+        airportCam = nil
+    end
+    TriggerEvent('qb-multicharacter:client:chooseChar')
+    cb('ok')
+end)
+
+RegisterNUICallback('previewGender', function(data, cb)
+    local gender = tostring(data.gender)
+    local modelName = (gender == 'female' or gender == Lang:t('ui.female')) and `mp_f_freemode_01` or `mp_m_freemode_01`
+    RequestModel(modelName)
+    local t = 0
+    while not HasModelLoaded(modelName) and t < 50 do
+        Wait(50)
+        t = t + 1
+    end
+    if HasModelLoaded(modelName) then
+        local ped = PlayerPedId()
+        local h = GetEntityHeading(ped)
+        local c = GetEntityCoords(ped)
+        SetPlayerModel(PlayerId(), modelName)
+        ped = PlayerPedId()
+        SetEntityCoords(ped, c.x, c.y, c.z, false, false, false, true)
+        SetEntityHeading(ped, h)
+        FreezeEntityPosition(ped, true)
+        SetPedComponentVariation(ped, 0, 0, 0, 2)
+    end
+    cb('ok')
+end)
+
 RegisterNUICallback('createNewCharacter', function(data, cb)
     local cData = data
     DoScreenFadeOut(150)
@@ -290,3 +386,4 @@ RegisterNUICallback('removeCharacter', function(data, cb)
     TriggerEvent('qb-multicharacter:client:chooseChar')
     cb('ok')
 end)
+

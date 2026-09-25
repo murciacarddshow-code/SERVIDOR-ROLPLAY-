@@ -73,7 +73,7 @@
 
                                 <!-- For empty slots -->
                                 <template v-else>
-                                    <div class="empty-slot" @click.stop="selectedCharacter = index; resetRegisterData(); show.characters = false; show.register = true;">+</div>
+                                    <div class="empty-slot" @click.stop="select_empty_slot(index)">+</div>
                                 </template>
                             </div>
                         </div>
@@ -89,31 +89,60 @@
                             </div>
                         </transition>
 
-                        <!-- Character Creation Form -->
+                        <!-- Character Creation Form (Airport Register) -->
                         <transition name="fade">
                             <div class="character-register" v-if="show.register">
-                                <div>
-                                    <p class="characters-register-block-header">{{translate('chardel_header')}}</p>
-                                    <span class="material-symbols-outlined" id="close-reg" @click="cancelCreate">close</span>
+                                <div class="register-header-container">
+                                    <div class="register-badge">SPAIN ROL</div>
+                                    <h2 class="register-title">REGISTRO DE CIUDADANO</h2>
+                                    <p class="register-subtitle">Introduce los datos oficiales de tu personaje</p>
+                                    <span class="material-symbols-outlined" id="close-reg" @click="cancelCreate" title="Cancelar">close</span>
                                 </div>
                                 <div class="char-register-inputs">
-                                    <v-text-field :placeholder="translate('firstname')" solo hide-details="auto" v-model="registerData.firstname"></v-text-field>
-                                    <v-text-field :placeholder="translate('lastname')" solo hide-details="auto" v-model="registerData.lastname"></v-text-field>
-                                    <v-text-field v-if="customNationality" :placeholder="translate('nationality')" solo hide-details="auto" v-model="registerData.nationality"></v-text-field>
-                                    <v-select v-else solo :placeholder="translate('nationality')" :items="nationalities" hide-details="auto" v-ripple v-model="registerData.nationality"></v-select>
-                                    <v-select solo :placeholder="translate('gender')" :items="[translate('male'), translate('female')]" hide-details="auto" v-ripple v-model="registerData.gender"></v-select>
-                                    <v-dialog ref="dialog" v-model="dataPickerMenu" :return-value.sync="registerData.date" persistent width="290px">
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-text-field v-model="registerData.date" :label="translate('birthdate')" readonly v-bind="attrs" v-on="on" solo></v-text-field>
-                                        </template>
-                                        <v-date-picker v-model="registerData.date" min="1900-01-01" max="2100-12-31">
-                                            <v-spacer></v-spacer>
-                                            <v-btn text class="date-cancel-btn" @click="dataPickerMenu = false">{{translate('cancel')}}</v-btn>
-                                            <v-btn text class="date-confirm-btn" @click="$refs.dialog.save(registerData.date)">{{translate('confirm')}}</v-btn>
-                                        </v-date-picker>
-                                    </v-dialog>
+                                    <div class="input-group">
+                                        <label class="input-label"><span class="material-symbols-outlined">badge</span> {{translate('firstname')}}</label>
+                                        <v-text-field :placeholder="translate('firstname')" solo hide-details="auto" v-model="registerData.firstname"></v-text-field>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label"><span class="material-symbols-outlined">person</span> {{translate('lastname')}}</label>
+                                        <v-text-field :placeholder="translate('lastname')" solo hide-details="auto" v-model="registerData.lastname"></v-text-field>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label"><span class="material-symbols-outlined">public</span> {{translate('nationality')}}</label>
+                                        <v-text-field v-if="customNationality" :placeholder="translate('nationality')" solo hide-details="auto" v-model="registerData.nationality"></v-text-field>
+                                        <v-select v-else solo :placeholder="translate('nationality')" :items="nationalities" hide-details="auto" v-ripple v-model="registerData.nationality"></v-select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label"><span class="material-symbols-outlined">wc</span> {{translate('gender')}}</label>
+                                        <div class="gender-selection-container">
+                                            <div class="gender-btn" :class="{'active': registerData.gender === translate('male')}" @click="setGender('male')">
+                                                <span class="gender-icon">♂</span>
+                                                <span>{{translate('male')}}</span>
+                                            </div>
+                                            <div class="gender-btn" :class="{'active': registerData.gender === translate('female')}" @click="setGender('female')">
+                                                <span class="gender-icon">♀</span>
+                                                <span>{{translate('female')}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label"><span class="material-symbols-outlined">calendar_month</span> {{translate('birthdate')}}</label>
+                                        <v-dialog ref="dialog" v-model="dataPickerMenu" :return-value.sync="registerData.date" persistent width="290px">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="registerData.date" :placeholder="translate('birthdate')" readonly v-bind="attrs" v-on="on" solo hide-details="auto"></v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="registerData.date" min="1900-01-01" max="2100-12-31" color="#d32f2f">
+                                                <v-spacer></v-spacer>
+                                                <v-btn text class="date-cancel-btn" @click="dataPickerMenu = false">{{translate('cancel')}}</v-btn>
+                                                <v-btn text class="date-confirm-btn" @click="$refs.dialog.save(registerData.date)">{{translate('confirm')}}</v-btn>
+                                            </v-date-picker>
+                                        </v-dialog>
+                                    </div>
                                 </div>
-                                <v-btn class="character-reg-btn" v-ripple @click="create_character" large>{{translate('create_button')}}</v-btn>
+                                <v-btn class="character-reg-btn" v-ripple @click="create_character" large>
+                                    <span class="material-symbols-outlined mr-2">how_to_reg</span>
+                                    {{translate('create_button')}}
+                                </v-btn>
                             </div>
                         </transition>
                     </div>

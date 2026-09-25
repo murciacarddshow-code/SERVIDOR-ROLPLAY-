@@ -41,13 +41,26 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 } else {
                     axios.post("https://qb-multicharacter/cDataPed", {});
-                    // For empty slots, immediately show the registration form
                     if (type === "empty") {
-                        this.resetRegisterData();
-                        this.show.characters = false;
-                        this.show.register = true;
+                        this.select_empty_slot(idx);
                     }
                 }
+            },
+            select_empty_slot: function (idx) {
+                this.selectedCharacter = idx;
+                this.resetRegisterData();
+                this.registerData.gender = this.translate('male');
+                this.registerData.nationality = this.registerData.nationality || "Spain";
+                this.show.characters = false;
+                axios.post("https://qb-multicharacter/startNewCharacterAirport", {}).then(() => {
+                    this.show.register = true;
+                }).catch(() => {
+                    this.show.register = true;
+                });
+            },
+            setGender: function (g) {
+                this.registerData.gender = this.translate(g);
+                axios.post("https://qb-multicharacter/previewGender", { gender: g });
             },
             prepareDelete: function () {
                 this.show.characters = false;
@@ -59,7 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             cancelCreate: function () {
                 this.show.register = false;
-                this.show.characters = true;
+                axios.post("https://qb-multicharacter/cancelNewCharacter", {}).then(() => {
+                    this.show.characters = true;
+                }).catch(() => {
+                    this.show.characters = true;
+                });
             },
             delete_character: function () {
                 if (this.show.delete) {
@@ -84,9 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             this.show.characters = false;
                         }, 500);
                     } else {
-                        this.resetRegisterData();
-                        this.show.characters = false;
-                        this.show.register = true;
+                        this.select_empty_slot(this.selectedCharacter);
                     }
                 }
             },
