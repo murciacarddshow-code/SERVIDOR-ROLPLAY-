@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+html {
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.progress-container {
+    display: none;
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 99;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 6px;
+    width: 100%;
+}
+
+#progress-label {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+#progress-percentage {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.progress-bar-container {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 5px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+#progress-bar {
+    background-color: #3498db; /* Sleek ONX blue */
+    width: 0%;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
+}
