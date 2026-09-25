@@ -32,7 +32,7 @@ CREATE TABLE `apartments` (
   PRIMARY KEY (`id`),
   KEY `citizenid` (`citizenid`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4145 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4146 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,8 @@ CREATE TABLE `apartments` (
 LOCK TABLES `apartments` WRITE;
 /*!40000 ALTER TABLE `apartments` DISABLE KEYS */;
 INSERT INTO `apartments` VALUES
-(4144,'apartment3219775','apartment3','Integrity Way 219775','FEZ03578');
+(4144,'apartment3219775','apartment3','Integrity Way 219775','FEZ03578'),
+(4145,'apartment5934725','apartment5','Fantastic Plaza 934725','JRM45973');
 /*!40000 ALTER TABLE `apartments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +63,7 @@ CREATE TABLE `bank_accounts` (
   `users` longtext DEFAULT '[]',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `account_name` (`account_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +92,28 @@ INSERT INTO `bank_accounts` VALUES
 (17,NULL,'unemployed',0,'job','[]'),
 (18,NULL,'vineyard',0,'job','[]'),
 (19,NULL,'cardealer',0,'job','[]'),
-(20,NULL,'lawyer',0,'job','[]');
+(20,NULL,'lawyer',0,'job','[]'),
+(21,NULL,'lumberjack',0,'job','[]'),
+(22,NULL,'dealership_sandy',0,'job','[]'),
+(23,NULL,'cards_courier',0,'job','[]'),
+(24,NULL,'content_creator',0,'job','[]'),
+(25,NULL,'wine_sommelier',0,'job','[]'),
+(26,NULL,'food_critic',0,'job','[]'),
+(27,NULL,'wildlife_ranger',0,'job','[]'),
+(28,NULL,'waiter',0,'job','[]'),
+(29,NULL,'dealership_sur',0,'job','[]'),
+(30,NULL,'dealership_paleto',0,'job','[]'),
+(31,NULL,'electrician',0,'job','[]'),
+(32,NULL,'pizza',0,'job','[]'),
+(33,NULL,'farmer',0,'job','[]'),
+(34,NULL,'diver',0,'job','[]'),
+(35,NULL,'delivery',0,'job','[]'),
+(36,NULL,'security',0,'job','[]'),
+(37,NULL,'windowcleaner',0,'job','[]'),
+(38,NULL,'fisherman',0,'job','[]'),
+(39,NULL,'miner',0,'job','[]'),
+(40,NULL,'vintage_picker',0,'job','[]'),
+(41,NULL,'gardener',0,'job','[]');
 /*!40000 ALTER TABLE `bank_accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +202,7 @@ CREATE TABLE `crypto` (
 LOCK TABLES `crypto` WRITE;
 /*!40000 ALTER TABLE `crypto` DISABLE KEYS */;
 INSERT INTO `crypto` VALUES
-('qbit',999,'[{\"NewWorth\":1000,\"PreviousWorth\":1000},{\"NewWorth\":999,\"PreviousWorth\":1000}]');
+('qbit',983,'[{\"NewWorth\":989,\"PreviousWorth\":994},{\"NewWorth\":989,\"PreviousWorth\":994},{\"NewWorth\":989,\"PreviousWorth\":994},{\"NewWorth\":983,\"PreviousWorth\":989}]');
 /*!40000 ALTER TABLE `crypto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,6 +260,51 @@ LOCK TABLES `dealers` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `dealership_stock`
+--
+
+DROP TABLE IF EXISTS `dealership_stock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dealership_stock` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dealership` varchar(50) NOT NULL,
+  `vehicle` varchar(50) NOT NULL,
+  `label` varchar(50) NOT NULL,
+  `brand` varchar(50) DEFAULT 'Ocasi+¶n',
+  `category` varchar(50) DEFAULT 'sports',
+  `plate` varchar(15) NOT NULL,
+  `price` int(11) NOT NULL,
+  `mods` longtext DEFAULT '{}',
+  `seller_citizenid` varchar(50) DEFAULT NULL,
+  `seller_name` varchar(100) DEFAULT 'Particular',
+  `date_added` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `dealership` (`dealership`),
+  KEY `plate` (`plate`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dealership_stock`
+--
+
+LOCK TABLES `dealership_stock` WRITE;
+/*!40000 ALTER TABLE `dealership_stock` DISABLE KEYS */;
+INSERT INTO `dealership_stock` VALUES
+(1,'dealership_sur','elegy2','Annis Elegy Retro Custom','Annis','sports','SUR 0110',89000,'{}',NULL,'Particular','2026-09-25 11:35:49'),
+(2,'dealership_sur','sultan','Karin Sultan RS','Karin','sports','SUR 0220',39000,'{}',NULL,'Particular','2026-09-25 11:35:49'),
+(3,'dealership_sur','schafter2','Benefactor Schafter V12','Benefactor','sedans','SUR 0330',36000,'{}',NULL,'Empresa VTC','2026-09-25 11:35:49'),
+(4,'dealership_sandy','sandking','Vapid Sandking XL Monster','Vapid','suvs','SND 4040',38000,'{}',NULL,'Rancho Desert','2026-09-25 11:35:49'),
+(5,'dealership_sandy','kamacho','Canis Kamacho All-Terrain','Canis','suvs','SND 5050',49000,'{}',NULL,'Cazador Local','2026-09-25 11:35:49'),
+(6,'dealership_sandy','sanchez','Maibatsu Sanchez Motocross','Maibatsu','bikes','SND 6060',11500,'{}',NULL,'Circuito Cross','2026-09-25 11:35:49'),
+(7,'dealership_paleto','dubsta','Benefactor Dubsta Luxury 4x4','Benefactor','suvs','PLT 7070',58000,'{}',NULL,'Turista','2026-09-25 11:35:49'),
+(8,'dealership_paleto','tailgater','Obey Tailgater Ejecutivo','Obey','sedans','PLT 8080',29500,'{}',NULL,'Empresario Norte','2026-09-25 11:35:49'),
+(9,'dealership_paleto','kuruma','Karin Kuruma Sport','Karin','sports','PLT 9090',52000,'{}',NULL,'Particular','2026-09-25 11:35:49');
+/*!40000 ALTER TABLE `dealership_stock` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `dpkeybinds`
 --
 
@@ -268,7 +335,9 @@ CREATE TABLE `dpkeybinds` (
 LOCK TABLES `dpkeybinds` WRITE;
 /*!40000 ALTER TABLE `dpkeybinds` DISABLE KEYS */;
 INSERT INTO `dpkeybinds` VALUES
-('license:b43e4e1ff76ba7f9c6d7a3c303fab5c0a1e73c23','num4','','num5','','num6','','num7','','num8','','num9','');
+('license:b43e4e1ff76ba7f9c6d7a3c303fab5c0a1e73c23','num4','','num5','','num6','','num7','','num8','','num9',''),
+('license:0c4a18f627ba6fe1994b23c97f950fa9b21da4f9','num4','','num5','','num6','','num7','','num8','','num9',''),
+('license:bfbec128540832cf3ed84f70b6de846e123b9512','num4','','num5','','num6','','num7','','num8','','num9','');
 /*!40000 ALTER TABLE `dpkeybinds` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -361,6 +430,34 @@ LOCK TABLES `inventories` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `lapraces`
+--
+
+DROP TABLE IF EXISTS `lapraces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lapraces` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `checkpoints` text DEFAULT NULL,
+  `records` text DEFAULT NULL,
+  `creator` varchar(50) DEFAULT NULL,
+  `distance` int(11) DEFAULT NULL,
+  `raceid` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lapraces`
+--
+
+LOCK TABLES `lapraces` WRITE;
+/*!40000 ALTER TABLE `lapraces` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lapraces` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `mdt_fines`
 --
 
@@ -415,6 +512,36 @@ CREATE TABLE `mdt_warrants` (
 LOCK TABLES `mdt_warrants` WRITE;
 /*!40000 ALTER TABLE `mdt_warrants` DISABLE KEYS */;
 /*!40000 ALTER TABLE `mdt_warrants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `occasion_vehicles`
+--
+
+DROP TABLE IF EXISTS `occasion_vehicles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `occasion_vehicles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `seller` varchar(50) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `plate` varchar(50) DEFAULT NULL,
+  `model` varchar(50) DEFAULT NULL,
+  `mods` text DEFAULT NULL,
+  `occasionid` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `occasionId` (`occasionid`)
+) ENGINE=InnoDB AUTO_INCREMENT=325 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `occasion_vehicles`
+--
+
+LOCK TABLES `occasion_vehicles` WRITE;
+/*!40000 ALTER TABLE `occasion_vehicles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `occasion_vehicles` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -638,7 +765,7 @@ CREATE TABLE `player_outfits` (
   PRIMARY KEY (`id`),
   KEY `citizenid` (`citizenid`),
   KEY `outfitId` (`outfitId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -647,6 +774,8 @@ CREATE TABLE `player_outfits` (
 
 LOCK TABLES `player_outfits` WRITE;
 /*!40000 ALTER TABLE `player_outfits` DISABLE KEYS */;
+INSERT INTO `player_outfits` VALUES
+(1,'ADE24479','diablo','1885233650','{\"chimp_bone_width\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"nose_5\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"pants\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":7},\"t-shirt\":{\"defaultTexture\":0,\"defaultItem\":1,\"texture\":3,\"item\":30},\"blush\":{\"defaultTexture\":1,\"defaultItem\":-1,\"texture\":1,\"item\":-1},\"facemix\":{\"defaultShapeMix\":0.0,\"defaultSkinMix\":0.0,\"shapeMix\":0.0,\"skinMix\":0.0},\"chimp_hole\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"mask\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":3},\"arms\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":2,\"item\":208},\"cheek_2\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"shoes\":{\"defaultTexture\":0,\"defaultItem\":1,\"texture\":0,\"item\":6},\"vest\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"nose_0\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"hair\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"beard\":{\"defaultTexture\":1,\"defaultItem\":-1,\"texture\":1,\"item\":-1},\"decals\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":4},\"bracelet\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"cheek_1\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"lipstick\":{\"defaultTexture\":1,\"defaultItem\":-1,\"texture\":1,\"item\":-1},\"hat\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"lips_thickness\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"bag\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"neck_thikness\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"ageing\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"eye_color\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"face\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":4,\"item\":4},\"jaw_bone_width\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"accessory\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":2},\"eyebrown_forward\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"moles\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"torso2\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":3,\"item\":6},\"chimp_bone_lowering\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"watch\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"nose_1\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"eyebrows\":{\"defaultTexture\":1,\"defaultItem\":-1,\"texture\":1,\"item\":-1},\"eyebrown_high\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"ear\":{\"defaultTexture\":0,\"defaultItem\":-1,\"texture\":0,\"item\":-1},\"face2\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":4},\"chimp_bone_lenght\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"jaw_bone_back_lenght\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"cheek_3\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"nose_4\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"makeup\":{\"defaultTexture\":1,\"defaultItem\":-1,\"texture\":1,\"item\":-1},\"eye_opening\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"glass\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"nose_3\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0},\"nose_2\":{\"defaultTexture\":0,\"defaultItem\":0,\"texture\":0,\"item\":0}}','outfit-10-5313');
 /*!40000 ALTER TABLE `player_outfits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -721,7 +850,7 @@ CREATE TABLE `players` (
   KEY `id` (`id`),
   KEY `last_updated` (`last_updated`),
   KEY `license` (`license`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -731,7 +860,10 @@ CREATE TABLE `players` (
 LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
 INSERT INTO `players` VALUES
-(1,'FEZ03578',1,'license:b43e4e1ff76ba7f9c6d7a3c303fab5c0a1e73c23','vwrz8269','{\"bank\":3020,\"crypto\":0,\"cash\":500}','{\"lastname\":\"Galvez\",\"nationality\":\"Argentina\",\"firstname\":\"Raul\",\"birthdate\":\"2026-09-22\",\"gender\":0,\"cid\":1,\"phone\":\"1378416509\",\"account\":\"US01QBCore4447723097\"}','{\"payment\":10,\"grade\":{\"payment\":10,\"name\":\"Freelancer\",\"level\":0,\"isboss\":false},\"type\":\"none\",\"label\":\"Civilian\",\"onduty\":true,\"name\":\"unemployed\",\"isboss\":false}','{\"isboss\":false,\"grade\":{\"name\":\"Unaffiliated\",\"level\":0,\"isboss\":false},\"name\":\"none\",\"label\":\"No Gang\"}','{\"x\":270.8835144042969,\"y\":-642.5670166015625,\"z\":13.0703125}','{\"isdead\":false,\"criminalrecord\":{\"hasRecord\":false},\"armor\":0,\"jailitems\":[],\"currentapartment\":\"apartment3219775\",\"licences\":{\"weapon\":false,\"business\":false,\"driver\":true},\"walletid\":\"QB-87505508\",\"ishandcuffed\":false,\"tracker\":false,\"bloodtype\":\"AB+\",\"vehicleKeys\":{\"87YIM239\":true},\"rep\":[],\"hunger\":100,\"stress\":0,\"injail\":0,\"inlaststand\":false,\"inside\":{\"apartment\":{\"apartmentId\":\"apartment3219775\",\"apartmentType\":\"apartment3\"}},\"phone\":[],\"thirst\":100,\"fingerprint\":\"VX984i66FOt1121\",\"callsign\":\"NO CALLSIGN\",\"status\":[],\"phonedata\":{\"InstalledApps\":[],\"SerialNumber\":80842504}}','[]','2026-09-22 18:28:16');
+(31,'ADE24479',2,'license:b43e4e1ff76ba7f9c6d7a3c303fab5c0a1e73c23','vwrz8269','{\"crypto\":0,\"bank\":5020,\"cash\":500}','{\"account\":\"US08QBCore1278709441\",\"gender\":0,\"cid\":2,\"lastname\":\"Pedregal\",\"firstname\":\"Jaime\",\"phone\":\"3585676301\",\"birthdate\":\"2026-09-22\",\"nationality\":\"+‡land Islands\"}','{\"payment\":10,\"name\":\"unemployed\",\"type\":\"none\",\"label\":\"Civilian\",\"onduty\":true,\"isboss\":false,\"grade\":{\"level\":0,\"name\":\"Freelancer\"}}','{\"label\":\"No Gang Affiliation\",\"name\":\"none\",\"isboss\":false,\"grade\":{\"level\":0,\"name\":\"none\"}}','{\"x\":-854.1758422851563,\"y\":-2472.712158203125,\"z\":13.980224609375}','{\"isdead\":false,\"phonedata\":{\"SerialNumber\":46627952,\"InstalledApps\":[]},\"rep\":[],\"thirst\":88.60000000000001,\"inlaststand\":false,\"licences\":{\"weapon\":false,\"driver\":true,\"business\":false},\"vehicleKeys\":{\"03DTG734\":true},\"criminalrecord\":{\"hasRecord\":false},\"stress\":0,\"jailitems\":[],\"ishandcuffed\":false,\"injail\":0,\"tracker\":false,\"callsign\":\"NO CALLSIGN\",\"status\":[],\"inside\":{\"apartment\":[]},\"fingerprint\":\"Nf519V45SzI8327\",\"armor\":0,\"bloodtype\":\"O-\",\"phone\":[],\"hunger\":87.39999999999999,\"walletid\":\"QB-33342031\"}','[{\"amount\":1,\"slot\":1,\"type\":\"item\",\"name\":\"id_card\",\"info\":{\"gender\":0,\"citizenid\":\"ADE24479\",\"birthdate\":\"2026-09-22\",\"firstname\":\"Jaime\",\"lastname\":\"Pedregal\",\"nationality\":\"+‡land Islands\"}},{\"amount\":1,\"slot\":2,\"type\":\"item\",\"name\":\"phone\",\"info\":[]},{\"amount\":1,\"slot\":3,\"type\":\"item\",\"name\":\"driver_license\",\"info\":{\"birthdate\":\"2026-09-22\",\"firstname\":\"Jaime\",\"lastname\":\"Pedregal\",\"type\":\"Class C Driver License\"}}]','2026-09-22 20:26:06'),
+(1,'FEZ03578',1,'license:b43e4e1ff76ba7f9c6d7a3c303fab5c0a1e73c23','vwrz8269','{\"crypto\":0,\"bank\":3060,\"cash\":500}','{\"phone\":\"1378416509\",\"birthdate\":\"2026-09-22\",\"lastname\":\"Galvez\",\"nationality\":\"Argentina\",\"account\":\"US01QBCore4447723097\",\"firstname\":\"Raul\",\"gender\":0,\"cid\":1}','{\"payment\":10,\"onduty\":true,\"grade\":{\"payment\":10,\"isboss\":false,\"name\":\"Freelancer\",\"level\":0},\"label\":\"Civilian\",\"type\":\"none\",\"name\":\"unemployed\",\"isboss\":false}','{\"label\":\"Cartel\",\"isboss\":true,\"name\":\"cartel\",\"grade\":{\"isboss\":true,\"name\":\"Boss\",\"level\":3}}','{\"x\":224.04396057128907,\"y\":-792.0791015625,\"z\":30.6951904296875}','{\"fingerprint\":\"VX984i66FOt1121\",\"inside\":{\"apartment\":[]},\"jailitems\":[],\"hunger\":95.8,\"bloodtype\":\"AB+\",\"stress\":0,\"callsign\":\"NO CALLSIGN\",\"injail\":0,\"walletid\":\"QB-87505508\",\"vehicleKeys\":{\"87YIM239\":true},\"licences\":{\"business\":false,\"weapon\":false,\"driver\":true},\"thirst\":96.2,\"isdead\":false,\"phone\":[],\"criminalrecord\":{\"hasRecord\":false},\"tracker\":false,\"inlaststand\":false,\"ishandcuffed\":false,\"rep\":[],\"status\":[],\"armor\":0,\"currentapartment\":\"apartment3219775\",\"phonedata\":{\"InstalledApps\":[],\"SerialNumber\":80842504}}','[]','2026-09-22 20:43:45'),
+(16,'JRM45973',1,'license:0c4a18f627ba6fe1994b23c97f950fa9b21da4f9','SleepyLizard9074','{\"crypto\":0,\"cash\":500,\"bank\":5030}','{\"cid\":1,\"firstname\":\"MAMA+ÊEMA\",\"lastname\":\"COVIRAN\",\"account\":\"US01QBCore6802509292\",\"gender\":0,\"phone\":\"4499788861\",\"nationality\":\"Albania\",\"birthdate\":\"1975-04-23\"}','{\"payment\":10,\"onduty\":true,\"isboss\":false,\"label\":\"Civilian\",\"name\":\"unemployed\",\"type\":\"none\",\"grade\":{\"name\":\"Freelancer\",\"level\":0}}','{\"label\":\"No Gang Affiliation\",\"name\":\"none\",\"grade\":{\"name\":\"none\",\"level\":0},\"isboss\":false}','{\"x\":294.052734375,\"y\":-1063.068115234375,\"z\":29.2630615234375}','{\"thirst\":88.60000000000001,\"isdead\":false,\"rep\":[],\"injail\":0,\"bloodtype\":\"O-\",\"jailitems\":[],\"licences\":{\"driver\":true,\"business\":false,\"weapon\":false},\"status\":[],\"currentapartment\":\"apartment5934725\",\"tracker\":false,\"ishandcuffed\":false,\"criminalrecord\":{\"hasRecord\":false},\"phonedata\":{\"SerialNumber\":44436540,\"InstalledApps\":[]},\"inlaststand\":false,\"armor\":0,\"hunger\":87.39999999999999,\"inside\":{\"apartment\":{\"apartmentId\":\"apartment5934725\",\"apartmentType\":\"apartment5\"}},\"callsign\":\"NO CALLSIGN\",\"fingerprint\":\"KP916T92FeQ8494\",\"phone\":[],\"stress\":0,\"walletid\":\"QB-26903652\"}','[{\"name\":\"phone\",\"amount\":1,\"slot\":1,\"type\":\"item\",\"info\":[]},{\"name\":\"driver_license\",\"amount\":1,\"slot\":2,\"type\":\"item\",\"info\":{\"birthdate\":\"1975-04-23\",\"firstname\":\"MAMA+ÊEMA\",\"type\":\"Class C Driver License\",\"lastname\":\"COVIRAN\"}},{\"name\":\"id_card\",\"amount\":1,\"slot\":3,\"type\":\"item\",\"info\":{\"citizenid\":\"JRM45973\",\"firstname\":\"MAMA+ÊEMA\",\"lastname\":\"COVIRAN\",\"birthdate\":\"1975-04-23\",\"gender\":0,\"nationality\":\"Albania\"}}]','2026-09-22 19:53:30'),
+(41,'VRK10104',1,'license:bfbec128540832cf3ed84f70b6de846e123b9512','inferno','{\"cash\":500,\"bank\":5000,\"crypto\":0}','{\"cid\":1,\"nationality\":\"El Salvador\",\"lastname\":\"pc\",\"gender\":0,\"account\":\"US04QBCore3903549218\",\"birthdate\":\"2026-09-22\",\"phone\":\"6227641921\",\"firstname\":\"pablo\"}','{\"name\":\"unemployed\",\"isboss\":false,\"onduty\":true,\"grade\":{\"name\":\"Freelancer\",\"level\":0},\"label\":\"Civilian\",\"type\":\"none\",\"payment\":10}','{\"label\":\"No Gang Affiliation\",\"grade\":{\"name\":\"none\",\"level\":0},\"isboss\":false,\"name\":\"none\"}','{\"x\":-1032.4615478515626,\"y\":-2729.9736328125,\"z\":13.744384765625}','{\"status\":[],\"fingerprint\":\"fq755h33VDQ5681\",\"walletid\":\"QB-51660327\",\"inside\":{\"apartment\":[]},\"injail\":0,\"thirst\":96.2,\"stress\":0,\"licences\":{\"driver\":true,\"business\":false,\"weapon\":false},\"armor\":0,\"ishandcuffed\":false,\"bloodtype\":\"B+\",\"phone\":[],\"inlaststand\":false,\"criminalrecord\":{\"hasRecord\":false},\"hunger\":95.8,\"tracker\":false,\"phonedata\":{\"SerialNumber\":39816326,\"InstalledApps\":[]},\"isdead\":false,\"rep\":[],\"callsign\":\"NO CALLSIGN\",\"jailitems\":[]}','[{\"name\":\"id_card\",\"info\":{\"nationality\":\"El Salvador\",\"gender\":0,\"citizenid\":\"VRK10104\",\"lastname\":\"pc\",\"firstname\":\"pablo\",\"birthdate\":\"2026-09-22\"},\"type\":\"item\",\"amount\":1,\"slot\":1},{\"name\":\"driver_license\",\"info\":{\"firstname\":\"pablo\",\"lastname\":\"pc\",\"type\":\"Class C Driver License\",\"birthdate\":\"2026-09-22\"},\"type\":\"item\",\"amount\":1,\"slot\":2},{\"name\":\"phone\",\"info\":[],\"type\":\"item\",\"amount\":1,\"slot\":3}]','2026-09-22 20:47:15');
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -751,7 +883,7 @@ CREATE TABLE `playerskins` (
   PRIMARY KEY (`id`),
   KEY `citizenid` (`citizenid`),
   KEY `active` (`active`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -761,7 +893,10 @@ CREATE TABLE `playerskins` (
 LOCK TABLES `playerskins` WRITE;
 /*!40000 ALTER TABLE `playerskins` DISABLE KEYS */;
 INSERT INTO `playerskins` VALUES
-(3,'FEZ03578','1885233650','{\"nose_5\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"cheek_3\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_1\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_2\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_3\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"lips_thickness\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"mask\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"chimp_hole\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"bracelet\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"glass\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eyebrown_forward\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"neck_thikness\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"accessory\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"makeup\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"vest\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"jaw_bone_width\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"arms\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"pants\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eyebrows\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"eye_opening\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"beard\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"chimp_bone_lenght\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"bag\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"lipstick\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"moles\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"cheek_2\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"t-shirt\":{\"defaultTexture\":0,\"item\":1,\"defaultItem\":1,\"texture\":0},\"blush\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"shoes\":{\"defaultTexture\":0,\"item\":1,\"defaultItem\":1,\"texture\":0},\"torso2\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eyebrown_high\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_4\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_0\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"face2\":{\"defaultTexture\":0,\"item\":7,\"defaultItem\":0,\"texture\":0},\"ear\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"cheek_1\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"watch\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"ageing\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"chimp_bone_width\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"hat\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"jaw_bone_back_lenght\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"chimp_bone_lowering\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"face\":{\"defaultTexture\":0,\"item\":7,\"defaultItem\":0,\"texture\":0},\"decals\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eye_color\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"hair\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"facemix\":{\"skinMix\":0,\"defaultShapeMix\":0.0,\"shapeMix\":0,\"defaultSkinMix\":0.0}}',1);
+(3,'FEZ03578','1885233650','{\"nose_5\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"cheek_3\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_1\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_2\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_3\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"lips_thickness\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"mask\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"chimp_hole\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"bracelet\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"glass\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eyebrown_forward\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"neck_thikness\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"accessory\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"makeup\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"vest\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"jaw_bone_width\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"arms\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"pants\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eyebrows\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"eye_opening\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"beard\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"chimp_bone_lenght\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"bag\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"lipstick\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"moles\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"cheek_2\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"t-shirt\":{\"defaultTexture\":0,\"item\":1,\"defaultItem\":1,\"texture\":0},\"blush\":{\"defaultTexture\":1,\"item\":-1,\"defaultItem\":-1,\"texture\":1},\"shoes\":{\"defaultTexture\":0,\"item\":1,\"defaultItem\":1,\"texture\":0},\"torso2\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eyebrown_high\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_4\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"nose_0\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"face2\":{\"defaultTexture\":0,\"item\":7,\"defaultItem\":0,\"texture\":0},\"ear\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"cheek_1\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"watch\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"ageing\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"chimp_bone_width\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"hat\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"jaw_bone_back_lenght\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"chimp_bone_lowering\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"face\":{\"defaultTexture\":0,\"item\":7,\"defaultItem\":0,\"texture\":0},\"decals\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"eye_color\":{\"defaultTexture\":0,\"item\":-1,\"defaultItem\":-1,\"texture\":0},\"hair\":{\"defaultTexture\":0,\"item\":0,\"defaultItem\":0,\"texture\":0},\"facemix\":{\"skinMix\":0,\"defaultShapeMix\":0.0,\"shapeMix\":0,\"defaultSkinMix\":0.0}}',1),
+(4,'JRM45973','-1613485779','{\"facemix\":{\"skinMix\":0.93,\"shapeMix\":0,\"defaultSkinMix\":0.0,\"defaultShapeMix\":0.0},\"decals\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"accessory\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"neck_thikness\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"blush\":{\"item\":-1,\"texture\":1,\"defaultTexture\":1,\"defaultItem\":-1},\"bag\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"nose_3\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"moles\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1},\"eyebrown_forward\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"pants\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"eye_opening\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"ageing\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1},\"mask\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"chimp_hole\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"vest\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"face\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"cheek_2\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"eye_color\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1},\"lipstick\":{\"item\":-1,\"texture\":1,\"defaultTexture\":1,\"defaultItem\":-1},\"face2\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"nose_1\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"nose_0\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"chimp_bone_lenght\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"hat\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1},\"jaw_bone_back_lenght\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"jaw_bone_width\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"eyebrown_high\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"nose_5\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"lips_thickness\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"cheek_1\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"chimp_bone_width\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"shoes\":{\"item\":1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":1},\"cheek_3\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"nose_4\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"t-shirt\":{\"item\":1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":1},\"hair\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"nose_2\":{\"item\":4,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"torso2\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"bracelet\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1},\"beard\":{\"item\":-1,\"texture\":1,\"defaultTexture\":1,\"defaultItem\":-1},\"chimp_bone_lowering\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"glass\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"arms\":{\"item\":0,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":0},\"ear\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1},\"eyebrows\":{\"item\":-1,\"texture\":1,\"defaultTexture\":1,\"defaultItem\":-1},\"makeup\":{\"item\":-1,\"texture\":1,\"defaultTexture\":1,\"defaultItem\":-1},\"watch\":{\"item\":-1,\"texture\":0,\"defaultTexture\":0,\"defaultItem\":-1}}',1),
+(5,'ADE24479','1885233650','{\"facemix\":{\"shapeMix\":0.0,\"skinMix\":0.0,\"defaultShapeMix\":0.0,\"defaultSkinMix\":0.0},\"shoes\":{\"defaultTexture\":0,\"defaultItem\":1,\"item\":6,\"texture\":0},\"makeup\":{\"defaultTexture\":1,\"defaultItem\":-1,\"item\":-1,\"texture\":1},\"face2\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":4,\"texture\":0},\"chimp_hole\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"chimp_bone_width\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"accessory\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":2,\"texture\":0},\"watch\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"lips_thickness\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"hair\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"arms\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":208,\"texture\":2},\"lipstick\":{\"defaultTexture\":1,\"defaultItem\":-1,\"item\":-1,\"texture\":1},\"eye_color\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"eyebrows\":{\"defaultTexture\":1,\"defaultItem\":-1,\"item\":-1,\"texture\":1},\"face\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":4,\"texture\":4},\"torso2\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":6,\"texture\":3},\"jaw_bone_back_lenght\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"glass\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"cheek_1\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"chimp_bone_lowering\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"nose_1\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"chimp_bone_lenght\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"eyebrown_forward\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"eyebrown_high\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"nose_2\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"eye_opening\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"cheek_3\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"cheek_2\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"nose_5\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"nose_4\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"pants\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":7,\"texture\":0},\"nose_3\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"jaw_bone_width\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"bag\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"vest\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"moles\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"beard\":{\"defaultTexture\":1,\"defaultItem\":-1,\"item\":-1,\"texture\":1},\"neck_thikness\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"mask\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":3,\"texture\":0},\"decals\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":4,\"texture\":0},\"bracelet\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"hat\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"blush\":{\"defaultTexture\":1,\"defaultItem\":-1,\"item\":-1,\"texture\":1},\"ageing\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"ear\":{\"defaultTexture\":0,\"defaultItem\":-1,\"item\":-1,\"texture\":0},\"nose_0\":{\"defaultTexture\":0,\"defaultItem\":0,\"item\":0,\"texture\":0},\"t-shirt\":{\"defaultTexture\":0,\"defaultItem\":1,\"item\":30,\"texture\":3}}',1),
+(6,'VRK10104','1885233650','{\"eyebrows\":{\"defaultTexture\":1,\"texture\":1,\"item\":-1,\"defaultItem\":-1},\"cheek_2\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"nose_1\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"eyebrown_high\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"vest\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"jaw_bone_width\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"cheek_3\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"blush\":{\"defaultTexture\":1,\"texture\":1,\"item\":-1,\"defaultItem\":-1},\"hat\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"t-shirt\":{\"defaultTexture\":0,\"texture\":0,\"item\":1,\"defaultItem\":1},\"bracelet\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"face\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"arms\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"ageing\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"chimp_bone_lenght\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"nose_0\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"chimp_hole\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"lips_thickness\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"glass\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"chimp_bone_lowering\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"jaw_bone_back_lenght\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"pants\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"eyebrown_forward\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"nose_3\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"chimp_bone_width\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"eye_opening\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"makeup\":{\"defaultTexture\":1,\"texture\":1,\"item\":-1,\"defaultItem\":-1},\"nose_4\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"torso2\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"cheek_1\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"facemix\":{\"defaultSkinMix\":0.0,\"defaultShapeMix\":0.0,\"shapeMix\":0.0,\"skinMix\":0.0},\"nose_2\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"neck_thikness\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"moles\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"hair\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"beard\":{\"defaultTexture\":1,\"texture\":1,\"item\":-1,\"defaultItem\":-1},\"mask\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"eye_color\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"decals\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"accessory\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"ear\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"face2\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"watch\":{\"defaultTexture\":0,\"texture\":0,\"item\":-1,\"defaultItem\":-1},\"bag\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"shoes\":{\"defaultTexture\":0,\"texture\":0,\"item\":1,\"defaultItem\":1},\"nose_5\":{\"defaultTexture\":0,\"texture\":0,\"item\":0,\"defaultItem\":0},\"lipstick\":{\"defaultTexture\":1,\"texture\":1,\"item\":-1,\"defaultItem\":-1}}',1);
 /*!40000 ALTER TABLE `playerskins` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -774,4 +909,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-09-22 21:13:06
+-- Dump completed on 2026-09-25 13:38:29
