@@ -35,7 +35,8 @@ client_scripts {
     'client/cl_police_markers.lua',
     'client/cl_police_dni_npc.lua',
     'client/cl_ems_markers.lua',
-    'client/cl_ems_reception_npc.lua'
+    'client/cl_ems_reception_npc.lua',
+    'client/cl_welcome_npc.lua'
 }
 
 server_scripts {
@@ -48,7 +49,8 @@ server_scripts {
     'server/sv_police_dni.lua',
     'server/sv_police_markers.lua',
     'server/sv_ems_markers.lua',
-    'server/sv_ems_reception.lua'
+    'server/sv_ems_reception.lua',
+    'server/sv_welcome_kit.lua'
 }
 
 ui_page 'html/index.html'
