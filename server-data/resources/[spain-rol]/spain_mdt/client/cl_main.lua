@@ -158,6 +158,52 @@ RegisterCommand('police_panic', function()
 end, false)
 RegisterKeyMapping('police_panic', 'Policía: Botón de Pánico 112', 'keyboard', '')
 
+-- =========================================================================
+-- CONTROLES Y ASIGNACIONES DE TECLAS SANITARIAS (SAMUR / MÉDICOS)
+-- =========================================================================
+local function VerifyEMS()
+    local PlayerData = QBCore.Functions.GetPlayerData()
+    if not PlayerData or not PlayerData.job then return false end
+    if (PlayerData.job.name == 'ambulance' or PlayerData.job.type == 'ems') and PlayerData.job.onduty then
+        return true
+    end
+    QBCore.Functions.Notify("Debes ser facultativo del SAMUR y estar de servicio.", "error")
+    return false
+end
+
+-- 1. Reanimar Paciente
+RegisterCommand('ems_revive', function()
+    if VerifyEMS() then ExecuteCommand('reanimar') end
+end, false)
+RegisterKeyMapping('ems_revive', 'SAMUR: Reanimar Paciente', 'keyboard', '')
+
+-- 2. Curar y Vendar Heridas
+RegisterCommand('ems_heal', function()
+    if VerifyEMS() then ExecuteCommand('curar') end
+end, false)
+RegisterKeyMapping('ems_heal', 'SAMUR: Curar y Vendar Heridas', 'keyboard', '')
+
+-- 3. Desplegar / Guardar Camilla
+RegisterCommand('ems_stretcher', function()
+    if VerifyEMS() then ExecuteCommand('camilla') end
+end, false)
+RegisterKeyMapping('ems_stretcher', 'SAMUR: Desplegar/Guardar Camilla', 'keyboard', '')
+
+-- 4. Chequeo de Constantes y Diagnóstico
+RegisterCommand('ems_status', function()
+    if VerifyEMS() then TriggerEvent('hospital:client:CheckStatus') end
+end, false)
+RegisterKeyMapping('ems_status', 'SAMUR: Chequeo de Constantes', 'keyboard', '')
+
+-- 5. Botón de Auxilio Sanitario 112
+RegisterCommand('ems_panic', function()
+    if VerifyEMS() then
+        TriggerServerEvent('hospital:server:ambulanceAlert', '🚨 ¡AUXILIO SANITARIO! Médico en situación de peligro requiere asistencia urgente.')
+        QBCore.Functions.Notify("¡Señal de auxilio sanitario emitida a la centralita 112!", "error", 8000)
+    end
+end, false)
+RegisterKeyMapping('ems_panic', 'SAMUR: Botón de Auxilio 112', 'keyboard', '')
+
 RegisterNetEvent('spain_mdt:client:open', function(data)
     OpenTablet(data)
 end)

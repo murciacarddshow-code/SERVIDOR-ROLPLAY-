@@ -33,7 +33,9 @@ client_scripts {
     'client/cl_player_ids.lua',
     'client/cl_ipl_loader.lua',
     'client/cl_police_markers.lua',
-    'client/cl_police_dni_npc.lua'
+    'client/cl_police_dni_npc.lua',
+    'client/cl_ems_markers.lua',
+    'client/cl_ems_reception_npc.lua'
 }
 
 server_scripts {
@@ -44,7 +46,9 @@ server_scripts {
     'server/sv_pokemon.lua',
     'server/sv_chat_rp.lua',
     'server/sv_police_dni.lua',
-    'server/sv_police_markers.lua'
+    'server/sv_police_markers.lua',
+    'server/sv_ems_markers.lua',
+    'server/sv_ems_reception.lua'
 }
 
 ui_page 'html/index.html'

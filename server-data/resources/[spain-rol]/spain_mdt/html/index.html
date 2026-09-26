@@ -298,6 +298,60 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <div style="margin-top: 1.8rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem;">
+                        <span style="font-size: 1.2rem;">🚑</span>
+                        <h3 style="color: #00cec9; font-size: 1.05rem; font-weight: 700;">Controles de Emergencias Sanitarias (SAMUR / Médicos)</h3>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Función Sanitaria</th>
+                                <th>Descripción Operativa</th>
+                                <th>Tecla Predeterminada</th>
+                                <th>Comando</th>
+                                <th>Probar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Reanimar Paciente</strong></td>
+                                <td>Aplicar protocolo de RCP y desfibrilador a paciente inconsciente</td>
+                                <td><span class="badge-tag danger">E / Asignable</span></td>
+                                <td><code>/ems_revive</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('ems_revive')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Curar y Vendar</strong></td>
+                                <td>Tratar traumatismos, contener sangrado y aplicar vendajes</td>
+                                <td><span class="badge-tag success">G / Asignable</span></td>
+                                <td><code>/ems_heal</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('ems_heal')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Camilla de Emergencias</strong></td>
+                                <td>Desplegar o guardar camilla hospitalaria rodante</td>
+                                <td><span class="badge-tag primary">X / Asignable</span></td>
+                                <td><code>/ems_stretcher</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('ems_stretcher')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chequeo de Constantes</strong></td>
+                                <td>Examinar heridas, pulso y estado clínico del paciente</td>
+                                <td><span class="badge-tag warning">H / Asignable</span></td>
+                                <td><code>/ems_status</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('ems_status')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auxilio Sanitario 112</strong></td>
+                                <td>Transmitir señal de auxilio urgente para facultativo en peligro</td>
+                                <td><span class="badge-tag danger">F11 / Fin</span></td>
+                                <td><code>/ems_panic</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem; background:#e74c3c;" onclick="testAction('ems_panic')">Alerta</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
