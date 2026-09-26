@@ -4,87 +4,111 @@
 
 local QBCore = exports['qb-core']:GetCoreObject()
 
--- Registrar plantillas HTML con estilos exclusivos de Spain Rol
+-- Registrar plantillas HTML con estilos modernos y elegantes de Spain Rol
 CreateThread(function()
-    Wait(1000)
+    Wait(800)
 
-    -- Twitter
+    -- 1. Twitter / Red Social
     TriggerEvent('chat:addTemplate', 'twt', [[
-        <div style="background: rgba(29, 161, 242, 0.15); border-left: 4px solid #1DA1F2; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #1DA1F2; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">🐦 Twitter</span> 
-            <strong style="color: #FFFFFF;">@{0}</strong>: 
-            <span style="color: #E8F5FD;">{1}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-twt"><i class="fa-brands fa-twitter"></i> TWITTER</span>
+                <span class="msg-author" style="color: #38bdf8;">@{0}</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #e0f2fe;">{1}</div>
     ]])
 
-    -- Anonimo
+    -- 2. Anónimo / Clandestino
     TriggerEvent('chat:addTemplate', 'anon', [[
-        <div style="background: rgba(33, 33, 33, 0.45); border-left: 4px solid #757575; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #BDBDBD; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">🕵️ Anónimo</span>: 
-            <span style="color: #ECEFF1; font-style: italic;">{0}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-anon"><i class="fa-solid fa-user-secret"></i> ANÓNIMO</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #fecdd3; font-style: italic;">{0}</div>
     ]])
 
-    -- OOC (Out of Character)
+    -- 3. OOC (Out of Character)
     TriggerEvent('chat:addTemplate', 'ooc', [[
-        <div style="background: rgba(45, 55, 72, 0.35); border-left: 4px solid #A0AEC0; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #CBD5E0; font-weight: 800; letter-spacing: 0.5px;">💬 [OOC]</span> 
-            <strong style="color: #EDF2F7;">[{0}] {1}</strong>: 
-            <span style="color: #F7FAFC;">{2}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-ooc"><i class="fa-solid fa-comment-dots"></i> OOC</span>
+                <span class="msg-author" style="color: #cbd5e1;">[{0}] {1}</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #f8fafc;">{2}</div>
     ]])
 
-    -- ME (Acciones)
+    -- 4. ME (Acciones)
     TriggerEvent('chat:addTemplate', 'me', [[
-        <div style="background: rgba(142, 68, 173, 0.20); border-left: 4px solid #9B59B6; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #D7BDE2; font-weight: bold; font-style: italic;">🟣 * {0} {1} *</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge" style="background: rgba(168, 85, 247, 0.25); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4);"><i class="fa-solid fa-hand-sparkles"></i> ACCIÓN</span>
+                <span class="msg-author" style="color: #e9d5ff;">{0}</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #e9d5ff; font-style: italic;">* {1} *</div>
     ]])
 
-    -- DO (Entorno)
+    -- 5. DO (Entorno)
     TriggerEvent('chat:addTemplate', 'do', [[
-        <div style="background: rgba(230, 126, 34, 0.20); border-left: 4px solid #E67E22; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #FAD7A0; font-weight: bold; font-style: italic;">🟠 * {1} * ({0})</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge" style="background: rgba(249, 115, 22, 0.25); color: #fdba74; border: 1px solid rgba(249, 115, 22, 0.4);"><i class="fa-solid fa-eye"></i> ENTORNO</span>
+                <span class="msg-author" style="color: #fed7aa;">({0})</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #fed7aa; font-style: italic;">* {1} *</div>
     ]])
 
-    -- Policía
+    -- 6. Policía Nacional (091)
     TriggerEvent('chat:addTemplate', 'policia', [[
-        <div style="background: rgba(21, 101, 192, 0.30); border-left: 4px solid #1E88E5; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #64B5F6; font-weight: 800; letter-spacing: 0.5px;">🚨 [POLICÍA 091]</span> 
-            <strong style="color: #BBDEFB;">Aviso de {0}</strong>: 
-            <span style="color: #FFFFFF;">{1}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-policia"><i class="fa-solid fa-shield-halved"></i> POLICÍA 091</span>
+                <span class="msg-author" style="color: #93c5fd;">Aviso de {0}</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #ffffff;">{1}</div>
     ]])
 
-    -- Emergencias 112 / EMS
+    -- 7. Urgencias Sanitarias (112)
     TriggerEvent('chat:addTemplate', 'ems', [[
-        <div style="background: rgba(198, 40, 40, 0.30); border-left: 4px solid #E53935; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #EF5350; font-weight: 800; letter-spacing: 0.5px;">🚑 [URGENCIAS 112]</span> 
-            <strong style="color: #FFCDD2;">Aviso de {0}</strong>: 
-            <span style="color: #FFFFFF;">{1}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-ems"><i class="fa-solid fa-truck-medical"></i> URGENCIAS 112</span>
+                <span class="msg-author" style="color: #fca5a5;">Aviso de {0}</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #ffffff;">{1}</div>
     ]])
 
-    -- Publicidad / Anuncio comercial
+    -- 8. Publicidad Comercial
     TriggerEvent('chat:addTemplate', 'ad', [[
-        <div style="background: rgba(46, 125, 50, 0.25); border-left: 4px solid #4CAF50; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #81C784; font-weight: 800; letter-spacing: 0.5px;">📢 [PUBLICIDAD]</span> 
-            <strong style="color: #C8E6C9;">{0}</strong>: 
-            <span style="color: #FFFFFF;">{1}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-ad"><i class="fa-solid fa-bullhorn"></i> PUBLICIDAD</span>
+                <span class="msg-author" style="color: #6ee7b7;">{0}</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #ffffff;">{1}</div>
     ]])
 
-    -- Reporte / Soporte Staff
+    -- 9. Reporte y Soporte Staff
     TriggerEvent('chat:addTemplate', 'staff', [[
-        <div style="background: rgba(243, 156, 18, 0.25); border-left: 4px solid #F39C12; padding: 6px 12px; margin: 4px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 13.5px;">
-            <span style="color: #F9E79F; font-weight: 800; letter-spacing: 0.5px;">🛡️ [REPORTE STAFF]</span> 
-            <strong style="color: #FCF3CF;">ID {0} ({1})</strong>: 
-            <span style="color: #FFFFFF;">{2}</span>
+        <div class="msg-header">
+            <div class="msg-meta">
+                <span class="badge badge-staff"><i class="fa-solid fa-shield-cat"></i> REPORTE STAFF</span>
+                <span class="msg-author" style="color: #fde68a;">ID {0} ({1})</span>
+            </div>
         </div>
+        <div class="msg-content" style="color: #ffffff;">{2}</div>
     ]])
 
-    -- Sugerencias de comandos al escribir en el chat
+    -- =========================================================================
+    -- SUGERENCIAS DE COMANDOS AMPLIADAS CON AUTOCOMPLETADO
+    -- =========================================================================
     TriggerEvent('chat:addSuggestion', '/twt', 'Publicar un mensaje en la red social Twitter (visible para todos)', {
         { name = 'mensaje', help = 'Contenido de tu publicación en Twitter' }
     })
@@ -106,7 +130,13 @@ CreateThread(function()
     TriggerEvent('chat:addSuggestion', '/policia', 'Llamar a la Policía Nacional para solicitar patrullas o auxilio', {
         { name = 'motivo', help = 'Describa el motivo y ubicación del incidente' }
     })
+    TriggerEvent('chat:addSuggestion', '/911', 'Llamar a la Policía Nacional para dar aviso urgente', {
+        { name = 'motivo', help = 'Incidente y ubicación' }
+    })
     TriggerEvent('chat:addSuggestion', '/ems', 'Llamar a Urgencias Sanitarias (112) para solicitar una ambulancia', {
+        { name = 'motivo', help = 'Describa la emergencia médica' }
+    })
+    TriggerEvent('chat:addSuggestion', '/112', 'Llamar a Urgencias Sanitarias para auxilio médico', {
         { name = 'motivo', help = 'Describa la emergencia médica' }
     })
     TriggerEvent('chat:addSuggestion', '/ad', 'Publicar un anuncio clasificado en la prensa (€100)', {
@@ -115,6 +145,14 @@ CreateThread(function()
     TriggerEvent('chat:addSuggestion', '/ayuda', 'Solicitar asistencia técnica o soporte al equipo de administración', {
         { name = 'duda', help = 'Explica el problema o consulta' }
     })
+    TriggerEvent('chat:addSuggestion', '/report', 'Enviar un reporte detallado al equipo de Staff', {
+        { name = 'motivo', help = 'Explica el motivo del reporte' }
+    })
+    TriggerEvent('chat:addSuggestion', '/trabajos', 'Abrir la tablet moderna de empleos Spain Works Pro')
+    TriggerEvent('chat:addSuggestion', '/darllaves', 'Entregar las llaves de tu vehículo a un jugador cercano', {
+        { name = 'id', help = 'ID del jugador' }
+    })
+    TriggerEvent('chat:addSuggestion', '/dni', 'Consultar y mostrar tu Documento Nacional de Identidad')
     TriggerEvent('chat:addSuggestion', '/tx', 'Abrir el menú de gestión administrativa txAdmin en el juego')
 end)
 

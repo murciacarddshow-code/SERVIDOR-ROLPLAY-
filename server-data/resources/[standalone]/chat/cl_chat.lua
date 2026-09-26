@@ -287,6 +287,24 @@ if RegisterKeyMapping then
   RegisterKeyMapping('openChat', 'Abrir Chat / Escribir Comandos', 'keyboard', 't')
 end
 
+-- Mapeo directo para abrir con la barra de comandos (/)
+RegisterCommand('openChatSlash', function()
+  if not chatInputActive then
+    chatInputActive = true
+    chatInputActivating = true
+
+    SendNUIMessage({
+      type = 'ON_OPEN',
+      initial = '/'
+    })
+    SetNuiFocus(true)
+  end
+end, false)
+
+if RegisterKeyMapping then
+  RegisterKeyMapping('openChatSlash', 'Abrir Chat con Comando (/)', 'keyboard', 'slash')
+end
+
 Citizen.CreateThread(function()
   SetTextChatEnabled(false)
   SetNuiFocus(false)

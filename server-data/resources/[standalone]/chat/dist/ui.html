@@ -1,1 +1,62 @@
-<!doctype html><html><head><meta charset="utf-8"><title></title><link href="/html/vendor/latofonts.css" rel="stylesheet"><link href="/html/vendor/flexboxgrid.6.3.1.min.css" rel="stylesheet"><link href="/html/vendor/animate.3.5.2.min.css" rel="stylesheet"><link href="index.css" rel="stylesheet"><script defer="defer" src="chat.js"></script></head><body><div id="app"></div></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spain Rol - Chat Moderno</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="index.css">
+  <script defer src="chat.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Contenedor Principal del Chat -->
+    <div id="chat-container" class="hidden">
+      <!-- Lista de Mensajes con Scroll Suave -->
+      <div id="chat-messages" class="chat-messages">
+        <!-- Los mensajes se insertan dinámicamente aquí -->
+      </div>
+
+      <!-- Sugerencias de Autocompletado de Comandos -->
+      <div id="chat-suggestions" class="chat-suggestions hidden">
+        <div class="suggestions-header">
+          <i class="fa-solid fa-terminal"></i> COMANDOS DISPONIBLES
+        </div>
+        <div id="suggestions-list" class="suggestions-list">
+          <!-- Items de comandos -->
+        </div>
+      </div>
+
+      <!-- Barra de Entrada de Chat Flotante y Avanzada -->
+      <div id="chat-input-wrapper" class="chat-input-wrapper hidden">
+        <div class="input-card">
+          <!-- Indicador de Modo -->
+          <div id="chat-mode" class="chat-mode" title="Cambiar modo con TAB">
+            <span class="mode-dot"></span>
+            <span id="chat-mode-label">GLOBAL</span>
+          </div>
+
+          <!-- Campo de Texto -->
+          <div class="input-box">
+            <i class="fa-regular fa-comment-dots input-icon"></i>
+            <textarea id="chat-input" rows="1" placeholder="Escribe un mensaje o /comando..." spellcheck="false" autocomplete="off"></textarea>
+          </div>
+
+          <!-- Botón de Enviar -->
+          <button id="chat-send-btn" class="chat-send-btn" title="Enviar (ENTER)">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+
+        <!-- Barra inferior de atajos / ayuda -->
+        <div class="input-footer">
+          <span class="key-hint"><kbd>ENTER</kbd> Enviar</span>
+          <span class="key-hint"><kbd>ESC</kbd> Cancelar</span>
+          <span class="key-hint"><kbd>TAB</kbd> Autocompletar / Modo</span>
+          <span class="key-hint"><kbd>↑ / ↓</kbd> Historial</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
