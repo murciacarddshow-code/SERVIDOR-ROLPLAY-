@@ -10,13 +10,22 @@ QBCore.Functions.CreateCallback('spain_mdt:server:searchCitizen', function(sourc
         if results then
             for _, r in ipairs(results) do
                 local charinfo = json.decode(r.charinfo) or {}
+                local metadata = json.decode(r.metadata) or {}
+                local licenses = metadata.licences or {}
+                local fullName = (charinfo.firstname or 'Desconocido') .. ' ' .. (charinfo.lastname or '')
                 table.insert(formatted, {
                     citizenid = r.citizenid,
+                    dni = r.citizenid,
+                    name = fullName,
                     firstname = charinfo.firstname or 'Desconocido',
                     lastname = charinfo.lastname or '',
                     phone = charinfo.phone or 'N/A',
                     birthdate = charinfo.birthdate or 'N/A',
-                    gender = charinfo.gender == 0 and 'Hombre' or 'Mujer'
+                    gender = charinfo.gender == 0 and 'Hombre' or 'Mujer',
+                    licenses = {
+                        driver = licenses.driver or false,
+                        weapon = licenses.weapon or false
+                    }
                 })
             end
         end
@@ -28,7 +37,7 @@ end)
 QBCore.Functions.CreateCallback('spain_mdt:server:searchVehicle', function(source, cb, plate)
     if not plate or plate == '' then cb(nil) return end
 
-    MySQL.query('SELECT plate, citizenid, vehicle, hash FROM player_vehicles WHERE plate = ? LIMIT 1', { plate }, function(result)
+    MySQL.query('SELECT plate, citizenid, vehicle, hash, garage, state FROM player_vehicles WHERE plate = ? LIMIT 1', { plate }, function(result)
         if result and result[1] then
             local veh = result[1]
             MySQL.query('SELECT charinfo FROM players WHERE citizenid = ?', { veh.citizenid }, function(pRes)
@@ -40,8 +49,11 @@ QBCore.Functions.CreateCallback('spain_mdt:server:searchVehicle', function(sourc
                 cb({
                     plate = veh.plate,
                     model = veh.vehicle or 'Modelo Estándar',
+                    vehicle = veh.vehicle or 'Modelo Estándar',
                     owner = ownerName,
-                    citizenid = veh.citizenid
+                    citizenid = veh.citizenid,
+                    garage = veh.garage or 'Depósito / Garaje Central',
+                    state = (veh.state == 1 and 'En Garaje' or 'En Vía Pública')
                 })
             end)
         else
@@ -62,28 +74,36 @@ QBCore.Functions.CreateCallback('spain_mdt:server:getWarrants', function(source,
     end)
 end)
 
--- Emitir Multa
+-- Emitir Multa y/o Condena Penitenciaria
 RegisterNetEvent('spain_mdt:server:issueFine', function(data)
     local src = source
     local Officer = QBCore.Functions.GetPlayer(src)
     if not Officer or not data then return end
 
     local citizenid = data.citizenid
-    local amount = tonumber(data.amount) or 100
-    local reason = data.reason or 'Infracción de Tráfico'
+    local amount = tonumber(data.amount) or 0
+    local jailTime = tonumber(data.jail) or 0
+    local reason = data.reason or 'Infracción del Código Penal'
     local officerName = Officer.PlayerData.charinfo.firstname .. ' ' .. Officer.PlayerData.charinfo.lastname
 
     MySQL.insert('INSERT INTO mdt_fines (citizenid, amount, reason, officer, date) VALUES (?, ?, ?, ?, NOW())', {
-        citizenid, amount, reason, officerName
+        citizenid, amount, reason .. (jailTime > 0 and (' [' .. jailTime .. ' meses de prisión]') or ''), officerName
     })
 
     local Target = QBCore.Functions.GetPlayerByCitizenId(citizenid)
     if Target then
-        Target.Functions.RemoveMoney('bank', amount, 'police-fine')
-        TriggerClientEvent('QBCore:Notify', Target.PlayerData.source, "Has recibido una sanción policial de €" .. amount .. ": " .. reason, "error", 10000)
+        if amount > 0 then
+            Target.Functions.RemoveMoney('bank', amount, 'police-fine')
+            TriggerClientEvent('QBCore:Notify', Target.PlayerData.source, "Has recibido una sanción policial de " .. amount .. "€: " .. reason, "error", 10000)
+        end
+
+        if jailTime > 0 then
+            TriggerEvent('prison:server:SetJailStatus', Target.PlayerData.source, jailTime)
+            TriggerClientEvent('QBCore:Notify', Target.PlayerData.source, "Condenado a " .. jailTime .. " meses en prisión de Bolingbroke.", "error", 10000)
+        end
     end
 
-    TriggerClientEvent('QBCore:Notify', src, "Sanción registrada correctamente en el sistema MDT.", "success")
+    TriggerClientEvent('QBCore:Notify', src, "Resolución judicial procesada en MDT (" .. amount .. "€ sanción" .. (jailTime > 0 and (", " .. jailTime .. " meses prisión)") or ")") .. ".", "success")
 end)
 
 -- Emitir Orden de Búsqueda y Captura

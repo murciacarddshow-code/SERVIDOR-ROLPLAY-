@@ -186,6 +186,14 @@ window.openFineModal = function(citizenid, name) {
     });
 };
 
+window.testAction = function(actionCommand) {
+    fetch(`https://${GetParentResourceName()}/triggerAction`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: actionCommand })
+    });
+};
+
 function loadDashboard() {
     // Basic dashboard initializer
 }

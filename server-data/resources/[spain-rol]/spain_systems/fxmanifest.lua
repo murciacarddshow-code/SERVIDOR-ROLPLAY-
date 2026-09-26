@@ -31,7 +31,9 @@ client_scripts {
     'client/cl_pokemon.lua',
     'client/cl_chat_rp.lua',
     'client/cl_player_ids.lua',
-    'client/cl_ipl_loader.lua'
+    'client/cl_ipl_loader.lua',
+    'client/cl_police_markers.lua',
+    'client/cl_police_dni_npc.lua'
 }
 
 server_scripts {
@@ -40,7 +42,9 @@ server_scripts {
     'server/sv_job_center.lua',
     'server/sv_jobs_engine.lua',
     'server/sv_pokemon.lua',
-    'server/sv_chat_rp.lua'
+    'server/sv_chat_rp.lua',
+    'server/sv_police_dni.lua',
+    'server/sv_police_markers.lua'
 }
 
 ui_page 'html/index.html'

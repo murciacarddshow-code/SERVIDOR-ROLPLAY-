@@ -245,3 +245,13 @@ body {
 .badge-tag.warning { background: #fdcb6e; color: #2d3436; }
 .badge-tag.success { background: #00b894; color: white; }
 .badge-tag.primary { background: #0984e3; color: white; }
+
+code {
+    background: rgba(255, 255, 255, 0.08);
+    color: #74b9ff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.82rem;
+    font-family: 'Consolas', 'Courier New', monospace;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

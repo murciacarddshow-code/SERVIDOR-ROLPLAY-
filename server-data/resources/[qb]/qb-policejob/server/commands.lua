@@ -123,26 +123,30 @@ QBCore.Commands.Add('callsign', Lang:t('commands.callsign'), { { name = 'name', 
     Player.SetMetaData('callsign', table.concat(args, ' '))
 end)
 
-QBCore.Commands.Add('jail', Lang:t('commands.jail_player'), {}, false, function(source)
+-- Comando /jail restringido EXCLUSIVAMENTE a Staff / Administración
+-- La policía debe tramitar los arrestos y condenas a través de la Tablet MDT
+QBCore.Commands.Add('jail', 'Encarcelar a un jugador (EXCLUSIVO STAFF/ADMIN)', { { name = 'id', help = 'ID del jugador' }, { name = 'tiempo', help = 'Tiempo en meses' } }, true, function(source, args)
     local src = source
-    local Player = exports['qb-core']:GetPlayer(src)
-    if Player.PlayerData.job.type == 'leo' and Player.PlayerData.job.onduty then
-        TriggerClientEvent('police:client:JailPlayer', src)
+    local targetId = tonumber(args[1])
+    local time = tonumber(args[2])
+    if targetId and time then
+        TriggerEvent('prison:server:SetJailStatus', targetId, time)
+        TriggerClientEvent('QBCore:Notify', src, "Jugador ID " .. targetId .. " enviado a prisión por " .. time .. " meses (Acción de Staff).", "success")
     else
-        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.on_duty_police_only'), 'error')
+        TriggerClientEvent('QBCore:Notify', src, "Uso: /jail [id] [tiempo]. Los policías deben usar la Tablet MDT.", "error")
     end
-end)
+end, 'admin')
 
-QBCore.Commands.Add('unjail', Lang:t('commands.unjail_player'), { { name = 'id', help = Lang:t('info.player_id') } }, true, function(source, args)
+QBCore.Commands.Add('unjail', 'Liberar a un preso de prisión (EXCLUSIVO STAFF/ADMIN)', { { name = 'id', help = 'ID del jugador' } }, true, function(source, args)
     local src = source
-    local Player = exports['qb-core']:GetPlayer(src)
-    if Player.PlayerData.job.type == 'leo' and Player.PlayerData.job.onduty then
-        local targetId = tonumber(args[1])
+    local targetId = tonumber(args[1])
+    if targetId then
         TriggerClientEvent('prison:client:UnjailPerson', targetId)
+        TriggerClientEvent('QBCore:Notify', src, "Preso ID " .. targetId .. " liberado de prisión (Acción de Staff).", "success")
     else
-        TriggerClientEvent('QBCore:Notify', src, Lang:t('error.on_duty_police_only'), 'error')
+        TriggerClientEvent('QBCore:Notify', src, "Uso: /unjail [id].", "error")
     end
-end)
+end, 'admin')
 
 QBCore.Commands.Add('seizecash', Lang:t('commands.seizecash'), {}, false, function(source)
     local src = source

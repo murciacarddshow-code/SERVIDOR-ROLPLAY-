@@ -48,6 +48,9 @@
                 <div class="nav-item" data-target="sec-ems">
                     <span>🚑</span> SAMUR / Sanitarios
                 </div>
+                <div class="nav-item" data-target="sec-keybinds">
+                    <span>⌨️</span> Asignación de Teclas
+                </div>
             </div>
 
             <!-- Content Area -->
@@ -183,6 +186,118 @@
                             &bull; <strong>/camilla</strong>: Despliega una camilla médica en el lugar para trasladar pacientes al hospital.
                         </p>
                     </div>
+                </div>
+
+                <!-- Section 7: Keybinds & Police Controls -->
+                <div class="view-section" id="sec-keybinds">
+                    <div class="section-title">
+                        <span>⌨️</span> Asignación de Teclas y Controles Policiales Oficiales
+                    </div>
+                    <div style="background:#131a24; padding:1.2rem; border-radius:12px; border:1px solid rgba(255,255,255,0.06); margin-bottom:1.2rem;">
+                        <h4 style="color:#74b9ff; margin-bottom:0.5rem;">⚙️ Personalización en el menú de FiveM:</h4>
+                        <p style="color:#b2bec3; font-size:0.85rem; line-height:1.6;">
+                            Todos los controles policiales están registrados en FiveM. Para cambiar cualquier tecla a tu gusto personal pulsa:<br>
+                            <strong style="color:#ffeaa7;">ESC &rarr; Configuración &rarr; Asignación de Teclas &rarr; FiveM</strong> y asigna la tecla de tu teclado que prefieras a cada función.
+                        </p>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Función Policial</th>
+                                <th>Descripción Operativa</th>
+                                <th>Tecla Predeterminada</th>
+                                <th>Comando</th>
+                                <th>Probar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tablet Policial MDT</strong></td>
+                                <td>Abrir / Cerrar Terminal Móvil</td>
+                                <td><span class="badge-tag primary">F6</span></td>
+                                <td><code>/mdt</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('mdt')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Esposar / Desesposar</strong></td>
+                                <td>Colocar grilletes de acero reglamentarios</td>
+                                <td><span class="badge-tag danger">G / Asignable</span></td>
+                                <td><code>/police_cuff</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_cuff')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Esposas Blandas</strong></td>
+                                <td>Esposado frontal para traslados y declaraciones</td>
+                                <td><span class="badge-tag warning">J / Asignable</span></td>
+                                <td><code>/police_sc</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_sc')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Escoltar Sospechoso</strong></td>
+                                <td>Sujetar o liberar del brazo al detenido</td>
+                                <td><span class="badge-tag primary">H / Asignable</span></td>
+                                <td><code>/police_escort</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_escort')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Registrar / Cachear</strong></td>
+                                <td>Inspeccionar pertenencias del detenido</td>
+                                <td><span class="badge-tag danger">K / Asignable</span></td>
+                                <td><code>/police_search</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_search')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Meter en Patrulla</strong></td>
+                                <td>Introducir al sospechoso en los asientos traseros</td>
+                                <td><span class="badge-tag primary">RePág / Asignable</span></td>
+                                <td><code>/police_putinveh</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_putinveh')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sacar de Patrulla</strong></td>
+                                <td>Bajar al detenido del vehículo oficial</td>
+                                <td><span class="badge-tag primary">AvPág / Asignable</span></td>
+                                <td><code>/police_takeoutveh</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_takeoutveh')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Radar Láser Tráfico</strong></td>
+                                <td>Medición de velocidad a distancia en km/h</td>
+                                <td><span class="badge-tag success">Num 8 / Asignable</span></td>
+                                <td><code>/police_radar</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_radar')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alcoholímetro Digital</strong></td>
+                                <td>Prueba de alcoholemia en aire espirado</td>
+                                <td><span class="badge-tag success">Num 7 / Asignable</span></td>
+                                <td><code>/police_breath</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_breath')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Narcotest Saliva</strong></td>
+                                <td>Detección rápida reactiva de sustancias estupefacientes</td>
+                                <td><span class="badge-tag success">Num 9 / Asignable</span></td>
+                                <td><code>/police_narco</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_narco')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Banda de Pinchos</strong></td>
+                                <td>Despliegue rápido de pinchos stinger en persecución</td>
+                                <td><span class="badge-tag warning">Num 5 / Asignable</span></td>
+                                <td><code>/police_spikes</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem;" onclick="testAction('police_spikes')">Probar</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Botón de Pánico 112</strong></td>
+                                <td>Señal prioritaria de socorro inmediato a todas las unidades</td>
+                                <td><span class="badge-tag danger">F11 / Fin</span></td>
+                                <td><code>/police_panic</code></td>
+                                <td><button class="action-btn" style="padding:0.35rem 0.7rem; font-size:0.75rem; background:#e74c3c;" onclick="testAction('police_panic')">Alerta</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
