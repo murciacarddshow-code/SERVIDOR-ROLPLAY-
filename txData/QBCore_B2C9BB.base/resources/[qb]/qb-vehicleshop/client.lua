@@ -524,7 +524,7 @@ function Init()
                 SetVehicleNumberPlateText(veh, 'BUY ME')
                 if Config.UsingTarget then createVehZones(k, veh) end
             end
-            if not Config.UsingTarget then createVehZones(k) end
+            if not Config.UsingTarget and Config.Shops[k]['ShowroomVehicles'] and #Config.Shops[k]['ShowroomVehicles'] > 0 then createVehZones(k) end
         end
     end)
 end

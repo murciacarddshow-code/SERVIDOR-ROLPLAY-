@@ -82,6 +82,9 @@ Config.StarterStock = {
 
 -- Base de datos de referencia técnica para calcular especificaciones y precios de tasación
 Config.VehicleDatabase = {
+    -- COMPACTOS & UTILITARIOS
+    ['blista'] = { label = 'Dinka Blista', brand = 'Dinka', category = 'compacts', basePrice = 13000, speed = 65, accel = 68, brakes = 70, handling = 72, image = 'https://docs.fivem.net/vehicles/blista.webp' },
+
     -- SUPERDEPORTIVOS
     ['zentorno'] = { label = 'Pegassi Zentorno', brand = 'Pegassi', category = 'super', basePrice = 320000, speed = 96, accel = 98, brakes = 88, handling = 90, image = 'https://docs.fivem.net/vehicles/zentorno.webp' },
     ['t20'] = { label = 'Progen T20', brand = 'Progen', category = 'super', basePrice = 450000, speed = 98, accel = 95, brakes = 92, handling = 92, image = 'https://docs.fivem.net/vehicles/t20.webp' },
