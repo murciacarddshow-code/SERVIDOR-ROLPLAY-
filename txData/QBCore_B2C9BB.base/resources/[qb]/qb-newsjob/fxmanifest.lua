@@ -18,4 +18,6 @@ client_scripts {
     'client/camera.lua',
 }
 
-server_script 'server/main.lua'
+server_scripts {
+    'server/main.lua'
+}
