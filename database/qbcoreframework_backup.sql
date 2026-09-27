@@ -910,3 +910,47 @@ UNLOCK TABLES;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
 -- Dump completed on 2026-09-25 13:38:29
+
+--
+-- Table structure for Spain Rol Vinewood Studio
+--
+CREATE TABLE IF NOT EXISTS `studio_songs` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `citizenid` VARCHAR(50) NOT NULL,
+  `artist_name` VARCHAR(100) NOT NULL,
+  `song_title` VARCHAR(100) NOT NULL,
+  `genre` VARCHAR(50) NOT NULL DEFAULT 'Urbano',
+  `lyrics` MEDIUMTEXT DEFAULT NULL,
+  `beat_id` VARCHAR(50) NOT NULL DEFAULT 'reggaeton_flow',
+  `audio_url` TEXT DEFAULT NULL,
+  `cover_url` TEXT DEFAULT NULL,
+  `bpm` INT(11) DEFAULT 120,
+  `duration` INT(11) DEFAULT 180,
+  `plays` INT(11) DEFAULT 0,
+  `likes` INT(11) DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `citizenid` (`citizenid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `studio_likes` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `song_id` INT(11) NOT NULL,
+  `citizenid` VARCHAR(50) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `song_citizen` (`song_id`, `citizenid`),
+  CONSTRAINT `fk_studio_likes_song` FOREIGN KEY (`song_id`) REFERENCES `studio_songs` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `studio_drafts` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `citizenid` VARCHAR(50) NOT NULL,
+  `title` VARCHAR(100) NOT NULL,
+  `lyrics` MEDIUMTEXT NOT NULL,
+  `genre` VARCHAR(50) DEFAULT 'Urbano',
+  `bpm` INT(11) DEFAULT 120,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `citizenid` (`citizenid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

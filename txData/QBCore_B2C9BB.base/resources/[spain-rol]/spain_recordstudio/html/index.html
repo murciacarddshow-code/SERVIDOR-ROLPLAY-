@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinewood A-Records | SoundWave DAW Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- INTERFAZ PRINCIPAL DEL ESTUDIO (DAW & PRODUCER OS) -->
+    <div id="studio-app" class="studio-container hidden">
+        <!-- BARRA SUPERIOR / STATUS BAR -->
+        <header class="studio-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-compact-disc fa-spin-pulse"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>A-RECORDS <span class="highlight">VINEWOOD</span></h1>
+                    <span class="sub-brand">SOUNDWAVE STUDIO DAW v3.8 • PRO AUDIO SUITE</span>
+                </div>
+            </div>
+
+            <!-- HARDWARE SIMULATION STATUS -->
+            <div class="hardware-status">
+                <div class="status-item">
+                    <span class="label">ENGINE:</span>
+                    <span class="value cyan">48kHz 24-BIT</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">LATENCY:</span>
+                    <span class="value green">1.2ms ULTRA-LOW</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">BPM:</span>
+                    <span id="header-bpm" class="value yellow">94 BPM</span>
+                </div>
+                <div class="status-item record-status-badge">
+                    <span id="on-air-badge" class="badge-air off">● REC OFF</span>
+                </div>
+            </div>
+
+            <!-- USER INFO & CLOSE -->
+            <div class="header-right">
+                <div class="artist-badge">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                    <span id="user-artist-name">Artista</span>
+                </div>
+                <button id="btn-close-studio" class="btn-close" title="Cerrar Estudio (ESC)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- NAVEGACIÓN POR PESTAÑAS DEL ESTUDIO -->
+        <nav class="studio-nav">
+            <button class="nav-tab active" data-tab="mixer">
+                <i class="fa-solid fa-sliders"></i> Mesa de Mezclas (DAW)
+            </button>
+            <button class="nav-tab" data-tab="booth">
+                <i class="fa-solid fa-microphone"></i> Cabina de Grabación
+            </button>
+            <button class="nav-tab" data-tab="writer">
+                <i class="fa-solid fa-pen-nib"></i> Bloc de Compositor
+            </button>
+            <button class="nav-tab" data-tab="press">
+                <i class="fa-solid fa-record-vinyl"></i> Prensa de Vinilos
+            </button>
+            <button class="nav-tab" data-tab="billboard">
+                <i class="fa-solid fa-trophy"></i> Top Billboard Éxitos
+            </button>
+        </nav>
+
+        <!-- CUERPO PRINCIPAL DE LAS PESTAÑAS -->
+        <main class="studio-main">
+
+            <!-- TAB 1: MESA DE MEZCLAS (DAW CONSOLE) -->
+            <section id="tab-mixer" class="tab-content active">
+                <div class="mixer-layout">
+                    
+                    <!-- CANALES DE MEZCLA (STRIPS) -->
+                    <div class="channel-strips">
+                        
+                        <!-- CANAL 1: INSTRUMENTAL / BEAT -->
+                        <div class="channel-strip" id="ch-beat">
+                            <div class="strip-header">
+                                <span class="ch-number">01</span>
+                                <span class="ch-name">BEAT / INSTR.</span>
+                                <span class="ch-tag cyan-tag">STEREO</span>
+                            </div>
+                            <!-- EQ SECTION -->
+                            <div class="knob-group">
+                                <div class="knob-control">
+                                    <label>HIGH</label>
+                                    <input type="range" min="-12" max="12" value="0" class="knob-range" id="beat-eq-high">
+                                    <span class="knob-val">0dB</span>
+                                </div>
+                                <div class="knob-control">
+                                    <label>MID</label>
+                                    <input type="range" min="-12" max="12" value="0" class="knob-range" id="beat-eq-mid">
+                                    <span class="knob-val">0dB</span>
+                                </div>
+                                <div class="knob-control">
+                                    <label>BASS</label>
+                                    <input type="range" min="-12" max="12" value="2" class="knob-range" id="beat-eq-low">
+                                    <span class="knob-val">+2dB</span>
+                                </div>
+                            </div>
+                            <!-- MUTE & SOLO -->
+                            <div class="btn-group-toggle">
+                                <button class="btn-toggle" id="mute-beat">M</button>
+                                <button class="btn-toggle solo" id="solo-beat">S</button>
+                            </div>
+                            <!-- FADER & METER -->
+                            <div class="fader-track">
+                                <div class="db-meter" id="meter-beat">
+                                    <div class="meter-bar"></div>
+                                </div>
+                                <input type="range" min="0" max="100" value="85" orient="vertical" class="vertical-fader" id="fader-beat">
+                            </div>
+                            <span class="fader-reading" id="reading-beat">-3.5 dB</span>
+                        </div>
+
+                        <!-- CANAL 2: VOZ PRINCIPAL -->
+                        <div class="channel-strip" id="ch-vocals">
+                            <div class="strip-header">
+                                <span class="ch-number">02</span>
+                                <span class="ch-name">LEAD VOCALS</span>
+                                <span class="ch-tag red-tag">MIC IN</span>
+                            </div>
+                            <!-- FX SECTION: AUTOTUNE & REVERB -->
+                            <div class="knob-group">
+                                <div class="knob-control">
+                                    <label>AUTOTUNE</label>
+                                    <input type="range" min="0" max="100" value="70" class="knob-range" id="vocal-autotune">
+                                    <span class="knob-val">70%</span>
+                                </div>
+                                <div class="knob-control">
+                                    <label>REVERB</label>
+                                    <input type="range" min="0" max="100" value="35" class="knob-range" id="vocal-reverb">
+                                    <span class="knob-val">35%</span>
+                                </div>
+                                <div class="knob-control">
+                                    <label>DELAY</label>
+                                    <input type="range" min="0" max="100" value="20" class="knob-range" id="vocal-delay">
+                                    <span class="knob-val">20%</span>
+                                </div>
+                            </div>
+                            <div class="btn-group-toggle">
+                                <button class="btn-toggle" id="mute-vocal">M</button>
+                                <button class="btn-toggle solo" id="solo-vocal">S</button>
+                            </div>
+                            <div class="fader-track">
+                                <div class="db-meter" id="meter-vocal">
+                                    <div class="meter-bar"></div>
+                                </div>
+                                <input type="range" min="0" max="100" value="90" orient="vertical" class="vertical-fader" id="fader-vocal">
+                            </div>
+                            <span class="fader-reading" id="reading-vocal">0.0 dB</span>
+                        </div>
+
+                        <!-- CANAL 3: AD-LIBS & EFECTOS -->
+                        <div class="channel-strip" id="ch-adlibs">
+                            <div class="strip-header">
+                                <span class="ch-number">03</span>
+                                <span class="ch-name">AD-LIBS / FX</span>
+                                <span class="ch-tag purple-tag">CHORUS</span>
+                            </div>
+                            <div class="knob-group">
+                                <div class="knob-control">
+                                    <label>CHORUS</label>
+                                    <input type="range" min="0" max="100" value="50" class="knob-range" id="adlib-chorus">
+                                    <span class="knob-val">50%</span>
+                                </div>
+                                <div class="knob-control">
+                                    <label>RADIO FX</label>
+                                    <input type="range" min="0" max="100" value="0" class="knob-range" id="adlib-radio">
+                                    <span class="knob-val">OFF</span>
+                                </div>
+                                <div class="knob-control">
+                                    <label>PAN</label>
+                                    <input type="range" min="-100" max="100" value="0" class="knob-range" id="adlib-pan">
+                                    <span class="knob-val">C</span>
+                                </div>
+                            </div>
+                            <div class="btn-group-toggle">
+                                <button class="btn-toggle" id="mute-adlib">M</button>
+                                <button class="btn-toggle solo" id="solo-adlib">S</button>
+                            </div>
+                            <div class="fader-track">
+                                <div class="db-meter" id="meter-adlib">
+                                    <div class="meter-bar"></div>
+                                </div>
+                                <input type="range" min="0" max="100" value="75" orient="vertical" class="vertical-fader" id="fader-adlib">
+                            </div>
+                            <span class="fader-reading" id="reading-adlib">-6.0 dB</span>
+                        </div>
+
+                        <!-- CANAL 4: MASTER BUS -->
+                        <div class="channel-strip master-strip" id="ch-master">
+                            <div class="strip-header">
+                                <span class="ch-number">M</span>
+                                <span class="ch-name">MASTER OUT</span>
+                                <span class="ch-tag gold-tag">MAIN L/R</span>
+                            </div>
+                            <div class="master-limit-badge">
+                                <span>ANALOG LIMITER: ON</span>
+                            </div>
+                            <div class="fader-track">
+                                <div class="db-meter stereo-meter">
+                                    <div class="meter-bar" id="meter-master-l"></div>
+                                    <div class="meter-bar" id="meter-master-r"></div>
+                                </div>
+                                <input type="range" min="0" max="100" value="95" orient="vertical" class="vertical-fader master-fader" id="fader-master">
+                            </div>
+                            <span class="fader-reading gold" id="reading-master">+1.2 dB</span>
+                        </div>
+
+                    </div>
+
+                    <!-- PANTALLA CENTRAL: WAVEFORM OSCILLOSCOPE & CONTROLES -->
+                    <div class="mixer-center-deck">
+                        
+                        <!-- VISUALIZADOR CANVAS DE ONDA DE AUDIO -->
+                        <div class="visualizer-card">
+                            <div class="visualizer-header">
+                                <div class="title">
+                                    <i class="fa-solid fa-wave-square"></i>
+                                    <span>ESPECTROGRÁFICA Y OSCILOSCOPIO DIGITAL</span>
+                                </div>
+                                <div class="timecode" id="studio-timecode">00:00:00</div>
+                            </div>
+                            <canvas id="waveform-canvas" width="680" height="150"></canvas>
+                        </div>
+
+                        <!-- PANEL DE TRANSPORTE Y CONTROL DE REPRODUCCIÓN -->
+                        <div class="transport-bar">
+                            <div class="transport-controls">
+                                <button id="btn-transport-stop" class="btn-transport" title="Detener">
+                                    <i class="fa-solid fa-stop"></i>
+                                </button>
+                                <button id="btn-transport-play" class="btn-transport play" title="Reproducir">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                                <button id="btn-transport-loop" class="btn-transport active" title="Bucle activado">
+                                    <i class="fa-solid fa-repeat"></i>
+                                </button>
+                                <button id="btn-studio-broadcast" class="btn-broadcast" title="Transmitir por los altavoces de todo el estudio">
+                                    <i class="fa-solid fa-tower-broadcast"></i> Altavoces Estudio: <span class="state">ACTIVO</span>
+                                </button>
+                            </div>
+
+                            <!-- SELECTOR DE BEAT / PISTA ACTIVA -->
+                            <div class="beat-selector-bar">
+                                <label><i class="fa-solid fa-music"></i> Pista Base:</label>
+                                <select id="select-active-beat">
+                                    <!-- Rellenado dinámicamente -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- BIBLIOTECA DE INSTRUMENTALES DISPONIBLES -->
+                        <div class="beats-grid-section">
+                            <h3><i class="fa-solid fa-fire"></i> Catálogo de Beats & Instrumentales del Estudio</h3>
+                            <div class="beats-card-container" id="beats-container">
+                                <!-- Cards generadas por JS -->
+                            </div>
+                        </div>
+
+                        <!-- CARGA DE PISTA PERSONALIZADA (URL) -->
+                        <div class="custom-track-bar">
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-link"></i>
+                                <input type="text" id="input-custom-audio" placeholder="O pega un enlace de audio directo (MP3, WAV, stream de Discord, SoundCloud, etc.)">
+                            </div>
+                            <button id="btn-load-custom" class="btn-action">
+                                <i class="fa-solid fa-cloud-arrow-down"></i> Cargar Audio
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: CABINA DE GRABACIÓN VOCAL -->
+            <section id="tab-booth" class="tab-content">
+                <div class="booth-container">
+                    <div class="booth-left">
+                        <div class="mic-station-card">
+                            <div class="mic-icon-art">
+                                <i class="fa-solid fa-microphone-lines"></i>
+                                <div class="pulse-ring"></div>
+                            </div>
+                            <h2>CABINA INSONORIZADA DE GRABACIÓN</h2>
+                            <p class="booth-sub">Conectado al micrófono de condensador Newman U87 con filtro antipop y auriculares de referencia.</p>
+                            
+                            <!-- RECORDING CONTROLS -->
+                            <div class="recording-action-box">
+                                <div id="record-countdown" class="record-countdown hidden">3</div>
+                                <button id="btn-start-record" class="btn-record-main">
+                                    <i class="fa-solid fa-circle"></i>
+                                    <span>INICIAR GRABACIÓN DE TOMA</span>
+                                </button>
+                                <div class="record-timer" id="record-timer">00:00</div>
+                            </div>
+
+                            <!-- MONITOR VOLUMEN -->
+                            <div class="headphone-volume-control">
+                                <label><i class="fa-solid fa-headphones"></i> Monitor de Auriculares:</label>
+                                <input type="range" id="booth-headphone-vol" min="0" max="100" value="80">
+                                <span id="booth-vol-label">80%</span>
+                            </div>
+                        </div>
+
+                        <!-- HISTORIAL DE TOMAS GRABADAS -->
+                        <div class="takes-card">
+                            <h3><i class="fa-solid fa-list-check"></i> Tomas de la Sesión</h3>
+                            <div class="takes-list" id="takes-list">
+                                <div class="take-item active">
+                                    <span class="take-title">Toma 1 (Master Track)</span>
+                                    <span class="take-time">02:45 min</span>
+                                    <button class="btn-take-play"><i class="fa-solid fa-play"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TELEPROMPTER DE LETRAS EN DIRECTO -->
+                    <div class="booth-right">
+                        <div class="prompter-card">
+                            <div class="prompter-header">
+                                <div class="title">
+                                    <i class="fa-solid fa-scroll"></i>
+                                    <span>TELEPROMPTER DE LETRA • CABINA</span>
+                                </div>
+                                <div class="prompter-controls">
+                                    <button id="btn-prompter-load-draft" class="btn-small">
+                                        <i class="fa-solid fa-folder-open"></i> Cargar Letra
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="prompter-display" id="prompter-display">
+                                <div class="prompter-line highlight">Pulsa en "Cargar Letra" o escribe tus rimas en el Bloc de Compositor.</div>
+                                <div class="prompter-line">La letra irá apareciendo aquí en tiempo real para que cantes mientras escuchas el beat.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: BLOC DE COMPOSITOR (LETRAS) -->
+            <section id="tab-writer" class="tab-content">
+                <div class="writer-container">
+                    <div class="writer-header-bar">
+                        <div class="input-group">
+                            <label>Título de la Canción:</label>
+                            <input type="text" id="draft-title" placeholder="Ej: Noches en Los Santos (Remix)">
+                        </div>
+                        <div class="input-group">
+                            <label>Género Musical:</label>
+                            <select id="draft-genre">
+                                <option value="Reggaeton">Reggaeton Urbano</option>
+                                <option value="Trap">Trap Latino / 808</option>
+                                <option value="Drill">Drill Español</option>
+                                <option value="Hip Hop">Hip Hop Boom Bap</option>
+                                <option value="Flamenco Urbano">Flamenco Flow</option>
+                                <option value="R&B">R&B / Soul</option>
+                                <option value="Pop Melódico">Pop Sintético</option>
+                                <option value="Corridos Tumbados">Corridos Tumbados</option>
+                            </select>
+                        </div>
+                        <div class="input-group small">
+                            <label>Tempo (BPM):</label>
+                            <input type="number" id="draft-bpm" value="120" min="60" max="190">
+                        </div>
+                        <div class="actions">
+                            <button id="btn-save-draft" class="btn-action primary">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Borrador
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="writer-body">
+                        <!-- EDITOR DE LETRA -->
+                        <div class="lyrics-editor">
+                            <div class="editor-tools">
+                                <span class="tool-title"><i class="fa-solid fa-pen"></i> Hoja de Rimas & Estrofas</span>
+                                <span class="char-count" id="lyrics-char-count">0 versos | 0 palabras</span>
+                            </div>
+                            <textarea id="draft-lyrics" placeholder="Escribe aquí tu letra...
+
+[Estribillo]
+Mami tú sabes que esta noche no se olvida,
+recorriendo Vinewood Hills sin prisa por la avenida...
+
+[Verso 1]
+Saliendo del estudio con el beat sonando duro,
+con la gente de Spain Rol coronando el futuro..."></textarea>
+                        </div>
+
+                        <!-- MIS BORRADORES GUARDADOS -->
+                        <div class="drafts-sidebar">
+                            <h3><i class="fa-solid fa-book-bookmark"></i> Mis Borradores Guardados</h3>
+                            <div class="drafts-list" id="drafts-list">
+                                <!-- Rellenado por JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: PRENSA DE VINILOS (DISC PRESSING) -->
+            <section id="tab-press" class="tab-content">
+                <div class="press-container">
+                    <!-- PREVISUALIZADOR DEL DISCO DE VINILO -->
+                    <div class="press-preview-side">
+                        <div class="vinyl-mockup-wrapper">
+                            <div class="vinyl-record" id="preview-vinyl-disc">
+                                <div class="vinyl-grooves"></div>
+                                <div class="vinyl-center-label" id="preview-vinyl-label">
+                                    <span class="label-text">A-RECORDS</span>
+                                </div>
+                            </div>
+                            <div class="album-cover-card" id="preview-cover-card">
+                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80" alt="Cover" id="preview-cover-img">
+                                <div class="album-info-overlay">
+                                    <h4 id="preview-song-title">Título del Single</h4>
+                                    <p id="preview-artist-name">Nombre del Artista</p>
+                                    <span class="edition-tag">EDICIÓN VINILO OFICIAL 2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vinyl-specs-box">
+                            <div><i class="fa-solid fa-weight-hanging"></i> <b>Formato:</b> Vinilo 180 Gramos Audiófilo</div>
+                            <div><i class="fa-solid fa-headphones"></i> <b>Calidad:</b> 24-bit / 96kHz Lossless Master</div>
+                            <div><i class="fa-solid fa-tag"></i> <b>Uso:</b> Reproducible desde el inventario en cualquier lugar</div>
+                        </div>
+                    </div>
+
+                    <!-- FORMULARIO DE MASTERIZACIÓN Y PLANCHADO -->
+                    <div class="press-form-side">
+                        <h2><i class="fa-solid fa-compact-disc"></i> PLANCHAR & PUBLICAR DISCO OFICIAL</h2>
+                        <p class="press-desc">Crea un disco físico coleccionable para tu inventario. Podrás escucharlo, vendérselo a otros jugadores, ponerlo en fiestas o distribuirlo por la ciudad.</p>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nombre Artístico:</label>
+                                <input type="text" id="press-artist" placeholder="Tu nombre artístico">
+                            </div>
+                            <div class="form-group">
+                                <label>Título de la Canción:</label>
+                                <input type="text" id="press-title" placeholder="Título oficial del tema">
+                            </div>
+                            <div class="form-group">
+                                <label>Género:</label>
+                                <select id="press-genre">
+                                    <option value="Reggaeton">Reggaeton Urbano</option>
+                                    <option value="Trap">Trap / 808</option>
+                                    <option value="Drill">Drill</option>
+                                    <option value="Hip Hop">Hip Hop Boom Bap</option>
+                                    <option value="Flamenco Urbano">Flamenco Flow</option>
+                                    <option value="R&B">R&B / Soul</option>
+                                    <option value="Pop">Pop Urbano</option>
+                                    <option value="Corridos Tumbados">Corridos Tumbados</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Enlace de Audio / Stream (Opcional):</label>
+                                <input type="text" id="press-audio-url" placeholder="URL directa de audio o dejar en blanco para beat del estudio">
+                            </div>
+                        </div>
+
+                        <!-- SELECTOR DE CARÁTULA -->
+                        <div class="cover-selector-box">
+                            <label>Seleccionar Carátula del Álbum:</label>
+                            <div class="covers-palette" id="covers-palette">
+                                <!-- Cards generadas dinámicamente -->
+                            </div>
+                            <input type="text" id="press-custom-cover" placeholder="O pega la URL de una imagen propia para la carátula...">
+                        </div>
+
+                        <!-- COSTE Y BOTÓN -->
+                        <div class="press-footer-card">
+                            <div class="price-display">
+                                <span class="label">Coste de Producción y Prensado:</span>
+                                <span class="cost" id="press-cost-display">500 €</span>
+                            </div>
+                            <button id="btn-submit-press" class="btn-press-submit">
+                                <i class="fa-solid fa-stamp"></i> PLANCHAR VINILO OFICIAL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: BILLBOARD LOS SANTOS (TOP ÉXITOS) -->
+            <section id="tab-billboard" class="tab-content">
+                <div class="billboard-container">
+                    <div class="billboard-header">
+                        <div class="title-wrap">
+                            <h2><i class="fa-solid fa-chart-simple"></i> LOS SANTOS TOP 30 BILLBOARD</h2>
+                            <p>Las canciones oficiales más escuchadas y apoyadas de toda la comunidad de Spain Rol.</p>
+                        </div>
+                    </div>
+
+                    <!-- TABLA TOP RANKING -->
+                    <div class="chart-table-wrap">
+                        <table class="chart-table">
+                            <thead>
+                                <tr>
+                                    <th class="th-rank">#</th>
+                                    <th class="th-cover">Disco</th>
+                                    <th class="th-song">Título</th>
+                                    <th class="th-artist">Artista</th>
+                                    <th class="th-genre">Género</th>
+                                    <th class="th-plays">Escuchas</th>
+                                    <th class="th-likes">Likes</th>
+                                    <th class="th-actions">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="billboard-tbody">
+                                <!-- Rellenado dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL DE VISUALIZAR LETRA -->
+    <div id="lyrics-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-song-title">Letra de la Canción</h3>
+                <button id="btn-close-modal" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modal-lyrics-content">
+                <!-- Letra completa -->
+            </div>
+        </div>
+    </div>
+
+    <!-- REPRODUCTOR PORTÁTIL FLOTANTE DE VINILO (AL USAR 'disco_musica' EN EL INVENTARIO) -->
+    <div id="vinyl-portable-player" class="vinyl-widget hidden">
+        <div class="widget-disc-spinner" id="widget-spinner">
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80" alt="Disc" id="widget-cover">
+        </div>
+        <div class="widget-details">
+            <div class="widget-header">
+                <span class="widget-badge">VINILO VINEWOOD</span>
+                <button id="widget-btn-close" class="widget-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <h4 id="widget-title">Canción Desconocida</h4>
+            <p id="widget-artist">Artista Desconocido</p>
+            
+            <div class="widget-progress-wrap">
+                <div class="widget-bar"><div class="widget-fill" id="widget-progress-fill"></div></div>
+                <div class="widget-times">
+                    <span id="widget-cur-time">00:00</span>
+                    <span id="widget-total-time">03:00</span>
+                </div>
+            </div>
+
+            <div class="widget-controls">
+                <button id="widget-btn-prev" class="btn-w-ctrl"><i class="fa-solid fa-backward-step"></i></button>
+                <button id="widget-btn-play" class="btn-w-ctrl play"><i class="fa-solid fa-pause"></i></button>
+                <button id="widget-btn-next" class="btn-w-ctrl"><i class="fa-solid fa-forward-step"></i></button>
+                <div class="widget-vol">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <input type="range" id="widget-vol-slider" min="0" max="100" value="85">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/audio_engine.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
