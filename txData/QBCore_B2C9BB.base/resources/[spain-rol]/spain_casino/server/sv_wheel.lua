@@ -97,7 +97,7 @@ RegisterNetEvent('spain_casino:server:claimWheelPrize', function(sliceIndex)
         local configVeh = MySQL.single.await('SELECT value FROM casino_config WHERE key_name = ?', { 'podium_vehicle' })
         local podiumModel = (configVeh and configVeh.value and configVeh.value ~= '') and configVeh.value or Config.LuckyWheel.defaultPodiumVehicle
         local plate = GenerateCasinoPlate()
-        local hash = joaat(podiumModel)
+        local hash = (type(joaat) == 'function' and joaat(podiumModel)) or GetHashKey(podiumModel)
         local garage = Config.LuckyWheel.defaultGarage or 'motelgarage'
 
         MySQL.insert([[

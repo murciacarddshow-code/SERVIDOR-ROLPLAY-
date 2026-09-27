@@ -954,3 +954,58 @@ CREATE TABLE IF NOT EXISTS `studio_drafts` (
   PRIMARY KEY (`id`),
   KEY `citizenid` (`citizenid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- qb-lapraces
+CREATE TABLE IF NOT EXISTS lapraces (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  
+ame varchar(50) DEFAULT NULL,
+  checkpoints text DEFAULT NULL,
+  ecords text DEFAULT NULL,
+  creator varchar(50) DEFAULT NULL,
+  distance int(11) DEFAULT NULL,
+  aceid varchar(50) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- qb-vehiclesales
+CREATE TABLE IF NOT EXISTS occasion_vehicles (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  seller varchar(50) DEFAULT NULL,
+  price int(11) DEFAULT NULL,
+  description longtext DEFAULT NULL,
+  plate varchar(50) DEFAULT NULL,
+  model varchar(50) DEFAULT NULL,
+  mods text DEFAULT NULL,
+  occasionid varchar(50) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY occasionId (occasionid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- spain_casino
+CREATE TABLE IF NOT EXISTS casino_luckywheel (
+  citizenid VARCHAR(50) NOT NULL,
+  last_spin BIGINT NOT NULL DEFAULT 0,
+  	otal_spins INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (citizenid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS casino_memberships (
+  citizenid VARCHAR(50) NOT NULL,
+  is_vip TINYINT(1) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (citizenid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS casino_config (
+  key_name VARCHAR(50) NOT NULL,
+  alue VARCHAR(255) NOT NULL,
+  PRIMARY KEY (key_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS casino_jackpot (
+  id INT NOT NULL DEFAULT 1,
+  mount INT NOT NULL DEFAULT 150000,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT IGNORE INTO casino_jackpot (id, mount) VALUES (1, 150000);

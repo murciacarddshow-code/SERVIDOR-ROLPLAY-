@@ -35,6 +35,10 @@ function closeAllModals() {
     document.getElementById('submodal-money').style.display = 'none';
     document.getElementById('submodal-job').style.display = 'none';
     document.getElementById('submodal-punish').style.display = 'none';
+    const subWeapon = document.getElementById('submodal-weapon');
+    const subAmmo = document.getElementById('submodal-ammo');
+    if (subWeapon) subWeapon.style.display = 'none';
+    if (subAmmo) subAmmo.style.display = 'none';
 }
 
 // ========================================================
@@ -73,9 +77,15 @@ window.addEventListener('keydown', (event) => {
         const subMoney = document.getElementById('submodal-money');
         const subJob = document.getElementById('submodal-job');
         const subPunish = document.getElementById('submodal-punish');
+        const subWeapon = document.getElementById('submodal-weapon');
+        const subAmmo = document.getElementById('submodal-ammo');
         const modalPlayer = document.getElementById('modal-player-actions');
 
-        if (subMoney.style.display === 'flex') {
+        if (subWeapon && subWeapon.style.display === 'flex') {
+            subWeapon.style.display = 'none';
+        } else if (subAmmo && subAmmo.style.display === 'flex') {
+            subAmmo.style.display = 'none';
+        } else if (subMoney.style.display === 'flex') {
             subMoney.style.display = 'none';
         } else if (subJob.style.display === 'flex') {
             subJob.style.display = 'none';
@@ -413,6 +423,85 @@ document.getElementById('btn-confirm-punish').addEventListener('click', () => {
     }
 });
 
+// 13. Dar Arma a Jugador
+document.getElementById('btn-act-giveweapon').addEventListener('click', () => {
+    if (!selectedPlayer) return;
+    document.getElementById('submodal-weapon-title').innerHTML = `<i class="fa-solid fa-gun text-red"></i> Entregar Arma a #${selectedPlayer.id} (${escapeHtml(selectedPlayer.charname)})`;
+    document.getElementById('input-weapon-ammo').value = '100';
+    document.getElementById('check-weapon-ammo-box').checked = true;
+    document.getElementById('submodal-weapon').style.display = 'flex';
+});
+
+document.getElementById('btn-cancel-weapon').addEventListener('click', () => {
+    document.getElementById('submodal-weapon').style.display = 'none';
+});
+
+document.getElementById('btn-confirm-weapon').addEventListener('click', () => {
+    if (!selectedPlayer) return;
+    const weapon = document.getElementById('select-weapon-name').value;
+    const ammo = parseInt(document.getElementById('input-weapon-ammo').value) || 0;
+    const giveAmmoBox = document.getElementById('check-weapon-ammo-box').checked;
+
+    postNUI('givePlayerWeapon', {
+        targetId: selectedPlayer.id,
+        weapon: weapon,
+        ammo: ammo,
+        giveAmmoBox: giveAmmoBox
+    }).then(() => {
+        document.getElementById('submodal-weapon').style.display = 'none';
+        document.getElementById('modal-player-actions').style.display = 'none';
+        fetchAndRenderPlayers();
+    });
+});
+
+// 14. Dar Munición a Jugador
+document.getElementById('btn-act-giveammo').addEventListener('click', () => {
+    if (!selectedPlayer) return;
+    document.getElementById('submodal-ammo-title').innerHTML = `<i class="fa-solid fa-boxes-stacked text-yellow"></i> Entregar Balas a #${selectedPlayer.id} (${escapeHtml(selectedPlayer.charname)})`;
+    document.getElementById('input-ammo-amount').value = '2';
+    document.getElementById('submodal-ammo').style.display = 'flex';
+});
+
+document.getElementById('btn-cancel-ammo').addEventListener('click', () => {
+    document.getElementById('submodal-ammo').style.display = 'none';
+});
+
+document.getElementById('btn-confirm-ammo').addEventListener('click', () => {
+    if (!selectedPlayer) return;
+    const ammoType = document.getElementById('select-ammo-type').value;
+    const amount = parseInt(document.getElementById('input-ammo-amount').value) || 1;
+
+    postNUI('givePlayerAmmo', {
+        targetId: selectedPlayer.id,
+        ammoType: ammoType,
+        amount: amount
+    }).then(() => {
+        document.getElementById('submodal-ammo').style.display = 'none';
+        document.getElementById('modal-player-actions').style.display = 'none';
+        fetchAndRenderPlayers();
+    });
+});
+
+// 15. Dar Chaleco Blindado
+document.getElementById('btn-act-givearmor').addEventListener('click', () => {
+    if (!selectedPlayer) return;
+    postNUI('givePlayerArmor', { targetId: selectedPlayer.id }).then(() => {
+        document.getElementById('modal-player-actions').style.display = 'none';
+        fetchAndRenderPlayers();
+    });
+});
+
+// 16. Quitar Todas las Armas
+document.getElementById('btn-act-clearweapons').addEventListener('click', () => {
+    if (!selectedPlayer) return;
+    if (confirm(`¿Estás seguro de que deseas retirar todas las armas a #${selectedPlayer.id} (${selectedPlayer.charname})?`)) {
+        postNUI('clearPlayerWeapons', { targetId: selectedPlayer.id }).then(() => {
+            document.getElementById('modal-player-actions').style.display = 'none';
+            fetchAndRenderPlayers();
+        });
+    }
+});
+
 // ========================================================
 // PESTAÑA: OPCIONES STAFF
 // ========================================================
@@ -462,6 +551,21 @@ document.getElementById('btn-self-skin').addEventListener('click', () => {
 document.getElementById('btn-self-suicide').addEventListener('click', () => {
     postNUI('selfSuicide');
 });
+
+// Armamento Rápido Staff
+document.querySelectorAll('.staff-quick-weapons button[data-staffweapon]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const weapon = btn.getAttribute('data-staffweapon');
+        postNUI('selfGiveWeapon', { weapon: weapon });
+    });
+});
+
+const btnSelfClear = document.getElementById('btn-self-clearweapons');
+if (btnSelfClear) {
+    btnSelfClear.addEventListener('click', () => {
+        postNUI('selfClearWeapons');
+    });
+}
 
 // ========================================================
 // PESTAÑA: VEHÍCULOS

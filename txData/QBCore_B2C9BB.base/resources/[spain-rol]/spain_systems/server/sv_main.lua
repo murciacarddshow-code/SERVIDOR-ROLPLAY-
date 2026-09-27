@@ -132,10 +132,22 @@ RegisterNetEvent('spain_mechanic:server:sendBill', function(targetServerId, amou
     if not Sender or not Target then return end
 
     local cost = tonumber(amount) or 0
+    if cost <= 0 then return end
+
     if Target.Functions.RemoveMoney('bank', cost) or Target.Functions.RemoveMoney('cash', cost) then
-        Sender.Functions.AddMoney('bank', math.floor(cost * 0.8), 'mechanic-commission')
-        TriggerClientEvent('QBCore:Notify', targetServerId, "Has pagado una factura de taller de €" .. cost, "success")
-        TriggerClientEvent('QBCore:Notify', src, "Factura cobrada con éxito. Recibes €" .. math.floor(cost * 0.8) .. " de comisión.", "success")
+        local commission = math.floor(cost * 0.7)
+        local shopCut = cost - commission
+        Sender.Functions.AddMoney('bank', commission, 'mechanic-commission')
+
+        local jobName = Sender.PlayerData.job.name
+        if exports['qb-management'] and exports['qb-management'].AddMoney then
+            pcall(function()
+                exports['qb-management']:AddMoney(jobName, shopCut)
+            end)
+        end
+
+        TriggerClientEvent('QBCore:Notify', targetServerId, "Has pagado una factura de " .. (Sender.PlayerData.job.label or "Taller Mecánico") .. " por €" .. cost, "success")
+        TriggerClientEvent('QBCore:Notify', src, "Factura cobrada con éxito. Recibes €" .. commission .. " de comisión (el taller ingresa €" .. shopCut .. ").", "success")
     else
         TriggerClientEvent('QBCore:Notify', src, "El cliente no tiene suficiente dinero para pagar la factura.", "error")
     end

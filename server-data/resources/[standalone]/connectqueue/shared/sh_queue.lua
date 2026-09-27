@@ -28,7 +28,7 @@ _Queue.Priority = {}
 _Queue.Connecting = {}
 _Queue.JoinCbs = {}
 _Queue.TempPriority = {}
-_Queue.JoinDelay = GetGameTimer() + Config.JoinDelay and Config.JoinDelay or 0
+_Queue.JoinDelay = GetGameTimer() + ((Config and Config.JoinDelay) or 0)
 
 local tostring = tostring
 local tonumber = tonumber

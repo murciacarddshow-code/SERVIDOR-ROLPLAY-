@@ -732,3 +732,437 @@ RegisterNetEvent('qb-admin:server:globalAnnouncement', function(message)
     end
 end)
 
+-- =========================================================================
+-- SPAIN ROL - GESTIÓN INTEGRAL DE ARMAS Y MUNICIÓN (PANEL NUI + COMANDOS)
+-- =========================================================================
+
+local weaponAliases = {
+    -- Pistolas
+    ['pistola']         = 'weapon_pistol',
+    ['pistol']          = 'weapon_pistol',
+    ['glock']           = 'weapon_combatpistol',
+    ['combatpistol']    = 'weapon_combatpistol',
+    ['combate']         = 'weapon_combatpistol',
+    ['ap']              = 'weapon_appistol',
+    ['appistol']        = 'weapon_appistol',
+    ['deagle']          = 'weapon_pistol50',
+    ['pistol50']        = 'weapon_pistol50',
+    ['desert']          = 'weapon_pistol50',
+    ['heavypistol']     = 'weapon_heavypistol',
+    ['pesada']          = 'weapon_heavypistol',
+    ['revolver']        = 'weapon_revolver',
+    ['taser']           = 'weapon_stungun',
+    ['stungun']         = 'weapon_stungun',
+    ['vintage']         = 'weapon_vintagepistol',
+    ['vintagepistol']   = 'weapon_vintagepistol',
+    -- Subfusiles
+    ['smg']             = 'weapon_smg',
+    ['mp5']             = 'weapon_smg',
+    ['uzi']             = 'weapon_microsmg',
+    ['microsmg']        = 'weapon_microsmg',
+    ['pdw']             = 'weapon_combatpdw',
+    ['combatpdw']       = 'weapon_combatpdw',
+    ['p90']             = 'weapon_assaultsmg',
+    ['assaultsmg']      = 'weapon_assaultsmg',
+    ['tec9']            = 'weapon_machinepistol',
+    ['machinepistol']   = 'weapon_machinepistol',
+    ['minismg']         = 'weapon_minismg',
+    ['skorpion']        = 'weapon_minismg',
+    ['thompson']        = 'weapon_gusenberg',
+    ['gusenberg']       = 'weapon_gusenberg',
+    -- Fusiles de Asalto
+    ['m4']              = 'weapon_carbinerifle',
+    ['carabina']        = 'weapon_carbinerifle',
+    ['carbine']         = 'weapon_carbinerifle',
+    ['carbinerifle']    = 'weapon_carbinerifle',
+    ['ak']              = 'weapon_assaultrifle',
+    ['ak47']            = 'weapon_assaultrifle',
+    ['assaultrifle']    = 'weapon_assaultrifle',
+    ['kalashnikov']     = 'weapon_assaultrifle',
+    ['g36']             = 'weapon_specialcarbine',
+    ['g36c']            = 'weapon_specialcarbine',
+    ['specialcarbine']  = 'weapon_specialcarbine',
+    ['aug']             = 'weapon_militaryrifle',
+    ['militaryrifle']   = 'weapon_militaryrifle',
+    ['tar21']           = 'weapon_advancedrifle',
+    ['advancedrifle']   = 'weapon_advancedrifle',
+    ['miniak']          = 'weapon_compactrifle',
+    ['compactrifle']    = 'weapon_compactrifle',
+    ['scar']            = 'weapon_heavyrifle',
+    ['heavyrifle']      = 'weapon_heavyrifle',
+    -- Escopetas
+    ['shotgun']         = 'weapon_pumpshotgun',
+    ['pumpshotgun']     = 'weapon_pumpshotgun',
+    ['escopeta']        = 'weapon_pumpshotgun',
+    ['recortada']       = 'weapon_sawnoffshotgun',
+    ['sawnoff']         = 'weapon_sawnoffshotgun',
+    ['sawnoffshotgun']  = 'weapon_sawnoffshotgun',
+    ['spas']            = 'weapon_combatshotgun',
+    ['spas12']          = 'weapon_combatshotgun',
+    ['combatshotgun']   = 'weapon_combatshotgun',
+    ['doble']           = 'weapon_dbshotgun',
+    ['dbshotgun']       = 'weapon_dbshotgun',
+    ['autoshotgun']     = 'weapon_autoshotgun',
+    -- Francotiradores
+    ['sniper']          = 'weapon_sniperrifle',
+    ['sniperrifle']     = 'weapon_sniperrifle',
+    ['franco']          = 'weapon_sniperrifle',
+    ['heavysniper']     = 'weapon_heavysniper',
+    ['barrett']         = 'weapon_heavysniper',
+    ['francopesado']    = 'weapon_heavysniper',
+    ['marksman']        = 'weapon_marksmanrifle',
+    ['marksmanrifle']   = 'weapon_marksmanrifle',
+    -- Ametralladoras
+    ['mg']              = 'weapon_mg',
+    ['combatmg']        = 'weapon_combatmg',
+    -- Cuerpo a cuerpo
+    ['knife']           = 'weapon_knife',
+    ['cuchillo']        = 'weapon_knife',
+    ['bat']             = 'weapon_bat',
+    ['bate']            = 'weapon_bat',
+    ['machete']         = 'weapon_machete',
+    ['navaja']          = 'weapon_switchblade',
+    ['switchblade']     = 'weapon_switchblade',
+    ['porra']           = 'weapon_nightstick',
+    ['nightstick']      = 'weapon_nightstick',
+    ['puño']            = 'weapon_knuckle',
+    ['knuckle']         = 'weapon_knuckle',
+    ['wrench']          = 'weapon_wrench',
+    ['llave']           = 'weapon_wrench',
+    ['palanca']         = 'weapon_crowbar',
+    ['crowbar']         = 'weapon_crowbar',
+    ['hacha']           = 'weapon_hatchet',
+    ['hatchet']         = 'weapon_hatchet',
+    ['linterna']        = 'weapon_flashlight',
+    ['flashlight']      = 'weapon_flashlight',
+    -- Equipamiento
+    ['chaleco']         = 'heavyarmor',
+    ['armor']           = 'heavyarmor',
+    ['heavyarmor']      = 'heavyarmor'
+}
+
+local ammoItemByWeaponType = {
+    ['AMMO_PISTOL']   = 'pistol_ammo',
+    ['AMMO_SMG']      = 'smg_ammo',
+    ['AMMO_RIFLE']    = 'rifle_ammo',
+    ['AMMO_SHOTGUN']  = 'shotgun_ammo',
+    ['AMMO_SNIPER']   = 'snp_ammo',
+    ['AMMO_MG']       = 'mg_ammo',
+    ['AMMO_STUNGUN']  = nil
+}
+
+local function resolveWeaponName(nameInput)
+    if not nameInput then return nil end
+    local clean = string.lower(string.gsub(tostring(nameInput), "%s+", ""))
+    if weaponAliases[clean] then
+        return weaponAliases[clean]
+    end
+    if QBCore.Shared.Items[clean] then
+        return clean
+    end
+    local withPrefix = 'weapon_' .. clean
+    if QBCore.Shared.Items[withPrefix] then
+        return withPrefix
+    end
+    return nil
+end
+
+local function giveWeaponInternal(src, targetId, weaponInput, ammoCount, giveAmmoBox)
+    targetId = tonumber(targetId)
+    if not targetId then
+        if src > 0 then
+            TriggerClientEvent('QBCore:Notify', src, 'ID de jugador no válida.', 'error')
+        end
+        return false
+    end
+
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if not TargetPlayer then
+        if src > 0 then
+            TriggerClientEvent('QBCore:Notify', src, ('El jugador con ID %s no está conectado.'):format(targetId), 'error')
+        end
+        return false
+    end
+
+    local resolved = resolveWeaponName(weaponInput)
+    if not resolved or not QBCore.Shared.Items[resolved] then
+        if src > 0 then
+            TriggerClientEvent('QBCore:Notify', src, ('El arma "%s" no es válida o no existe.'):format(weaponInput or ''), 'error')
+        end
+        return false
+    end
+
+    local itemData = QBCore.Shared.Items[resolved]
+    ammoCount = tonumber(ammoCount) or 100
+
+    local info = {
+        serie = tostring(QBCore.Shared.RandomInt(2) .. QBCore.Shared.RandomStr(3) .. QBCore.Shared.RandomInt(1) .. QBCore.Shared.RandomStr(2) .. QBCore.Shared.RandomInt(3) .. QBCore.Shared.RandomStr(4)),
+        quality = 100,
+        ammo = ammoCount
+    }
+
+    local success = exports['qb-inventory']:AddItem(targetId, resolved, 1, false, info, 'Admin Give Weapon')
+    if success then
+        TriggerClientEvent('qb-inventory:client:ItemBox', targetId, itemData, 'add', 1)
+
+        -- Si es un arma de fuego y se solicitó caja de balas de reserva
+        if giveAmmoBox and itemData.ammotype and ammoItemByWeaponType[itemData.ammotype] then
+            local ammoItem = ammoItemByWeaponType[itemData.ammotype]
+            if QBCore.Shared.Items[ammoItem] then
+                exports['qb-inventory']:AddItem(targetId, ammoItem, 2, false, false, 'Admin Give Weapon Ammo')
+                TriggerClientEvent('qb-inventory:client:ItemBox', targetId, QBCore.Shared.Items[ammoItem], 'add', 2)
+            end
+        end
+
+        local pName = (TargetPlayer.PlayerData.charinfo.firstname or '') .. ' ' .. (TargetPlayer.PlayerData.charinfo.lastname or '')
+        local adminName = src > 0 and GetPlayerName(src) or 'Consola'
+
+        if src > 0 then
+            TriggerClientEvent('QBCore:Notify', src, ('Arma entregada: %s (Balas: %s) a %s (ID: %s)'):format(itemData.label or resolved, ammoCount, pName, targetId), 'success')
+        end
+        TriggerClientEvent('QBCore:Notify', targetId, ('Has recibido: %s (Munición: %s)'):format(itemData.label or resolved, ammoCount), 'success')
+
+        TriggerEvent('qb-log:server:CreateLog', 'adminmenu', 'Dar Arma', 'red', string.format('**%s** entregó arma **%s** (%s balas) a **%s** (ID: %s)', adminName, itemData.label or resolved, ammoCount, GetPlayerName(targetId), targetId), true)
+        return true
+    else
+        if src > 0 then
+            TriggerClientEvent('QBCore:Notify', src, 'El inventario del jugador está lleno.', 'error')
+        end
+        return false
+    end
+end
+
+local function clearWeaponsInternal(src, targetId)
+    targetId = tonumber(targetId)
+    if not targetId then return false end
+
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if not TargetPlayer then
+        if src > 0 then
+            TriggerClientEvent('QBCore:Notify', src, ('El jugador con ID %s no está conectado.'):format(targetId), 'error')
+        end
+        return false
+    end
+
+    local items = TargetPlayer.PlayerData.items
+    local removedCount = 0
+    if items then
+        for slot, item in pairs(items) do
+            if item and (item.type == 'weapon' or string.sub(string.lower(item.name), 1, 7) == 'weapon_') then
+                TargetPlayer.Functions.RemoveItem(item.name, item.amount, slot)
+                TriggerClientEvent('qb-inventory:client:ItemBox', targetId, QBCore.Shared.Items[item.name], 'remove', item.amount)
+                removedCount = removedCount + 1
+            end
+        end
+    end
+
+    -- Desarmar ped inmediatamente
+    TriggerClientEvent('qb-admin:client:stripPedWeapons', targetId)
+
+    local pName = (TargetPlayer.PlayerData.charinfo.firstname or '') .. ' ' .. (TargetPlayer.PlayerData.charinfo.lastname or '')
+    local adminName = src > 0 and GetPlayerName(src) or 'Consola'
+
+    if src > 0 then
+        TriggerClientEvent('QBCore:Notify', src, ('Se han retirado %s armas a %s (ID: %s).'):format(removedCount, pName, targetId), 'primary')
+    end
+    TriggerClientEvent('QBCore:Notify', targetId, 'Un administrador ha retirado todo tu armamento.', 'error')
+
+    TriggerEvent('qb-log:server:CreateLog', 'adminmenu', 'Quitar Armas', 'red', string.format('**%s** retiró todas las armas (%s armas) a **%s** (ID: %s)', adminName, removedCount, GetPlayerName(targetId), targetId), true)
+    return true
+end
+
+-- =========================================================================
+-- EVENTOS NET
+-- =========================================================================
+
+RegisterNetEvent('qb-admin:server:giveWeaponToPlayer', function(targetId, weaponName, ammo, giveAmmoBox)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        BanPlayer(src)
+        return
+    end
+    giveWeaponInternal(src, targetId, weaponName, ammo, giveAmmoBox)
+end)
+
+RegisterNetEvent('qb-admin:server:giveAmmoToPlayer', function(targetId, ammoType, amount)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        BanPlayer(src)
+        return
+    end
+
+    targetId = tonumber(targetId)
+    amount = tonumber(amount) or 1
+    ammoType = tostring(ammoType or 'pistol_ammo')
+
+    if not QBCore.Shared.Items[ammoType] then
+        TriggerClientEvent('QBCore:Notify', src, 'Tipo de munición no válido.', 'error')
+        return
+    end
+
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if TargetPlayer then
+        exports['qb-inventory']:AddItem(targetId, ammoType, amount, false, false, 'Admin Give Ammo')
+        TriggerClientEvent('qb-inventory:client:ItemBox', targetId, QBCore.Shared.Items[ammoType], 'add', amount)
+        TriggerClientEvent('QBCore:Notify', src, ('Has entregado %s paquetes de %s a ID: %s'):format(amount, QBCore.Shared.Items[ammoType].label or ammoType, targetId), 'success')
+        TriggerClientEvent('QBCore:Notify', targetId, ('Has recibido %s paquetes de %s'):format(amount, QBCore.Shared.Items[ammoType].label or ammoType), 'success')
+    end
+end)
+
+RegisterNetEvent('qb-admin:server:giveArmorToPlayer', function(targetId)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        BanPlayer(src)
+        return
+    end
+
+    targetId = tonumber(targetId)
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if TargetPlayer then
+        exports['qb-inventory']:AddItem(targetId, 'heavyarmor', 1, false, false, 'Admin Give Armor')
+        TriggerClientEvent('qb-inventory:client:ItemBox', targetId, QBCore.Shared.Items['heavyarmor'], 'add', 1)
+        TriggerClientEvent('QBCore:Notify', src, ('Has entregado un Chaleco Blindado a ID: %s'):format(targetId), 'success')
+        TriggerClientEvent('QBCore:Notify', targetId, 'Has recibido un Chaleco Blindado de Administración.', 'success')
+    end
+end)
+
+RegisterNetEvent('qb-admin:server:clearPlayerWeapons', function(targetId)
+    local src = source
+    if not (QBCore.Functions.HasPermission(src, 'admin') or IsPlayerAceAllowed(src, 'command')) then
+        BanPlayer(src)
+        return
+    end
+    clearWeaponsInternal(src, targetId)
+end)
+
+-- =========================================================================
+-- COMANDOS DE CHAT DE ADMINISTRACIÓN
+-- =========================================================================
+
+-- /dararma [id] [arma] [municion]
+QBCore.Commands.Add('dararma', 'Entregar un arma a un jugador (Admin)', {
+    { name = 'id', help = 'ID del jugador (o "me" para ti mismo)' },
+    { name = 'arma', help = 'Nombre o alias del arma (ej: m4, ak47, glock, combatpistol, spas, sniper, knife)' },
+    { name = 'municion', help = 'Cantidad de balas en el cargador (opcional, por defecto 100)' }
+}, false, function(source, args)
+    local targetInput = args[1]
+    local weaponInput = args[2]
+    local ammoInput = tonumber(args[3]) or 100
+
+    if not targetInput or not weaponInput then
+        TriggerClientEvent('QBCore:Notify', source, 'Uso: /dararma [id/me] [nombre_arma] [municion]', 'error')
+        return
+    end
+
+    local targetId = (string.lower(tostring(targetInput)) == 'me') and source or tonumber(targetInput)
+    giveWeaponInternal(source, targetId, weaponInput, ammoInput, true)
+end, 'admin')
+
+-- Alias /giveweapon
+QBCore.Commands.Add('giveweapon', 'Entregar un arma a un jugador (Admin)', {
+    { name = 'id', help = 'ID del jugador (o "me")' },
+    { name = 'arma', help = 'Nombre o alias del arma (ej: m4, ak47, glock, combatpistol, spas, sniper)' },
+    { name = 'municion', help = 'Cantidad de balas (opcional)' }
+}, false, function(source, args)
+    local targetInput = args[1]
+    local weaponInput = args[2]
+    local ammoInput = tonumber(args[3]) or 100
+
+    if not targetInput or not weaponInput then
+        TriggerClientEvent('QBCore:Notify', source, 'Uso: /giveweapon [id/me] [nombre_arma] [municion]', 'error')
+        return
+    end
+
+    local targetId = (string.lower(tostring(targetInput)) == 'me') and source or tonumber(targetInput)
+    giveWeaponInternal(source, targetId, weaponInput, ammoInput, true)
+end, 'admin')
+
+-- /quitararmas [id]
+QBCore.Commands.Add('quitararmas', 'Retirar todas las armas del inventario de un jugador (Admin)', {
+    { name = 'id', help = 'ID del jugador (o "me" para ti mismo)' }
+}, false, function(source, args)
+    local targetInput = args[1]
+    if not targetInput then
+        TriggerClientEvent('QBCore:Notify', source, 'Uso: /quitararmas [id/me]', 'error')
+        return
+    end
+
+    local targetId = (string.lower(tostring(targetInput)) == 'me') and source or tonumber(targetInput)
+    clearWeaponsInternal(source, targetId)
+end, 'admin')
+
+-- Alias /clearweapons
+QBCore.Commands.Add('clearweapons', 'Retirar todas las armas de un jugador (Admin)', {
+    { name = 'id', help = 'ID del jugador (o "me")' }
+}, false, function(source, args)
+    local targetInput = args[1]
+    if not targetInput then
+        TriggerClientEvent('QBCore:Notify', source, 'Uso: /clearweapons [id/me]', 'error')
+        return
+    end
+
+    local targetId = (string.lower(tostring(targetInput)) == 'me') and source or tonumber(targetInput)
+    clearWeaponsInternal(source, targetId)
+end, 'admin')
+
+-- /darbalas [id] [tipo] [cajas]
+QBCore.Commands.Add('darbalas', 'Entregar cajas de munición a un jugador (Admin)', {
+    { name = 'id', help = 'ID del jugador (o "me")' },
+    { name = 'tipo', help = 'pistol, smg, rifle, shotgun, sniper, mg' },
+    { name = 'cajas', help = 'Cantidad de cajas (por defecto 2)' }
+}, false, function(source, args)
+    local targetInput = args[1]
+    local typeInput = tostring(args[2] or 'pistol'):lower()
+    local amountInput = tonumber(args[3]) or 2
+
+    if not targetInput then
+        TriggerClientEvent('QBCore:Notify', source, 'Uso: /darbalas [id/me] [pistol/smg/rifle/shotgun/sniper/mg] [cajas]', 'error')
+        return
+    end
+
+    local targetId = (string.lower(tostring(targetInput)) == 'me') and source or tonumber(targetInput)
+    local ammoItemMap = {
+        ['pistol']   = 'pistol_ammo',
+        ['pistola']  = 'pistol_ammo',
+        ['smg']      = 'smg_ammo',
+        ['rifle']    = 'rifle_ammo',
+        ['fusil']    = 'rifle_ammo',
+        ['shotgun']  = 'shotgun_ammo',
+        ['escopeta'] = 'shotgun_ammo',
+        ['sniper']   = 'snp_ammo',
+        ['franco']   = 'snp_ammo',
+        ['mg']       = 'mg_ammo'
+    }
+
+    local ammoItem = ammoItemMap[typeInput] or (typeInput .. '_ammo')
+    if not QBCore.Shared.Items[ammoItem] then
+        TriggerClientEvent('QBCore:Notify', source, 'Tipo de munición no reconocido.', 'error')
+        return
+    end
+
+    local TargetPlayer = QBCore.Functions.GetPlayer(targetId)
+    if TargetPlayer then
+        exports['qb-inventory']:AddItem(targetId, ammoItem, amountInput, false, false, 'Admin Give Ammo Command')
+        TriggerClientEvent('qb-inventory:client:ItemBox', targetId, QBCore.Shared.Items[ammoItem], 'add', amountInput)
+        TriggerClientEvent('QBCore:Notify', source, ('Entregadas %s cajas de %s a ID: %s'):format(amountInput, QBCore.Shared.Items[ammoItem].label, targetId), 'success')
+    else
+        TriggerClientEvent('QBCore:Notify', source, 'Jugador no encontrado.', 'error')
+    end
+end, 'admin')
+
+-- /armas : Información y ayuda de comandos de armamento
+QBCore.Commands.Add('armas', 'Ver ayuda de comandos de armamento para administradores', {}, false, function(source)
+    TriggerClientEvent('chat:addMessage', source, {
+        color = { 239, 68, 68 },
+        multiline = true,
+        args = { '🔫 SPAIN ROL - COMANDOS DE ARMAS', 'Comandos disponibles:\n' ..
+            '• /dararma [id/me] [arma] [municion] (o /giveweapon)\n' ..
+            '• /quitararmas [id/me] (o /clearweapons)\n' ..
+            '• /darbalas [id/me] [pistol/rifle/smg/shotgun/sniper] [cajas]\n\n' ..
+            'Alias de armas populares:\n' ..
+            'glock, pistol, ap, deagle, mp5, uzi, pdw, p90, m4, ak47, g36, aug, spas, recortada, sniper, heavysniper, knife, bat, chaleco.'
+        }
+    })
+end, 'admin')
+
+

@@ -676,6 +676,15 @@ body {
 .btn-revive i { color: #ec4899; }
 .btn-kick i { color: #f97316; }
 .btn-ban i { color: #ef4444; }
+.btn-weapon-give i { color: #f43f5e; }
+.btn-ammo-give i { color: #eab308; }
+.btn-armor-give i { color: #3b82f6; }
+
+.staff-quick-weapons {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
+}
 
 .btn-danger-action i {
     color: #ef4444;

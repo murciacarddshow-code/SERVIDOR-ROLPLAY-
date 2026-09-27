@@ -150,6 +150,56 @@ RegisterNUICallback('banPlayer', function(data, cb)
     cb('ok')
 end)
 
+-- Gestión de Armas y Equipamiento (NUI)
+RegisterNUICallback('givePlayerWeapon', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    local weapon = tostring(data.weapon or '')
+    local ammo = tonumber(data.ammo) or 100
+    local giveAmmoBox = data.giveAmmoBox == true
+    TriggerServerEvent('qb-admin:server:giveWeaponToPlayer', targetId, weapon, ammo, giveAmmoBox)
+    cb('ok')
+end)
+
+RegisterNUICallback('givePlayerAmmo', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    local ammoType = tostring(data.ammoType or 'pistol_ammo')
+    local amount = tonumber(data.amount) or 1
+    TriggerServerEvent('qb-admin:server:giveAmmoToPlayer', targetId, ammoType, amount)
+    cb('ok')
+end)
+
+RegisterNUICallback('givePlayerArmor', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:giveArmorToPlayer', targetId)
+    cb('ok')
+end)
+
+RegisterNUICallback('clearPlayerWeapons', function(data, cb)
+    local targetId = tonumber(data.targetId)
+    TriggerServerEvent('qb-admin:server:clearPlayerWeapons', targetId)
+    cb('ok')
+end)
+
+RegisterNUICallback('selfGiveWeapon', function(data, cb)
+    local weapon = tostring(data.weapon or '')
+    if weapon ~= '' then
+        TriggerServerEvent('qb-admin:server:giveWeaponToPlayer', GetPlayerServerId(PlayerId()), weapon, 150, true)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('selfClearWeapons', function(_, cb)
+    TriggerServerEvent('qb-admin:server:clearPlayerWeapons', GetPlayerServerId(PlayerId()))
+    cb('ok')
+end)
+
+RegisterNetEvent('qb-admin:client:stripPedWeapons', function()
+    local ped = PlayerPedId()
+    RemoveAllPedWeapons(ped, true)
+    SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+    QBCore.Functions.Notify("La administración ha retirado todas tus armas.", "error", 5000)
+end)
+
 -- Opciones de Administrador
 RegisterNUICallback('toggleGodmode', function(data, cb)
     isGodmode = data.enabled

@@ -6,7 +6,6 @@ description 'The Diamond Casino & Resort - Ruleta Diaria 24h, Podio al Garaje, C
 version '1.0.0'
 
 shared_scripts {
-    '@oxmysql/lib/MySQL.lua',
     'config.lua'
 }
 
@@ -19,6 +18,7 @@ client_scripts {
 }
 
 server_scripts {
+    '@oxmysql/lib/MySQL.lua',
     'server/sv_main.lua',
     'server/sv_wheel.lua',
     'server/sv_roulette.lua',

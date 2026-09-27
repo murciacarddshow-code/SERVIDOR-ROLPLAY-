@@ -87,14 +87,6 @@ local npcList = {
         scenario = 'WORLD_HUMAN_CLIPBOARD',
         type = 'hospital_reception',
         text = '~b~[E]~s~ Consulta Médica / Ingreso Hospitalario'
-    },
-    -- JEFE MECÁNICO BENNY'S
-    {
-        model = `s_m_m_autoshop_01`,
-        coords = vector4(-205.51, -1310.22, 31.3, 180.0),
-        scenario = 'WORLD_HUMAN_WELDING',
-        type = 'mechanic_boss',
-        text = '~y~[E]~s~ Hablar con Jefe de Taller'
     }
 }
 

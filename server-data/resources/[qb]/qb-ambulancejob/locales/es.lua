@@ -39,6 +39,7 @@ local Translations = {
         healthy = '¡Ya estás completamente saludable de nuevo!',
         safe = 'Caja fuerte de hopital',
         pb_hospital = 'Hospital Pillbox',
+        paleto_hospital = 'Hospital de Paleto',
         pain_message = 'Sientes %{severity} en %{limb}',
         many_places = 'Te duele todo...',
         bleed_alert = 'Estás %{bleedstate}',

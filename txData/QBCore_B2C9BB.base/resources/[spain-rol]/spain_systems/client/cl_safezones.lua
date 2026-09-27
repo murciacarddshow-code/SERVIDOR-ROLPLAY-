@@ -143,12 +143,6 @@ CreateThread(function()
             DisableControlAction(0, 263, true) -- Combate
             DisableControlAction(0, 264, true) -- Combate
 
-            -- Evitar atropellos masivos (VDM) limitando la velocidad a ~55 km/h
-            local veh = GetVehiclePedIsIn(playerPed, false)
-            if veh ~= 0 and GetPedInVehicleSeat(veh, -1) == playerPed then
-                SetVehicleMaxSpeed(veh, 15.2) -- 55 km/h aprox
-            end
-
             -- Texto visual permanente en la pantalla
             DrawSafeZoneBanner(currentZoneName)
 

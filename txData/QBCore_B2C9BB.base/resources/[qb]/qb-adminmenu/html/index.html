@@ -151,6 +151,20 @@
                                     </button>
                                 </div>
                             </div>
+
+                            <div class="admin-card full-width">
+                                <h4><i class="fa-solid fa-gun"></i> Armamento Rápido Staff</h4>
+                                <div class="card-actions staff-quick-weapons">
+                                    <button class="action-btn" data-staffweapon="weapon_combatpistol"><i class="fa-solid fa-gun"></i> Glock Combate</button>
+                                    <button class="action-btn" data-staffweapon="weapon_carbinerifle"><i class="fa-solid fa-crosshairs"></i> Carabina M4</button>
+                                    <button class="action-btn" data-staffweapon="weapon_assaultrifle"><i class="fa-solid fa-fire"></i> AK-47</button>
+                                    <button class="action-btn" data-staffweapon="weapon_pumpshotgun"><i class="fa-solid fa-burst"></i> Escopeta</button>
+                                    <button class="action-btn" data-staffweapon="weapon_smg"><i class="fa-solid fa-meteor"></i> Subfusil MP5</button>
+                                    <button class="action-btn" data-staffweapon="weapon_heavysniper"><i class="fa-solid fa-bullseye"></i> Francotirador</button>
+                                    <button class="action-btn" data-staffweapon="heavyarmor"><i class="fa-solid fa-shield"></i> Chaleco Blindado</button>
+                                    <button class="action-btn btn-danger-action" id="btn-self-clearweapons"><i class="fa-solid fa-ban"></i> Limpiar Mis Armas</button>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
@@ -333,6 +347,26 @@
                         </button>
                     </div>
 
+                    <h4 class="actions-group-title text-blue"><i class="fa-solid fa-gun"></i> ARMAS Y EQUIPAMIENTO</h4>
+                    <div class="actions-button-grid">
+                        <button class="btn-action-tile btn-weapon-give" id="btn-act-giveweapon">
+                            <i class="fa-solid fa-gun"></i>
+                            <span>Dar Arma</span>
+                        </button>
+                        <button class="btn-action-tile btn-ammo-give" id="btn-act-giveammo">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                            <span>Dar Munición</span>
+                        </button>
+                        <button class="btn-action-tile btn-armor-give" id="btn-act-givearmor">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Dar Chaleco</span>
+                        </button>
+                        <button class="btn-action-tile btn-danger-action" id="btn-act-clearweapons">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Quitar Armas</span>
+                        </button>
+                    </div>
+
                     <h4 class="actions-group-title text-red">SANCIONES</h4>
                     <div class="actions-button-grid">
                         <button class="btn-action-tile btn-kick" id="btn-act-kick">
@@ -434,6 +468,118 @@
                 <div class="submodal-footer">
                     <button class="btn-secondary" id="btn-cancel-punish">Cancelar</button>
                     <button class="btn-primary btn-danger-action" id="btn-confirm-punish">Aplicar Sanción</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SUB-MODAL: DAR ARMA -->
+        <!-- ======================================================== -->
+        <div id="submodal-weapon" class="modal-overlay submodal" style="display: none;">
+            <div class="submodal-card">
+                <h3 id="submodal-weapon-title"><i class="fa-solid fa-gun text-red"></i> Entregar Arma a Jugador</h3>
+                <div class="form-group">
+                    <label>Selecciona el Arma:</label>
+                    <select id="select-weapon-name">
+                        <optgroup label="🔫 Pistolas">
+                            <option value="weapon_combatpistol" selected>Glock / Pistola de Combate</option>
+                            <option value="weapon_pistol">Pistola Básica 9mm (Walther)</option>
+                            <option value="weapon_appistol">Pistola AP Automática</option>
+                            <option value="weapon_pistol50">Desert Eagle .50</option>
+                            <option value="weapon_heavypistol">Pistola Pesada</option>
+                            <option value="weapon_revolver">Revólver Heavy</option>
+                            <option value="weapon_stungun">Táser Policial</option>
+                            <option value="weapon_vintagepistol">Pistola Vintage</option>
+                        </optgroup>
+                        <optgroup label="⚡ Subfusiles (SMG)">
+                            <option value="weapon_smg">Subfusil MP5</option>
+                            <option value="weapon_microsmg">Micro Uzi</option>
+                            <option value="weapon_combatpdw">Combat PDW</option>
+                            <option value="weapon_assaultsmg">Assault SMG (P90)</option>
+                            <option value="weapon_machinepistol">Tec-9</option>
+                            <option value="weapon_minismg">Mini SMG (Skorpion)</option>
+                            <option value="weapon_gusenberg">Thompson / Gusenberg</option>
+                        </optgroup>
+                        <optgroup label="💥 Fusiles de Asalto">
+                            <option value="weapon_carbinerifle">Carabina M4</option>
+                            <option value="weapon_assaultrifle">AK-47 / Kalashnikov</option>
+                            <option value="weapon_specialcarbine">G36C / Carabina Especial</option>
+                            <option value="weapon_militaryrifle">AUG / Militar</option>
+                            <option value="weapon_advancedrifle">TAR-21 / Avanzado</option>
+                            <option value="weapon_compactrifle">Mini AK / Compacto</option>
+                            <option value="weapon_heavyrifle">SCAR-L / Pesado</option>
+                        </optgroup>
+                        <optgroup label="🛑 Escopetas">
+                            <option value="weapon_pumpshotgun">Escopeta de Corredera (Pump)</option>
+                            <option value="weapon_sawnoffshotgun">Escopeta Recortada (Sawn-off)</option>
+                            <option value="weapon_combatshotgun">Escopeta de Combate (SPAS-12)</option>
+                            <option value="weapon_dbshotgun">Escopeta Doble Cañón</option>
+                            <option value="weapon_autoshotgun">Escopeta Automática Sweeper</option>
+                        </optgroup>
+                        <optgroup label="🎯 Francotiradores">
+                            <option value="weapon_sniperrifle">Fusil Francotirador Clásico</option>
+                            <option value="weapon_heavysniper">Barrett .50 Heavy Sniper</option>
+                            <option value="weapon_marksmanrifle">Tirador Selecto (Marksman)</option>
+                        </optgroup>
+                        <optgroup label="💣 Ametralladoras Pesadas">
+                            <option value="weapon_combatmg">Ametralladora Combat MG</option>
+                            <option value="weapon_mg">Ametralladora MG</option>
+                        </optgroup>
+                        <optgroup label="🔪 Armas Blancas & Herramientas">
+                            <option value="weapon_knife">Cuchillo Táctico</option>
+                            <option value="weapon_bat">Bate de Béisbol</option>
+                            <option value="weapon_machete">Machete</option>
+                            <option value="weapon_switchblade">Navaja Automática</option>
+                            <option value="weapon_knuckle">Puño Americano</option>
+                            <option value="weapon_nightstick">Porra Policial</option>
+                            <option value="weapon_wrench">Llave Inglesa</option>
+                            <option value="weapon_crowbar">Palanca de Hierro</option>
+                            <option value="weapon_hatchet">Hacha de Mano</option>
+                            <option value="weapon_flashlight">Linterna Pesada</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Munición en el arma:</label>
+                    <input type="number" id="input-weapon-ammo" placeholder="100" value="100" min="0" max="999">
+                </div>
+                <div class="form-group">
+                    <label class="chip" style="margin-top: 4px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="check-weapon-ammo-box" checked style="width: 18px; height: 18px; cursor: pointer;">
+                        <span style="font-size: 13px; color: #cbd5e1;">Entregar también caja de munición de reserva</span>
+                    </label>
+                </div>
+                <div class="submodal-footer">
+                    <button class="btn-secondary" id="btn-cancel-weapon">Cancelar</button>
+                    <button class="btn-primary" id="btn-confirm-weapon"><i class="fa-solid fa-gift"></i> Entregar Arma</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SUB-MODAL: DAR MUNICIÓN -->
+        <!-- ======================================================== -->
+        <div id="submodal-ammo" class="modal-overlay submodal" style="display: none;">
+            <div class="submodal-card">
+                <h3 id="submodal-ammo-title"><i class="fa-solid fa-boxes-stacked text-yellow"></i> Entregar Munición a Jugador</h3>
+                <div class="form-group">
+                    <label>Tipo de Balas:</label>
+                    <select id="select-ammo-type">
+                        <option value="pistol_ammo" selected>Balas de Pistola (9mm / .45)</option>
+                        <option value="smg_ammo">Balas de Subfusil (SMG)</option>
+                        <option value="rifle_ammo">Balas de Fusil de Asalto (5.56 / 7.62)</option>
+                        <option value="shotgun_ammo">Cartuchos de Escopeta (12 Gauge)</option>
+                        <option value="snp_ammo">Balas de Francotirador (Sniper .50)</option>
+                        <option value="mg_ammo">Cinta de Munición Pesada (MG)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad de Cajas / Paquetes:</label>
+                    <input type="number" id="input-ammo-amount" placeholder="2" value="2" min="1" max="50">
+                </div>
+                <div class="submodal-footer">
+                    <button class="btn-secondary" id="btn-cancel-ammo">Cancelar</button>
+                    <button class="btn-primary" id="btn-confirm-ammo"><i class="fa-solid fa-circle-check"></i> Entregar Balas</button>
                 </div>
             </div>
         </div>

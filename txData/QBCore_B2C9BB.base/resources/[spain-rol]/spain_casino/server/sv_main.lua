@@ -1,6 +1,6 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-local CurrentPodiumVehicle = Config.LuckyWheel.defaultPodiumVehicle
-local CurrentJackpot = Config.Slots.initialJackpot
+CurrentPodiumVehicle = Config.LuckyWheel.defaultPodiumVehicle
+CurrentJackpot = Config.Slots.initialJackpot
 
 -- ============================================================================
 -- INICIALIZACIÓN DE BASE DE DATOS

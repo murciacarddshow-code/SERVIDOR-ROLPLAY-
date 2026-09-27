@@ -170,6 +170,7 @@ RegisterNetEvent('qb-mechanicjob:client:install', function(data)
             SetVehicleMod(data.vehicle, modType, upgradeIndex, false)
         end
         if shouldToggleHood then ToggleHood(data.vehicle) end
+        TriggerServerEvent('qb-mechanicjob:server:SaveVehicleProps', QBCore.Functions.GetVehicleProperties(data.vehicle))
         TriggerServerEvent('qb-mechanicjob:server:removeItem', 'veh_' .. partName)
         QBCore.Functions.Notify(string.format(Lang:t('success.installed'), partName), 'success')
     end, function()

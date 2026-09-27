@@ -50,7 +50,8 @@ server_scripts {
     'server/sv_police_markers.lua',
     'server/sv_ems_markers.lua',
     'server/sv_ems_reception.lua',
-    'server/sv_welcome_kit.lua'
+    'server/sv_welcome_kit.lua',
+    'server/sv_mechanic.lua'
 }
 
 ui_page 'html/index.html'

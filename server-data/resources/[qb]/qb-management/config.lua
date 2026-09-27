@@ -13,8 +13,20 @@ Config.BossMenus = {
     cardealer = {
         vector3(-32.94, -1114.64, 26.42),
     },
-    mechanic = {
+    mechanic = { -- Los Santos Customs (Centro)
         vector3(-347.59, -133.35, 39.01),
+    },
+    bennys = { -- Benny's Original Motor Works
+        vector3(-205.56, -1313.41, 31.30),
+    },
+    mechanic2 = { -- Taller Mecánico Harmony Repair
+        vector3(1185.86, 2638.70, 38.40),
+    },
+    mechanic3 = { -- Los Santos Customs Sur (Aeropuerto)
+        vector3(-1147.28, -1990.26, 13.18),
+    },
+    beeker = { -- Beeker's Garage (Paleto Bay)
+        vector3(108.87, 6625.56, 31.79),
     },
 }
 

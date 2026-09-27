@@ -7,7 +7,7 @@ echo ========================================================
 echo.
 echo Importando estructura y datos de qbcoreframework...
 "%~dp0bin\mysql.exe" --defaults-file="%~dp0my.ini" -u root -e "CREATE DATABASE IF NOT EXISTS qbcoreframework CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-"%~dp0bin\mysql.exe" --defaults-file="%~dp0my.ini" -u root qbcoreframework < "%~dp0qbcoreframework_dump.sql"
+"%~dp0bin\mysql.exe" --defaults-file="%~dp0my.ini" -u root qbcoreframework < "%~dp0qbcoreframework_backup.sql"
 echo.
 echo ========================================================
 echo   Base de datos importada y sincronizada con exito!
