@@ -7,9 +7,9 @@ Config.PaymentInterval = 24            -- time in hours between payment being du
 Config.MinimumDown = 10                -- minimum percentage allowed down
 Config.MaximumPayments = 24            -- maximum payments allowed
 Config.PreventFinanceSelling = false   -- allow/prevent players from using /transfervehicle if financed
-Config.FilterByMake = false            -- adds a make list before selecting category in shops
+Config.FilterByMake = true            -- adds a make list before selecting category in shops
 Config.SortAlphabetically = true       -- will sort make, category, and vehicle selection menus alphabetically
-Config.HideCategorySelectForOne = true -- will hide the category selection menu if a shop only sells one category of vehicle or a make has only one category
+Config.HideCategorySelectForOne = false -- will hide the category selection menu if a shop only sells one category of vehicle or a make has only one category
 Config.Shops = {
     ['pdm'] = {
         ['Type'] = 'free-use', -- no player interaction is required to purchase a car
@@ -44,39 +44,39 @@ Config.Shops = {
         ['FinanceZone'] = vector3(-29.53, -1103.67, 26.42),          -- Where the finance menu is located
         ['ShowroomVehicles'] = {
             [1] = {
-                coords = vector4(-45.65, -1093.66, 25.44, 69.5), -- where the vehicle will spawn on display
-                defaultVehicle = 'blista',                       -- Default display vehicle
-                chosenVehicle = 'blista',                        -- Same as default but is dynamically changed when swapping vehicles
+                coords = vector4(-45.65, -1093.66, 25.44, 69.5),
+                defaultVehicle = 'rs6',
+                chosenVehicle = 'rs6'
             },
             [2] = {
                 coords = vector4(-48.27, -1101.86, 25.44, 294.5),
-                defaultVehicle = 'blista',
-                chosenVehicle = 'blista'
+                defaultVehicle = 'm4f82',
+                chosenVehicle = 'm4f82'
             },
             [3] = {
                 coords = vector4(-39.6, -1096.01, 25.44, 66.5),
-                defaultVehicle = 'blista',
-                chosenVehicle = 'blista'
+                defaultVehicle = 'c6320',
+                chosenVehicle = 'c6320'
             },
             [4] = {
                 coords = vector4(-51.21, -1096.77, 25.44, 254.5),
-                defaultVehicle = 'blista',
-                chosenVehicle = 'blista'
+                defaultVehicle = 'taycan',
+                chosenVehicle = 'taycan'
             },
             [5] = {
                 coords = vector4(-40.18, -1104.13, 25.44, 338.5),
-                defaultVehicle = 'blista',
-                chosenVehicle = 'blista'
+                defaultVehicle = '488',
+                chosenVehicle = '488'
             },
             [6] = {
                 coords = vector4(-43.31, -1099.02, 25.44, 52.5),
-                defaultVehicle = 'blista',
-                chosenVehicle = 'blista'
+                defaultVehicle = 'huracanst',
+                chosenVehicle = 'huracanst'
             },
             [7] = {
                 coords = vector4(-50.66, -1093.05, 25.44, 222.5),
-                defaultVehicle = 'blista',
-                chosenVehicle = 'blista'
+                defaultVehicle = 'gtr',
+                chosenVehicle = 'gtr'
             },
             [8] = {
                 coords = vector4(-44.28, -1102.47, 25.44, 298.5),
