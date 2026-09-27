@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Diamond Casino & Resort</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="casino-app" class="hidden">
+
+        <!-- ========================================================= -->
+        <!-- 1. MODAL: RULETA DIARIA DE LA SUERTE (24H)                -->
+        <!-- ========================================================= -->
+        <div id="wheel-modal" class="casino-modal hidden">
+            <div class="modal-card wheel-card">
+                <button class="close-modal-btn" onclick="closeAllModals()"><i class="fas fa-times"></i></button>
+                
+                <div class="modal-header">
+                    <div class="diamond-emblem"><i class="fas fa-gem"></i></div>
+                    <div class="header-titles">
+                        <span class="sub-tag">THE DIAMOND CASINO & RESORT</span>
+                        <h1>RULETA DIARIA DE LA SUERTE</h1>
+                        <p>1 Tirada Gratuita cada 24 Horas para todos los ciudadanos</p>
+                    </div>
+                    <div id="wheel-vip-badge" class="vip-badge hidden"><i class="fas fa-crown"></i> MIEMBRO VIP</div>
+                </div>
+
+                <div class="wheel-main-container">
+                    <!-- Vitrina del Coche del Podio -->
+                    <div class="podium-showcase">
+                        <div class="showcase-header">
+                            <i class="fas fa-trophy"></i>
+                            <span>PREMIO ESTRELLA DEL PODIO</span>
+                        </div>
+                        <div class="podium-car-display">
+                            <div class="car-badge"><i class="fas fa-car-side"></i></div>
+                            <h2 id="podium-car-name">BLISTA COMPACT</h2>
+                            <p class="car-desc">¡Si cae en el Coche, las llaves y la documentación van directas a tu Garaje!</p>
+                            <div class="car-status-pill"><i class="fas fa-check-circle"></i> EN EXHIBICIÓN ACTIVA</div>
+                        </div>
+
+                        <div class="wheel-timer-box" id="wheel-timer-container">
+                            <span class="timer-label"><i class="far fa-clock"></i> PRÓXIMA TIRADA GRATUITA</span>
+                            <div class="timer-clock" id="wheel-cooldown-text">DISPONIBLE AHORA</div>
+                        </div>
+
+                        <button id="btn-spin-wheel" class="gold-action-btn" onclick="spinLuckyWheel()">
+                            <i class="fas fa-play"></i> ¡GIRAR RULETA GRATIS!
+                        </button>
+                    </div>
+
+                    <!-- Canvas / Render de la Ruleta -->
+                    <div class="wheel-stage">
+                        <div class="wheel-indicator"><i class="fas fa-caret-down"></i></div>
+                        <div class="wheel-wrapper">
+                            <canvas id="lucky-wheel-canvas" width="460" height="460"></canvas>
+                            <div class="wheel-center-hub">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- 2. MODAL: CAJERO DE FICHAS & PASE VIP 50K                  -->
+        <!-- ========================================================= -->
+        <div id="cashier-modal" class="casino-modal hidden">
+            <div class="modal-card cashier-card">
+                <button class="close-modal-btn" onclick="closeAllModals()"><i class="fas fa-times"></i></button>
+
+                <div class="modal-header">
+                    <div class="diamond-emblem"><i class="fas fa-coins"></i></div>
+                    <div class="header-titles">
+                        <span class="sub-tag">THE DIAMOND CASINO & RESORT</span>
+                        <h1>CAJERO CENTRAL & CLUB VIP</h1>
+                        <p>Compra y canje de fichas | Adquisición de Membresía VIP</p>
+                    </div>
+                </div>
+
+                <!-- Resumen de Saldos del Jugador -->
+                <div class="cashier-balances">
+                    <div class="bal-pill">
+                        <span class="bal-label"><i class="fas fa-wallet"></i> Efectivo:</span>
+                        <span class="bal-val" id="user-cash">0 €</span>
+                    </div>
+                    <div class="bal-pill">
+                        <span class="bal-label"><i class="fas fa-university"></i> Banco:</span>
+                        <span class="bal-val" id="user-bank">0 €</span>
+                    </div>
+                    <div class="bal-pill highlight">
+                        <span class="bal-label"><i class="fas fa-coins"></i> Fichas Casino:</span>
+                        <span class="bal-val" id="user-chips">0 Fichas</span>
+                    </div>
+                    <div class="bal-pill vip-pill" id="user-vip-status">
+                        <span class="bal-label"><i class="fas fa-crown"></i> Membresía:</span>
+                        <span class="bal-val" id="user-vip-text">ESTÁNDAR</span>
+                    </div>
+                </div>
+
+                <!-- Pestañas del Cajero -->
+                <div class="cashier-tabs">
+                    <button class="tab-btn active" onclick="switchCashierTab('buy')"><i class="fas fa-plus-circle"></i> Comprar Fichas</button>
+                    <button class="tab-btn" onclick="switchCashierTab('sell')"><i class="fas fa-exchange-alt"></i> Canjear por Dinero</button>
+                    <button class="tab-btn vip-tab" onclick="switchCashierTab('vip')"><i class="fas fa-crown"></i> Pase VIP (50.000 €)</button>
+                </div>
+
+                <!-- Tab 1: Comprar Fichas -->
+                <div id="tab-buy" class="cashier-tab-content">
+                    <h3>Selecciona o ingresa la cantidad de fichas a comprar:</h3>
+                    <div class="presets-grid">
+                        <button class="preset-btn" onclick="setChipInput('buy', 1000)">1.000 Fichas (1.000 €)</button>
+                        <button class="preset-btn" onclick="setChipInput('buy', 5000)">5.000 Fichas (5.000 €)</button>
+                        <button class="preset-btn" onclick="setChipInput('buy', 10000)">10.000 Fichas (10.000 €)</button>
+                        <button class="preset-btn" onclick="setChipInput('buy', 25000)">25.000 Fichas (25.000 €)</button>
+                        <button class="preset-btn" onclick="setChipInput('buy', 50000)">50.000 Fichas (50.000 €)</button>
+                        <button class="preset-btn" onclick="setChipInput('buy', 100000)">100.000 Fichas (100.000 €)</button>
+                    </div>
+
+                    <div class="custom-input-group">
+                        <label>Cantidad personalizada:</label>
+                        <input type="number" id="input-buy-amount" placeholder="Ej: 15000" min="100" step="100">
+                    </div>
+
+                    <div class="pay-method-selector">
+                        <span>Método de pago:</span>
+                        <label><input type="radio" name="buy-method" value="cash" checked> Efectivo</label>
+                        <label><input type="radio" name="buy-method" value="bank"> Cuenta Bancaria</label>
+                    </div>
+
+                    <button class="gold-action-btn" onclick="executeBuyChips()"><i class="fas fa-shopping-cart"></i> COMPRAR FICHAS</button>
+                </div>
+
+                <!-- Tab 2: Canjear Fichas -->
+                <div id="tab-sell" class="cashier-tab-content hidden">
+                    <h3>Selecciona la cantidad de fichas a convertir a dinero:</h3>
+                    <div class="presets-grid">
+                        <button class="preset-btn" onclick="setChipInput('sell', 1000)">1.000 Fichas</button>
+                        <button class="preset-btn" onclick="setChipInput('sell', 5000)">5.000 Fichas</button>
+                        <button class="preset-btn" onclick="setChipInput('sell', 10000)">10.000 Fichas</button>
+                        <button class="preset-btn" onclick="setChipInput('sell', 25000)">25.000 Fichas</button>
+                        <button class="preset-btn" onclick="setChipInput('sell', 50000)">50.000 Fichas</button>
+                        <button class="preset-btn" onclick="setChipInput('sell', 'all')">TODAS LAS FICHAS</button>
+                    </div>
+
+                    <div class="custom-input-group">
+                        <label>Cantidad personalizada:</label>
+                        <input type="number" id="input-sell-amount" placeholder="Ej: 5000" min="100" step="100">
+                    </div>
+
+                    <div class="pay-method-selector">
+                        <span>Recibir fondos en:</span>
+                        <label><input type="radio" name="sell-method" value="cash" checked> Efectivo</label>
+                        <label><input type="radio" name="sell-method" value="bank"> Cuenta Bancaria</label>
+                    </div>
+
+                    <button class="gold-action-btn" onclick="executeSellChips()"><i class="fas fa-money-bill-wave"></i> CANJEAR FICHAS</button>
+                </div>
+
+                <!-- Tab 3: Membresía VIP (50.000 €) -->
+                <div id="tab-vip" class="cashier-tab-content hidden">
+                    <div class="vip-pass-card">
+                        <div class="vip-card-front">
+                            <div class="vip-card-top">
+                                <span>THE DIAMOND RESORT</span>
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="vip-card-chip"></div>
+                            <div class="vip-card-title">VIP HIGH ROLLER PASS</div>
+                            <div class="vip-card-num">•••• •••• •••• 7777</div>
+                            <div class="vip-card-holder">MEMBRESÍA EXCLUSIVA</div>
+                        </div>
+
+                        <div class="vip-perks-list">
+                            <h4><i class="fas fa-star"></i> BENEFICIOS EXCLUSIVOS DEL PASE VIP:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> <strong>Ruleta Premium de Altas Apuestas</strong>: Apuesta hasta <strong>100.000 € por tirada</strong> (frente a 10.000 € de la mesa normal).</li>
+                                <li><i class="fas fa-check"></i> <strong>Límites VIP en Tragaperras</strong>: Apuestas máximas de hasta 25.000 fichas para optar al Gran Jackpot.</li>
+                                <li><i class="fas fa-check"></i> <strong>Acceso a Salones Privados</strong> y zonas reservadas del Casino.</li>
+                                <li><i class="fas fa-check"></i> <strong>Tarjeta física oficial de socio</strong> en tu inventario.</li>
+                            </ul>
+
+                            <div class="vip-cost-box">
+                                <span>Precio de Membresía Vitalicia:</span>
+                                <h2>50.000 €</h2>
+                            </div>
+
+                            <div class="pay-method-selector">
+                                <span>Pagar con:</span>
+                                <label><input type="radio" name="vip-method" value="cash" checked> Efectivo</label>
+                                <label><input type="radio" name="vip-method" value="bank"> Cuenta Bancaria</label>
+                            </div>
+
+                            <button id="btn-buy-vip" class="gold-action-btn vip-glow-btn" onclick="executeBuyVip()">
+                                <i class="fas fa-crown"></i> ADQUIRIR PASE VIP (50.000 €)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- 3. MODAL: RULETA DE APUESTAS (NORMAL 10K / PREMIUM 100K)  -->
+        <!-- ========================================================= -->
+        <div id="roulette-modal" class="casino-modal hidden">
+            <div class="modal-card roulette-card">
+                <button class="close-modal-btn" onclick="closeAllModals()"><i class="fas fa-times"></i></button>
+
+                <div class="modal-header">
+                    <div class="diamond-emblem"><i class="fas fa-circle-notch"></i></div>
+                    <div class="header-titles">
+                        <span id="roulette-table-tag" class="sub-tag">MESA DE RULETA</span>
+                        <h1 id="roulette-table-title">RULETA CLÁSICA</h1>
+                        <p id="roulette-limit-desc">Apuesta Máxima: 10.000 € por tirada</p>
+                    </div>
+                    <div class="roulette-top-stats">
+                        <div class="stat-box">
+                            <span>TUS FICHAS:</span>
+                            <strong id="roulette-chips-val">0</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>APUESTA ACTUAL:</span>
+                            <strong id="roulette-current-bet">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rueda giratoria animada -->
+                <div class="roulette-stage">
+                    <div class="roulette-wheel-box">
+                        <div class="wheel-rim">
+                            <canvas id="roulette-wheel-canvas" width="280" height="280"></canvas>
+                            <div class="wheel-pointer"><i class="fas fa-arrow-down"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="roulette-result-display" id="roulette-result-box">
+                        <span class="res-label">ÚLTIMO NÚMERO</span>
+                        <div class="res-ball" id="roulette-winning-num">--</div>
+                        <span class="res-msg" id="roulette-result-msg">¡Coloca tus fichas y gira!</span>
+                    </div>
+                </div>
+
+                <!-- Tapete de Apuestas Oficial -->
+                <div class="roulette-felt">
+                    <!-- Cero Verde -->
+                    <div class="felt-zero-col">
+                        <div class="felt-cell zero-cell" data-type="straight" data-value="0">0</div>
+                    </div>
+
+                    <!-- Cuadrícula 1-36 -->
+                    <div class="felt-numbers-grid" id="roulette-numbers-grid">
+                        <!-- Generado dinámicamente en app.js -->
+                    </div>
+
+                    <!-- Columnas 2 a 1 -->
+                    <div class="felt-columns-row">
+                        <div class="felt-cell col-cell" data-type="column" data-value="1">2 to 1</div>
+                        <div class="felt-cell col-cell" data-type="column" data-value="2">2 to 1</div>
+                        <div class="felt-cell col-cell" data-type="column" data-value="3">2 to 1</div>
+                    </div>
+
+                    <!-- Docenas -->
+                    <div class="felt-dozens-row">
+                        <div class="felt-cell dozen-cell" data-type="dozen" data-value="1">1ª Docena (1-12)</div>
+                        <div class="felt-cell dozen-cell" data-type="dozen" data-value="2">2ª Docena (13-24)</div>
+                        <div class="felt-cell dozen-cell" data-type="dozen" data-value="3">3ª Docena (25-36)</div>
+                    </div>
+
+                    <!-- Apuestas Exteriores -->
+                    <div class="felt-outside-row">
+                        <div class="felt-cell out-cell" data-type="low_high" data-value="low">1 - 18</div>
+                        <div class="felt-cell out-cell" data-type="even_odd" data-value="even">PAR (EVEN)</div>
+                        <div class="felt-cell out-cell red-cell" data-type="color" data-value="red">ROJO (RED)</div>
+                        <div class="felt-cell out-cell black-cell" data-type="color" data-value="black">NEGRO (BLACK)</div>
+                        <div class="felt-cell out-cell" data-type="even_odd" data-value="odd">IMPAR (ODD)</div>
+                        <div class="felt-cell out-cell" data-type="low_high" data-value="high">19 - 36</div>
+                    </div>
+                </div>
+
+                <!-- Selector de Denominación de Fichas & Controles -->
+                <div class="roulette-controls">
+                    <div class="chip-selector-bar" id="roulette-chip-selector">
+                        <!-- Chips generadas según mesa -->
+                    </div>
+
+                    <div class="action-buttons-bar">
+                        <button class="btn-clear-bets" onclick="clearRouletteBets()"><i class="fas fa-trash"></i> Limpiar</button>
+                        <button class="btn-spin-roulette" id="btn-spin-roulette" onclick="spinRoulette()"><i class="fas fa-play"></i> ¡GIRAR RULETA!</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- 4. MODAL: TRAGAPERRAS & JACKPOT DIAMOND                    -->
+        <!-- ========================================================= -->
+        <div id="slots-modal" class="casino-modal hidden">
+            <div class="modal-card slots-card">
+                <button class="close-modal-btn" onclick="closeAllModals()"><i class="fas fa-times"></i></button>
+
+                <div class="modal-header">
+                    <div class="diamond-emblem"><i class="fas fa-gem"></i></div>
+                    <div class="header-titles">
+                        <span class="sub-tag">THE DIAMOND CASINO & RESORT</span>
+                        <h1>TRAGAPERRAS JACKPOT DIAMOND</h1>
+                        <p>Alinea 3 símbolos iguales o 3 JACKPOTS para el Gran Bote</p>
+                    </div>
+                </div>
+
+                <!-- Pantalla del Gran Bote Acumulado -->
+                <div class="jackpot-marquee">
+                    <div class="marquee-title"><i class="fas fa-star"></i> BOTE JACKPOT ACUMULADO <i class="fas fa-star"></i></div>
+                    <div class="marquee-digits" id="slots-jackpot-amount">150.000 FICHAS</div>
+                </div>
+
+                <div class="slots-machine-stage">
+                    <!-- Rodillos Giratorios -->
+                    <div class="slots-cabinet">
+                        <div class="payline-marker left"><i class="fas fa-chevron-right"></i></div>
+                        
+                        <div class="reel-box" id="reel-1">
+                            <div class="reel-strip" id="reel-strip-1">
+                                <div class="slot-symbol">🍒</div>
+                            </div>
+                        </div>
+                        <div class="reel-box" id="reel-2">
+                            <div class="reel-strip" id="reel-strip-2">
+                                <div class="slot-symbol">💎</div>
+                            </div>
+                        </div>
+                        <div class="reel-box" id="reel-3">
+                            <div class="reel-strip" id="reel-strip-3">
+                                <div class="slot-symbol">⭐</div>
+                            </div>
+                        </div>
+
+                        <div class="payline-marker right"><i class="fas fa-chevron-left"></i></div>
+                    </div>
+
+                    <!-- Tabla de Pagos Luminosa -->
+                    <div class="paytable-box">
+                        <h4>TABLA DE PREMIOS</h4>
+                        <div class="paytable-row jackpot-row">
+                            <span>⭐ ⭐ ⭐</span>
+                            <strong>JACKPOT + BOTE</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>7️⃣ 7️⃣ 7️⃣</span>
+                            <strong>x75 APUESTA</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>💎 💎 💎</span>
+                            <strong>x50 APUESTA</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>🍇 🍇 🍇</span>
+                            <strong>x25 APUESTA</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>🔔 🔔 🔔</span>
+                            <strong>x15 APUESTA</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>🍋 🍋 🍋</span>
+                            <strong>x10 APUESTA</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>🍒 🍒 🍒</span>
+                            <strong>x5 APUESTA</strong>
+                        </div>
+                        <div class="paytable-row">
+                            <span>🍒 🍒 (2x)</span>
+                            <strong>x2 APUESTA</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Inferior de Apuesta y Giro -->
+                <div class="slots-controls-bar">
+                    <div class="slots-user-chips">
+                        <span>FICHAS DISPONIBLES:</span>
+                        <strong id="slots-chips-val">0</strong>
+                    </div>
+
+                    <div class="slots-bet-selector">
+                        <span>APUESTA POR TIRO:</span>
+                        <div class="bet-buttons-group" id="slots-bet-buttons">
+                            <!-- Generado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <button id="btn-spin-slots" class="gold-action-btn spin-slot-btn" onclick="spinSlots()">
+                        <i class="fas fa-sync-alt"></i> ¡TIRAR / SPIN!
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

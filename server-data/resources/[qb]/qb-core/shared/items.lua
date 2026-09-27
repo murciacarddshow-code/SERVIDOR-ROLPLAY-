@@ -376,6 +376,7 @@ QBCore.Shared.Items = {
 
     -- Other Tools
     casinochips                  = { name = 'casinochips', label = 'Casino Chips', weight = 0, type = 'item', image = 'casinochips.png', unique = false, useable = false, shouldClose = false, description = 'Chips For Casino Gambling' },
+    casinovip                    = { name = 'casinovip', label = 'Pase VIP Diamond Casino', weight = 50, type = 'item', image = 'casinovip.png', unique = true, useable = false, shouldClose = false, description = 'Pase VIP exclusivo para la Ruleta de Altas Apuestas (100k) y salones privados del Diamond Casino.' },
     stickynote                   = { name = 'stickynote', label = 'Sticky note', weight = 0, type = 'item', image = 'stickynote.png', unique = true, useable = false, shouldClose = false, description = 'Sometimes handy to remember something :)' },
     moneybag                     = { name = 'moneybag', label = 'Money Bag', weight = 0, type = 'item', image = 'moneybag.png', unique = true, useable = true, shouldClose = true, description = 'A bag with cash' },
     parachute                    = { name = 'parachute', label = 'Parachute', weight = 30000, type = 'item', image = 'parachute.png', unique = true, useable = true, shouldClose = true, description = 'The sky is the limit! Woohoo!' },
