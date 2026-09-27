@@ -48,6 +48,10 @@ local table_remove = table.remove
 
 Queue.InitHostName = Queue.InitHostName ~= "default FXServer" and Queue.InitHostName or false
 
+Config = Config or {}
+Config.Priority = Config.Priority or {}
+Config.Language = Config.Language or {}
+
 for id, power in pairs(Config.Priority) do
     _Queue.Priority[string_lower(id)] = power
 end

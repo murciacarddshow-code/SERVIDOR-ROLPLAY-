@@ -61,7 +61,7 @@ window.addEventListener('message', function (event) {
 // Cerrar Tablet
 document.getElementById('btn-close-tablet').addEventListener('click', closeTablet);
 window.addEventListener('keyup', function (e) {
-    if (e.key === 'Escape') closeTablet();
+    if (e.key === 'Escape' || e.key === 'F6') closeTablet();
 });
 
 function closeTablet() {
@@ -70,7 +70,7 @@ function closeTablet() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({})
-    });
+    }).catch(() => {});
 }
 
 // Botón de Pánico 112

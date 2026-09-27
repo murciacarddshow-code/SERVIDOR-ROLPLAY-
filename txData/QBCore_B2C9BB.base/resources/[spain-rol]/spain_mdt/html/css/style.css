@@ -30,20 +30,32 @@ body {
 
 /* Chasis Rugerizado de Tablet Policial TETRA */
 .tablet-frame {
-    width: 1240px;
-    height: 780px;
+    width: min(1280px, 94vw);
+    height: min(800px, 92vh);
     background: #0d121c;
-    border-radius: 32px;
-    border: 14px solid #1a2233;
+    border-radius: 28px;
+    border: 12px solid #1a2233;
     outline: 2px solid rgba(0, 206, 201, 0.3);
     box-shadow: 
-        0 30px 90px rgba(0, 0, 0, 0.9),
-        0 0 50px rgba(9, 132, 227, 0.25),
+        0 30px 90px rgba(0, 0, 0, 0.95),
+        0 0 50px rgba(9, 132, 227, 0.3),
         inset 0 0 20px rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    animation: tabletAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tabletAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 /* Barra superior con sensores */

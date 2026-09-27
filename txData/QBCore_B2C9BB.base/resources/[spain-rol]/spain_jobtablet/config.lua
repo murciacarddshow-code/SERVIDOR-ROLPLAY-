@@ -169,5 +169,17 @@ Config.JobsData = {
         rate = 'Atención Médica Pública Sanitaria 24h',
         hq = 'Hospital Central Pillbox Hill (Postal #7140)',
         coords = vector3(298.54, -584.62, 43.26)
+    },
+    ['burgershot'] = {
+        name = 'burgershot',
+        title = 'BURGER SHOT VESPUCCI',
+        subtitle = 'Restaurante y Cocina Fast Food & Drive-Thru',
+        icon = 'fa-burger',
+        color = '#e67e22',
+        gradient = 'linear-gradient(135deg, #e67e22, #f39c12)',
+        vehicle = 'Furgoneta de Reparto Burgershot Rumpo',
+        rate = 'Menú Bleeder €20 / Menú Torpedo €25',
+        hq = 'Burgershot Vespucci (Postal #8040)',
+        coords = vector3(-1199.05, -882.44, 13.35)
     }
 }

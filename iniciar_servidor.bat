@@ -120,6 +120,7 @@ if %errorlevel% neq 0 (
 ) else (
     echo [2/3] Base de datos 'qbcoreframework' verificada y lista.
 )
+powershell -NoProfile -Command "& '%DB_DIR%\bin\mysql.exe' -u root qbcoreframework -e 'CREATE TABLE IF NOT EXISTS lapraces (id int(11) NOT NULL AUTO_INCREMENT, name varchar(50) DEFAULT NULL, checkpoints text DEFAULT NULL, records text DEFAULT NULL, creator varchar(50) DEFAULT NULL, distance int(11) DEFAULT NULL, raceid varchar(50) DEFAULT NULL, PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; CREATE TABLE IF NOT EXISTS mdt_warrants (id int(11) NOT NULL AUTO_INCREMENT, citizenid varchar(50) DEFAULT NULL, name varchar(100) DEFAULT NULL, reason text DEFAULT NULL, officer varchar(100) DEFAULT NULL, date datetime DEFAULT NULL, PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; CREATE TABLE IF NOT EXISTS mdt_fines (id int(11) NOT NULL AUTO_INCREMENT, citizenid varchar(50) DEFAULT NULL, amount int(11) DEFAULT NULL, reason text DEFAULT NULL, officer varchar(100) DEFAULT NULL, date datetime DEFAULT NULL, PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'" >nul 2>&1
 
 :: 6. Limpiar procesos previos
 echo [3/3] Comprobando instancias anteriores de FXServer...
