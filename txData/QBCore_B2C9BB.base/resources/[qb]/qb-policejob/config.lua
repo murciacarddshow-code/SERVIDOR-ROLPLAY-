@@ -126,14 +126,19 @@ Config.CarItems = {
 Config.AuthorizedVehicles = {
     -- Grade 0 and higher
     [0] = {
-        police = 'Police Car 1',
-        police2 = 'Police Car 2',
-        police3 = 'Police Car 3',
-        police4 = 'Police Car 4',
-        policeb = 'Police Car 5',
-        policet = 'Police Car 6',
-        sheriff = 'Sheriff Car 1',
-        sheriff2 = 'Sheriff Car 2',
+        police = 'Vapid Stanier CNP (Zeta)',
+        police2 = 'Buffalo STX Interceptor',
+        police5 = 'Gauntlet Hellfire Interceptor',
+        police3 = 'Vapid Torrence K-9',
+        police4 = 'Declasse Granger UIP',
+        policeb = 'Moto Policial CNP',
+        policet = 'Furgon Celular Presos',
+        riot = 'Furgon Blindado Riot UIP',
+        fbi = 'Buffalo Camuflado UCO',
+        fbi2 = 'Granger Camuflado UCO',
+        pranger = 'Park Ranger 4x4',
+        sheriff = 'Vapid Stanier Guardia Civil',
+        sheriff2 = 'Declasse Granger Guardia Civil',
     },
 }
 
