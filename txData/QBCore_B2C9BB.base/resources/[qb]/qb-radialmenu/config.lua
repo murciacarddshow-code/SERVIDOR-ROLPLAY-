@@ -12,6 +12,13 @@ Config.MenuItems = {
         icon = 'user',
         items = {
             {
+                id = 'job_tablet',
+                title = 'Tablet de Trabajo',
+                icon = 'briefcase',
+                type = 'client',
+                event = 'spain_jobtablet:client:open',
+                shouldClose = true
+            }, {
                 id = 'givenum',
                 title = 'Give Contact Details',
                 icon = 'address-book',
@@ -458,6 +465,13 @@ Config.VehicleSeats = {
 Config.JobInteractions = {
     ['ambulance'] = {
         {
+            id = 'mdttablet_ems',
+            title = 'Tablet MDT SAMUR',
+            icon = 'tablet-screen-button',
+            type = 'client',
+            event = 'spain_mdt:client:openCommand',
+            shouldClose = true
+        }, {
             id = 'statuscheck',
             title = 'Check Health Status',
             icon = 'heart-pulse',
@@ -558,6 +572,13 @@ Config.JobInteractions = {
     },
     ['mechanic'] = {
         {
+            id = 'tunertablet_mech',
+            title = 'Tablet Diagnóstico OBD',
+            icon = 'tablet-screen-button',
+            type = 'client',
+            event = 'qb-tunerchip:client:openChip',
+            shouldClose = true
+        }, {
             id = 'towvehicle',
             title = 'Tow vehicle',
             icon = 'truck-pickup',
@@ -568,6 +589,13 @@ Config.JobInteractions = {
     },
     ['police'] = {
         {
+            id = 'mdttablet_police',
+            title = 'Tablet MDT Policial',
+            icon = 'tablet-screen-button',
+            type = 'client',
+            event = 'spain_mdt:client:openCommand',
+            shouldClose = true
+        }, {
             id = 'emergencybutton',
             title = 'Emergency button',
             icon = 'bell',

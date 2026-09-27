@@ -1,0 +1,173 @@
+Config = Config or {}
+
+-- Mapeo visual y corporativo para todos los trabajos del servidor
+Config.JobsData = {
+    ['taxi'] = {
+        name = 'taxi',
+        title = 'DOWNTOWN CAB CO.',
+        subtitle = 'Cooperativa Oficial de Taxi de Los Santos',
+        icon = 'fa-taxi',
+        color = '#f1c40f',
+        gradient = 'linear-gradient(135deg, #f1c40f, #f39c12)',
+        vehicle = 'Dynasty Taxi / Vapid Stanier Cab',
+        rate = '€25 / km + Suplemento Aeropuerto',
+        hq = 'Central de Taxis Downtown (Postal #7102)',
+        coords = vector3(895.53, -179.37, 74.7)
+    },
+    ['mechanic'] = {
+        name = 'mechanic',
+        title = 'LOS SANTOS CUSTOMS',
+        subtitle = 'Taller Central de Chapa, Pintura y Tuning Pro',
+        icon = 'fa-wrench',
+        color = '#e74c3c',
+        gradient = 'linear-gradient(135deg, #e74c3c, #ff4757)',
+        vehicle = 'Grúa Flatbed & Furgoneta de Taller Slamvan',
+        rate = 'Mano de obra €150/h + Recambios',
+        hq = 'Taller Central Los Santos (Postal #7214)',
+        coords = vector3(-337.28, -136.93, 39.01)
+    },
+    ['mechanic2'] = {
+        name = 'mechanic2',
+        title = 'HARMONY REPAIR',
+        subtitle = 'Taller de Asistencia en Carretera Ruta 68',
+        icon = 'fa-gears',
+        color = '#e67e22',
+        gradient = 'linear-gradient(135deg, #e67e22, #d35400)',
+        vehicle = 'Grúa de Rescate Pesado Towtruck',
+        rate = 'Tarifa Carretera / Asistencia 24 Horas',
+        hq = 'Ruta 68 Harmony (Postal #3040)',
+        coords = vector3(1178.1, 2639.8, 37.75)
+    },
+    ['trucker'] = {
+        name = 'trucker',
+        title = 'SPAIN LOGISTICS FREIGHT',
+        subtitle = 'Transporte Pesado y Logística de Mercancías',
+        icon = 'fa-truck',
+        color = '#3498db',
+        gradient = 'linear-gradient(135deg, #2980b9, #3498db)',
+        vehicle = 'Camión Trailer Phantom / Hauler',
+        rate = '€850 por flete de larga distancia',
+        hq = 'Centro Logístico Terminal Portuaria (Postal #8290)',
+        coords = vector3(145.47, -3205.15, 5.86)
+    },
+    ['tow'] = {
+        name = 'tow',
+        title = 'SERVICIO DE GRÚA MUNICIPAL',
+        subtitle = 'Retirada de Vehículos y Rescate en Carretera',
+        icon = 'fa-truck-pickup',
+        color = '#e67e22',
+        gradient = 'linear-gradient(135deg, #d35400, #e67e22)',
+        vehicle = 'Grúa de Plataforma Hidráulica Flatbed',
+        rate = 'Enganche €120 + Kilometraje',
+        hq = 'Depósito Municipal de Vehículos (Postal #8015)',
+        coords = vector3(404.14, -1632.74, 29.29)
+    },
+    ['garbage'] = {
+        name = 'garbage',
+        title = 'SAN ANDREAS WASTE MGMT',
+        subtitle = 'Servicio Oficial de Limpieza y Recogida Urbana',
+        icon = 'fa-trash-can',
+        color = '#27ae60',
+        gradient = 'linear-gradient(135deg, #27ae60, #2ecc71)',
+        vehicle = 'Camión Recolector Compactador Trashmaster',
+        rate = '€95 por contenedor vaciado + Bonus Turno',
+        hq = 'Planta de Tratamiento de Residuos (Postal #8310)',
+        coords = vector3(-322.25, -1545.92, 31.02)
+    },
+    ['bus'] = {
+        name = 'bus',
+        title = 'LIRR TRANSIT SYSTEM',
+        subtitle = 'Red de Transporte Público Urbano e Interurbano',
+        icon = 'fa-bus',
+        color = '#16a085',
+        gradient = 'linear-gradient(135deg, #16a085, #1abc9c)',
+        vehicle = 'Autobús de Línea Regular Dashound',
+        rate = 'Billete sencillo €5 / Abono mensual',
+        hq = 'Cocheras Centrales de Autobuses (Postal #7150)',
+        coords = vector3(436.43, -645.71, 28.74)
+    },
+    ['reporter'] = {
+        name = 'reporter',
+        title = 'WEAZEL NEWS 24H',
+        subtitle = 'Agencia de Noticias, Radio y Televisión en Directo',
+        icon = 'fa-bullhorn',
+        color = '#c0392b',
+        gradient = 'linear-gradient(135deg, #c0392b, #e74c3c)',
+        vehicle = 'Furgoneta de Retransmisión Rumpo News',
+        rate = 'Exclusivas & Reportajes de Investigación',
+        hq = 'Sede Central Weazel Plaza (Postal #7044)',
+        coords = vector3(-596.11, -929.98, 23.86)
+    },
+    ['vineyard'] = {
+        name = 'vineyard',
+        title = 'BODEGAS MARLOWE VINEYARDS',
+        subtitle = 'Cultivo de Vid, Crianza y Selección de Vinos Premium',
+        icon = 'fa-wine-bottle',
+        color = '#8e44ad',
+        gradient = 'linear-gradient(135deg, #8e44ad, #9b59b6)',
+        vehicle = 'Tractor Agrícola & Camioneta Sadler',
+        rate = 'Caja de Reserva €350 / Botella Selección',
+        hq = 'Finca Viñedos de Marlowe (Postal #2041)',
+        coords = vector3(-1928.09, 2060.37, 140.84)
+    },
+    ['hotdog'] = {
+        name = 'hotdog',
+        title = 'DOGGIE DELIGHTS STREET',
+        subtitle = 'Cadena de Puestos de Perritos Calientes Artesanales',
+        icon = 'fa-hotdog',
+        color = '#d35400',
+        gradient = 'linear-gradient(135deg, #e67e22, #f39c12)',
+        vehicle = 'Puesto Móvil de Comida Rápida Hotdogger',
+        rate = 'Menú Completo con Refresco €15',
+        hq = 'Base de Almacén Legion Square (Postal #7180)',
+        coords = vector3(170.15, -960.25, 30.09)
+    },
+    ['miner'] = {
+        name = 'miner',
+        title = 'CANTERAS DAVIS QUARTZ',
+        subtitle = 'Extracción de Minerales, Oro, Cobre y Joyería',
+        icon = 'fa-trowel-bricks',
+        color = '#7f8c8d',
+        gradient = 'linear-gradient(135deg, #7f8c8d, #95a5a6)',
+        vehicle = 'Dump Truck Cantera / Picadora Industrial',
+        rate = 'Lingote de Oro €1.200 / Diamante €2.500',
+        hq = 'Mina a Cielo Abierto Davis Quartz (Postal #3010)',
+        coords = vector3(2953.15, 2787.52, 41.5)
+    },
+    ['cards_courier'] = {
+        name = 'cards_courier',
+        title = 'POKÉVAULT TCG LOGISTICS',
+        subtitle = 'Transporte y Custodia de Cajas Selladas & Cartas PSA 10',
+        icon = 'fa-box-archive',
+        color = '#e74c3c',
+        gradient = 'linear-gradient(135deg, #ff4757, #ff6b81)',
+        vehicle = 'Furgón Blindado Brute Stockade TCG',
+        rate = 'Tarifa de Custodia y Envío Urgente Certificado',
+        hq = 'Bóveda Central Legion Square (Postal #7170)',
+        coords = vector3(215.82, -875.45, 30.49)
+    },
+    ['police'] = {
+        name = 'police',
+        title = 'CUERPO NACIONAL DE POLICÍA',
+        subtitle = 'Jefatura Superior de Policía de Los Santos',
+        icon = 'fa-shield-halved',
+        color = '#0984e3',
+        gradient = 'linear-gradient(135deg, #0984e3, #00cec9)',
+        vehicle = 'Zeta CNP Cupra Formentor / Furgón UPR',
+        rate = 'Sueldo Funcionario + Plus Peligrosidad',
+        hq = 'Comisaría Central Mission Row (Postal #7190)',
+        coords = vector3(428.23, -984.28, 30.71)
+    },
+    ['ambulance'] = {
+        name = 'ambulance',
+        title = 'SAMUR PROTECCIÓN CIVIL 112',
+        subtitle = 'Servicio de Asistencia Médica de Urgencias',
+        icon = 'fa-truck-medical',
+        color = '#e74c3c',
+        gradient = 'linear-gradient(135deg, #e74c3c, #c0392b)',
+        vehicle = 'UVI Móvil Mercedes Sprinter SAMUR',
+        rate = 'Atención Médica Pública Sanitaria 24h',
+        hq = 'Hospital Central Pillbox Hill (Postal #7140)',
+        coords = vector3(298.54, -584.62, 43.26)
+    }
+}

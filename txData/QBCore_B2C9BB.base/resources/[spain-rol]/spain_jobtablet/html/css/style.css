@@ -1,0 +1,602 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&family=Share+Tech+Mono&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jobtablet-overlay {
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(5px);
+}
+
+.jobtablet-case {
+    width: 1100px;
+    height: 700px;
+    background: #0d121c;
+    border-radius: 28px;
+    border: 12px solid #1a2233;
+    outline: 2px solid rgba(0, 206, 201, 0.3);
+    box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(0, 206, 201, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ========================================================= */
+/* HEADER CORPORATIVO DINÁMICO                               */
+/* ========================================================= */
+.jt-header {
+    height: 76px;
+    background: linear-gradient(90deg, #121824 0%, #172133 50%, #121824 100%);
+    border-bottom: 2px solid #00cec9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+}
+
+.header-corp-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.corp-logo-badge {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, #0984e3, #00cec9);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 206, 201, 0.5);
+    transition: all 0.3s;
+}
+
+.corp-titles h2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+    line-height: 1.1;
+}
+
+.corp-titles p {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #00cec9;
+    letter-spacing: 0.6px;
+    margin-top: 2px;
+}
+
+.header-worker-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.worker-avatar {
+    width: 40px;
+    height: 40px;
+    background: #1a2233;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00cec9;
+    font-size: 1.2rem;
+}
+
+.worker-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.worker-name {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.worker-tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 3px;
+}
+
+.worker-grade-pill {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #dfe4ea;
+}
+
+.duty-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(46, 213, 115, 0.4);
+    background: rgba(46, 213, 115, 0.15);
+    color: #2ed573;
+    font-size: 0.68rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.duty-toggle-btn.off {
+    border-color: rgba(231, 76, 60, 0.4);
+    background: rgba(231, 76, 60, 0.15);
+    color: #ff7675;
+}
+
+.duty-led {
+    width: 6px;
+    height: 6px;
+    background: #2ed573;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #2ed573;
+}
+
+.duty-toggle-btn.off .duty-led {
+    background: #ff7675;
+    box-shadow: 0 0 6px #ff7675;
+}
+
+.jt-close-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 71, 87, 0.15);
+    border: 1px solid rgba(255, 71, 87, 0.4);
+    border-radius: 8px;
+    color: #ff4757;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.jt-close-btn:hover {
+    background: #ff4757;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* ========================================================= */
+/* BODY & NAVEGACIÓN                                         */
+/* ========================================================= */
+.jt-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.jt-nav {
+    display: flex;
+    background: #090d14;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0 20px;
+    gap: 8px;
+}
+
+.jt-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #747d8c;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.jt-nav-item:hover {
+    color: #dfe4ea;
+}
+
+.jt-nav-item.active {
+    color: #ffffff;
+    border-bottom-color: #00cec9;
+    background: linear-gradient(180deg, rgba(0, 206, 201, 0.12) 0%, transparent 100%);
+}
+
+.jt-nav-item.active i {
+    color: #00cec9;
+}
+
+.jt-badge {
+    font-size: 0.62rem;
+    font-weight: 800;
+    background: #0984e3;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* ========================================================= */
+/* CONTENIDO                                                 */
+/* ========================================================= */
+.jt-content {
+    flex: 1;
+    background: #0c111a;
+    padding: 22px;
+    overflow-y: auto;
+}
+
+.jt-section {
+    display: none;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.jt-section.active {
+    display: flex;
+}
+
+/* Overview Cards */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.overview-card {
+    background: #121824;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #747d8c;
+    letter-spacing: 0.8px;
+}
+
+.card-icon {
+    font-size: 1.3rem;
+    color: #00cec9;
+}
+
+.overview-card h4 {
+    font-size: 0.85rem;
+    color: #a4b0be;
+    font-weight: 700;
+}
+
+.salary-amount-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.salary-amount-row .amount {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #2ed573;
+    line-height: 1;
+}
+
+.salary-amount-row .period {
+    font-size: 0.75rem;
+    color: #747d8c;
+}
+
+.salary-breakdown {
+    background: #090d14;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sb-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #a4b0be;
+}
+
+.veh-assigned-info strong {
+    display: block;
+    font-size: 1.15rem;
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.veh-assigned-info p {
+    font-size: 0.75rem;
+    color: #a4b0be;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+.veh-status-row {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.badge-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+.badge-pill.ok {
+    background: rgba(46, 213, 115, 0.12);
+    color: #2ed573;
+    border: 1px solid rgba(46, 213, 115, 0.3);
+}
+
+/* Panel Box General */
+.jt-panel-box {
+    background: #121824;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.panel-box-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 12px;
+}
+
+.panel-box-title h3 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.live-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #2ed573;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Protocol Grid */
+.protocol-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.proto-item {
+    background: #090d14;
+    padding: 14px;
+    border-radius: 10px;
+    display: flex;
+    gap: 12px;
+}
+
+.p-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #00cec9;
+}
+
+.proto-item strong {
+    display: block;
+    font-size: 0.82rem;
+    color: #ffffff;
+}
+
+.proto-item p {
+    font-size: 0.72rem;
+    color: #a4b0be;
+    margin-top: 3px;
+    line-height: 1.35;
+}
+
+/* Tabla de Compañeros */
+.jt-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.jt-table th {
+    background: #090d14;
+    padding: 12px 14px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #747d8c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.jt-table td {
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    color: #dfe4ea;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Sede & GPS */
+.hq-card {
+    background: #121824;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hq-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.hq-pin-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 206, 201, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00cec9;
+    font-size: 1.5rem;
+}
+
+.hq-subtitle {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #747d8c;
+    letter-spacing: 0.8px;
+}
+
+.hq-left h3 {
+    font-size: 1.2rem;
+    color: #ffffff;
+    font-weight: 800;
+    margin: 2px 0;
+}
+
+.hq-left p {
+    font-size: 0.78rem;
+    color: #a4b0be;
+}
+
+.btn-gps-route {
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #0984e3, #00cec9);
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 15px rgba(0, 206, 201, 0.4);
+    transition: all 0.2s;
+}
+
+.btn-gps-route:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 25px rgba(0, 206, 201, 0.7);
+}
+
+.poi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.poi-item {
+    background: #090d14;
+    padding: 14px;
+    border-radius: 10px;
+    display: flex;
+    gap: 12px;
+}
+
+.poi-item i {
+    font-size: 1.4rem;
+    color: #0984e3;
+    margin-top: 2px;
+}
+
+.poi-item strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #ffffff;
+}
+
+.poi-item p {
+    font-size: 0.72rem;
+    color: #a4b0be;
+    margin-top: 3px;
+    line-height: 1.35;
+}
+
+/* Tarifas & Regulaciones */
+.rates-display-box {
+    background: #090d14;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.rate-highlight {
+    background: #121824;
+    border-left: 4px solid #f1c40f;
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+.rate-lbl {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #747d8c;
+    letter-spacing: 0.8px;
+}
+
+.rate-highlight h4 {
+    font-size: 1.15rem;
+    color: #f1c40f;
+    font-weight: 800;
+    margin-top: 2px;
+}

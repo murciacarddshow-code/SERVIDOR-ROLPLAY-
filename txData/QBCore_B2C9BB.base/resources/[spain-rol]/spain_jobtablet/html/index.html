@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spain Rol - Tablet Corporativa de Trabajo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&family=Share+Tech+Mono&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="jobtablet-overlay">
+        <div class="jobtablet-case">
+            <!-- Header Corporativo Dinámico -->
+            <header class="jt-header" id="jt-header">
+                <div class="header-corp-brand">
+                    <div class="corp-logo-badge" id="corp-logo-badge">
+                        <i class="fa-solid fa-briefcase" id="corp-icon"></i>
+                    </div>
+                    <div class="corp-titles">
+                        <h2 id="corp-title">TERMINAL LABORAL OFICIAL</h2>
+                        <p id="corp-subtitle">Gremio Profesional &bull; Spain Rol v2.0</p>
+                    </div>
+                </div>
+
+                <div class="header-worker-card">
+                    <div class="worker-avatar">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div class="worker-info">
+                        <span class="worker-name" id="worker-name">Empleado Oficial</span>
+                        <div class="worker-tags">
+                            <span class="worker-grade-pill" id="worker-grade">Oficial 1ª</span>
+                            <button class="duty-toggle-btn" id="duty-toggle-btn">
+                                <span class="duty-led" id="duty-led"></span>
+                                <span id="duty-label">EN SERVICIO</span>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="jt-close-btn" id="btn-close-tablet" title="Cerrar (ESC)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Layout Principal -->
+            <div class="jt-body">
+                <!-- Barra de Navegación -->
+                <nav class="jt-nav">
+                    <button class="jt-nav-item active" data-tab="tab-overview">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span>Mi Puesto & Nómina</span>
+                    </button>
+                    <button class="jt-nav-item" data-tab="tab-colleagues">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Compañeros de Turno</span>
+                        <span class="jt-badge" id="badge-colleagues-count">1</span>
+                    </button>
+                    <button class="jt-nav-item" data-tab="tab-headquarters">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Sede & Coordenadas GPS</span>
+                    </button>
+                    <button class="jt-nav-item" data-tab="tab-regulations">
+                        <i class="fa-solid fa-book"></i>
+                        <span>Tarifas & Convenio</span>
+                    </button>
+                </nav>
+
+                <!-- Panel Central de Vistas -->
+                <main class="jt-content">
+                    <!-- TAB 1: OVERVIEW & NÓMINA -->
+                    <section class="jt-section active" id="tab-overview">
+                        <div class="overview-grid">
+                            <!-- Tarjeta Salario & Retenciones -->
+                            <div class="overview-card salary-card">
+                                <div class="card-top">
+                                    <span class="card-tag">CONVENIO COLECTIVO</span>
+                                    <i class="fa-solid fa-hand-holding-dollar card-icon"></i>
+                                </div>
+                                <h4>SALARIO BASE HORARIO</h4>
+                                <div class="salary-amount-row">
+                                    <span class="amount" id="worker-salary">€75</span>
+                                    <span class="period">/ cada nómina (hora RP)</span>
+                                </div>
+                                <div class="salary-breakdown">
+                                    <div class="sb-item">
+                                        <span>Plus de Peligrosidad / Nocturnidad:</span>
+                                        <strong style="color: #2ed573;">+15%</strong>
+                                    </div>
+                                    <div class="sb-item">
+                                        <span>Seguridad Social & IRPF:</span>
+                                        <strong style="color: #00cec9;">100% Cubierto</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta Vehículo de Empresa Asignado -->
+                            <div class="overview-card vehicle-card">
+                                <div class="card-top">
+                                    <span class="card-tag">FLOTA OFICIAL</span>
+                                    <i class="fa-solid fa-car card-icon"></i>
+                                </div>
+                                <h4>VEHÍCULO HOMOLOGADO</h4>
+                                <div class="veh-assigned-info">
+                                    <strong id="corp-vehicle-name">Vehículo de Empresa</strong>
+                                    <p>Asignado para el desempeño de tus funciones laborales en el término de Los Santos.</p>
+                                </div>
+                                <div class="veh-status-row">
+                                    <span class="badge-pill ok"><i class="fa-solid fa-circle-check"></i> Seguro de Empresa Activo</span>
+                                    <span class="badge-pill ok"><i class="fa-solid fa-gas-pump"></i> Combustible Bonificado</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Manual de Procedimiento de Trabajo -->
+                        <div class="jt-panel-box">
+                            <div class="panel-box-title">
+                                <h3><i class="fa-solid fa-list-check"></i> PROTOCOLO DE DESEMPEÑO & BUENAS PRÁCTICAS</h3>
+                            </div>
+                            <div class="protocol-grid">
+                                <div class="proto-item">
+                                    <span class="p-num">1</span>
+                                    <div>
+                                        <strong>Puntualidad e Inicio de Servicio</strong>
+                                        <p>Activa tu estado "EN SERVICIO" desde la barra superior antes de comenzar tus tareas laborales.</p>
+                                    </div>
+                                </div>
+                                <div class="proto-item">
+                                    <span class="p-num">2</span>
+                                    <div>
+                                        <strong>Uso Correcto de Uniformidad</strong>
+                                        <p>Equípate con la ropa reglamentaria en el vestuario de la empresa antes de atender a ciudadanos.</p>
+                                    </div>
+                                </div>
+                                <div class="proto-item">
+                                    <span class="p-num">3</span>
+                                    <div>
+                                        <strong>Cuidado del Material y Vehículos</strong>
+                                        <p>Guarda el vehículo en el garaje corporativo al terminar tu jornada para evitar sanciones de tráfico.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- TAB 2: COMPAÑEROS DE TURNO -->
+                    <section class="jt-section" id="tab-colleagues">
+                        <div class="jt-panel-box">
+                            <div class="panel-box-title">
+                                <h3><i class="fa-solid fa-address-book"></i> COMPAÑEROS DE PLANTILLA EN LÍNEA</h3>
+                                <span class="live-tag"><i class="fa-solid fa-circle fa-beat"></i> SINCRONIZADO EN VIVO</span>
+                            </div>
+                            <table class="jt-table">
+                                <thead>
+                                    <tr>
+                                        <th>TRABAJADOR</th>
+                                        <th>CATEGORÍA / RANGO</th>
+                                        <th>ESTADO TURNO</th>
+                                        <th>TELÉFONO MÓVIL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="colleagues-tbody">
+                                    <tr><td colspan="4" style="text-align: center; color: #747d8c; padding: 30px;">Cargando plantilla de trabajadores...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- TAB 3: SEDE & GPS -->
+                    <section class="jt-section" id="tab-headquarters">
+                        <div class="hq-card">
+                            <div class="hq-left">
+                                <div class="hq-pin-icon"><i class="fa-solid fa-building-circle-check"></i></div>
+                                <div>
+                                    <span class="hq-subtitle">SEDE CORPORATIVA PRINCIPAL</span>
+                                    <h3 id="hq-name">Sede Central</h3>
+                                    <p>Punto de encuentro, vestuarios, garaje de vehículos y oficina del encargado de turno.</p>
+                                </div>
+                            </div>
+                            <button class="btn-gps-route" id="btn-set-gps">
+                                <i class="fa-solid fa-location-arrow"></i>
+                                <span>Marcar Ruta en GPS</span>
+                            </button>
+                        </div>
+
+                        <div class="jt-panel-box mt-3">
+                            <div class="panel-box-title">
+                                <h3><i class="fa-solid fa-route"></i> NAVEGACIÓN & PUNTOS DE INTERÉS LABORAL</h3>
+                            </div>
+                            <div class="poi-grid">
+                                <div class="poi-item">
+                                    <i class="fa-solid fa-warehouse"></i>
+                                    <div>
+                                        <strong>Garaje y Cochera</strong>
+                                        <p>Lugar de spawn y guardado de los vehículos autorizados de la empresa.</p>
+                                    </div>
+                                </div>
+                                <div class="poi-item">
+                                    <i class="fa-solid fa-shirt"></i>
+                                    <div>
+                                        <strong>Vestuarios & Taquillas</strong>
+                                        <p>Cambio de vestimenta de civil a uniforme de trabajo homologado.</p>
+                                    </div>
+                                </div>
+                                <div class="poi-item">
+                                    <i class="fa-solid fa-vault"></i>
+                                    <div>
+                                        <strong>Caja Fuerte & Inventario</strong>
+                                        <p>Depósito de materiales, herramientas, albaranes y facturas de clientes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- TAB 4: TARIFAS & CONVENIO -->
+                    <section class="jt-section" id="tab-regulations">
+                        <div class="jt-panel-box">
+                            <div class="panel-box-title">
+                                <h3><i class="fa-solid fa-scale-balanced"></i> CUADRO DE TARIFAS VIGENTES & DERECHOS</h3>
+                            </div>
+                            <div class="rates-display-box">
+                                <div class="rate-highlight">
+                                    <span class="rate-lbl">TARIFA ESTIPULADA AL PÚBLICO</span>
+                                    <h4 id="corp-rate-val">Tarifa Oficial Regulada</h4>
+                                </div>
+                                <p style="font-size: 0.82rem; color: #a4b0be; line-height: 1.6; margin-top: 12px;">
+                                    Todas las prestaciones y servicios facturados por miembros de esta empresa están sujetos a la ordenanza municipal de comercio y servicios de Spain Rol. Está terminantemente prohibido el sobreprecio no autorizado a ciudadanos.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

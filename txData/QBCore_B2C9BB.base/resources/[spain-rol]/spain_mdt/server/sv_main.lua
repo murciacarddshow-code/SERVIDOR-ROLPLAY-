@@ -101,5 +101,23 @@ RegisterNetEvent('spain_mdt:server:createWarrant', function(data)
         citizenid, name, reason, officerName
     })
 
-    TriggerClientEvent('QBCore:Notify', -1, "🚨 MDT: Se ha emitido una Orden de Búsqueda y Captura contra " .. name, "primary")
+    TriggerClientEvent('QBCore:Notify', -1, "🚨 MDT: Se ha emitido una Orden de Busca y Captura contra " .. name, "primary")
+end)
+
+-- Alerta de Pánico 112 (Botón de Emergencia)
+RegisterNetEvent('spain_mdt:server:panicAlert', function(coords)
+    local src = source
+    local Officer = QBCore.Functions.GetPlayer(src)
+    if not Officer then return end
+
+    local officerName = Officer.PlayerData.charinfo.firstname .. ' ' .. Officer.PlayerData.charinfo.lastname
+    local jobName = Officer.PlayerData.job.name
+    local corpLabel = jobName == 'ambulance' and 'SANITARIO SAMUR' or 'AGENTE POLICÍA'
+
+    local players = QBCore.Functions.GetQBPlayers()
+    for _, v in pairs(players) do
+        if v.PlayerData.job.name == 'police' or v.PlayerData.job.name == 'ambulance' then
+            TriggerClientEvent('QBCore:Notify', v.PlayerData.source, "🚨 ¡BOTÓN 112 ACTIVADO! " .. corpLabel .. " " .. officerName .. " solicita auxilio inmediato.", "error", 12000)
+        end
+    end
 end)

@@ -28,9 +28,9 @@ local function OpenTablet(data)
     SetNuiFocus(true, true)
     SendNUIMessage({
         action = 'open',
-        officer = data.officerName or 'Agente',
+        officer = data.officerName or 'Agente CNP',
         job = data.job or 'CNP',
-        callsign = data.callsign or '01'
+        callsign = data.callsign or 'Z-10'
     })
 end
 
@@ -56,6 +56,24 @@ end)
 RegisterNetEvent('spain_mdt:client:openCommand', function()
     ExecuteCommand('mdt')
 end)
+
+-- Comando rápido para abrir la tablet MDT
+RegisterCommand('mdt', function()
+    local PlayerData = QBCore.Functions.GetPlayerData()
+    local allowedJobs = { ['police'] = true, ['ambulance'] = true }
+    if allowedJobs[PlayerData.job.name] or QBCore.Functions.HasPermission('admin') then
+        local charinfo = PlayerData.charinfo or {}
+        local name = (charinfo.firstname or 'Agente') .. ' ' .. (charinfo.lastname or '')
+        local jobLabel = PlayerData.job.name == 'ambulance' and 'SAMUR' or 'CNP'
+        OpenTablet({
+            officerName = name,
+            job = jobLabel,
+            callsign = PlayerData.metadata and PlayerData.metadata.callsign or 'Z-10'
+        })
+    else
+        QBCore.Functions.Notify('No tienes autorización para acceder a la terminal policial/médica.', 'error')
+    end
+end, false)
 
 -- NUI Callbacks
 RegisterNUICallback('close', function(_, cb)
@@ -94,5 +112,20 @@ end)
 
 RegisterNUICallback('createWarrant', function(data, cb)
     TriggerServerEvent('spain_mdt:server:createWarrant', data)
+    cb('ok')
+end)
+
+RegisterNUICallback('executeCommand', function(data, cb)
+    if data and data.command then
+        ExecuteCommand(data.command)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('panicAlert', function(data, cb)
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    TriggerServerEvent('spain_mdt:server:panicAlert', coords)
+    QBCore.Functions.Notify('¡BOTÓN DE PÁNICO ACTIVADO! Transmitiendo posición GPS urgente a todas las unidades.', 'error', 8000)
     cb('ok')
 end)

@@ -1,257 +1,450 @@
-<html>
-    <head>
-        <title></title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-        <style>
-            @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Policía Científica - Sistema Dactilar & Vigilancia CCTV</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Montserrat:wght@600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 
-            @font-face {
-                font-family: "vcr-ocd";
-                src: url("vcr-ocd.ttf");
-            }
+        @font-face {
+            font-family: "vcr-ocd";
+            src: url("vcr-ocd.ttf");
+        }
 
-            html {
-                overflow-x: hidden;
-                overflow-y: hidden;
-            }
-            #helicontainer {
-                font-family: "Roboto Mono";
-                display: none;
-                position: relative;
-                height: 100vh;
-                width: 100vw;
-                background-color: transparent !important;
-                color: #ffffff;
-                text-transform: uppercase;
-            }
-            .vehicleinfo {
-                display: none;
-            }
-            .heli-model {
-                position: absolute;
-                left: 50%;
-                top: 35%;
-                transform: translate(-50%, -50%);
-                text-shadow:
-                    -1px -1px 0 #000,
-                    1px -1px 0 #000,
-                    -1px 1px 0 #000,
-                    1px 1px 0 #000;
-            }
-            .heli-plate {
-                position: absolute;
-                left: 50%;
-                bottom: 30%;
-                transform: translate(-50%, -50%);
-                text-shadow:
-                    -1px -1px 0 #000,
-                    1px -1px 0 #000,
-                    -1px 1px 0 #000,
-                    1px 1px 0 #000;
-            }
-            .heli-street {
-                position: absolute;
-                left: 70%;
-                top: 50.7%;
-                transform: translate(-50%, -50%);
-                text-shadow:
-                    -1px -1px 0 #000,
-                    1px -1px 0 #000,
-                    -1px 1px 0 #000,
-                    1px 1px 0 #000;
-            }
-            .heli-speed {
-                position: absolute;
-                left: 35%;
-                top: 35%;
-                text-shadow:
-                    -1px -1px 0 #000,
-                    1px -1px 0 #000,
-                    -1px 1px 0 #000,
-                    1px 1px 0 #000;
-                font-size: 22px;
-            }
-            .heli-rectangle {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                width: 70px;
-                height: 70px;
-                background: transparent;
-                border: 1px solid #ab0c0c;
-                transform: translate(-50%, -50%);
-            }
-            .scan {
-                position: absolute;
-                left: 37%;
-                bottom: 39%;
-                border: 2px solid #cccccc;
-                background: rgba(155, 155, 155, 0);
-                height: 20vh;
-                width: 1vw;
-            }
-            .scanBar {
-                background: #cccccc;
-            }
-            #camcontainer {
-                font-family: "Roboto Mono";
-                position: relative;
-                height: 100vh;
-                background-color: transparent !important;
-            }
-            #camlabel {
-                position: absolute;
-                left: 50%;
-                bottom: 10%;
-                transform: translate(-50%, -50%);
-                font-size: 20px;
-                color: white;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 0.3vw;
-                text-align: center;
-                text-transform: uppercase;
-            }
-            #camtimelabel {
-                position: absolute;
-                right: 10%;
-                top: 10%;
-                font-size: 20px;
-                color: white;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 0.3vw;
-            }
-            #camdatelabel {
-                position: absolute;
-                left: 10%;
-                top: 10%;
-                font-size: 20px;
-                color: white;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 0.3vw;
-            }
-            #iplabel {
-                position: absolute;
-                right: 10%;
-                bottom: 15%;
-                transform: translate(0, -50%);
-                font-size: 20px;
-                color: white;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 0.3vw;
-            }
-            #connectedlabel {
-                position: absolute;
-                right: 10%;
-                bottom: 10%;
-                transform: translate(0, -50%);
-                font-size: 20px;
-                color: white;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 0.3vw;
-            }
-            .connected {
-                color: #3cc71a !important;
-            }
-            .disconnect {
-                color: #ba1e1e !important;
-            }
-            #blockscreen {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: rgba(25, 25, 25, 1);
-                display: none;
-                z-index: -99;
-            }
-            .fingerprint-container {
-                display: none;
-                position: relative;
-                width: 60vh;
-                margin: 0 auto;
-                top: 10vh;
-            }
-            .fingerprint-frame {
-                width: 60vh;
-            }
-            .take-fingerprint {
-                position: absolute;
-                height: 12.5vh;
-                width: 10vh;
-                background: rgba(250, 250, 250, 0.45);
-                margin: 0 auto;
-                left: 0;
-                right: 0;
-                bottom: 15vh;
-                transition: 0.1s;
-            }
-            .take-fingerprint:hover {
-                background: rgba(250, 250, 250, 0.65);
-            }
-            .fingerprint-id {
-                position: absolute;
-                width: 22vh;
-                height: 13vh;
-                top: 23vh;
-                margin: 0 auto;
-                left: 0;
-                right: 0;
-                text-align: center;
-                padding-top: 2vh;
-                font-family: "Roboto Mono";
-                font-weight: bold;
-            }
-            .fingerprint-id > p {
-                padding-top: 2vh;
-                font-weight: lighter;
-            }
-        </style>
-    </head>
-    <body style="background: rgb(0, 0, 0, 0)">
-        <div id="camcontainer" v-show="camerasOpen">
-            <div id="camlabel">{{ cameraLabel }}</div>
-            <div id="camdatelabel">{{ dateLabel }}</div>
-            <div id="camtimelabel">{{ timeLabel }}</div>
-            <div id="iplabel">{{ ipLabel }}</div>
-            <div id="connectedlabel" class="connected">{{ connectLabel }}</div>
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background: transparent !important;
+            user-select: none;
+        }
 
-            <div id="blockscreen"></div>
+        /* HELICÓPTERO CÓNDOR FLIR HUD */
+        #helicontainer {
+            font-family: "Share Tech Mono", "Roboto Mono", monospace;
+            display: none;
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            background-color: transparent !important;
+            color: #00ffcc;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.7);
+        }
+
+        .vehicleinfo {
+            display: none;
+        }
+
+        .heli-model {
+            position: absolute;
+            left: 50%;
+            top: 35%;
+            transform: translate(-50%, -50%);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        .heli-plate {
+            position: absolute;
+            left: 50%;
+            bottom: 30%;
+            transform: translate(-50%, -50%);
+            font-size: 1.3rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 12px;
+            border: 1px solid #00ffcc;
+            border-radius: 4px;
+        }
+
+        .heli-street {
+            position: absolute;
+            left: 70%;
+            top: 50.7%;
+            transform: translate(-50%, -50%);
+            font-size: 0.95rem;
+        }
+
+        .heli-speed {
+            position: absolute;
+            left: 35%;
+            top: 35%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .heli-rectangle {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 90px;
+            height: 90px;
+            background: transparent;
+            border: 2px solid #ff4757;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
+            animation: targetLock 2s infinite alternate;
+        }
+
+        @keyframes targetLock {
+            0% { transform: translate(-50%, -50%) scale(0.95); }
+            100% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .scan {
+            position: absolute;
+            left: 37%;
+            bottom: 39%;
+            border: 2px solid #00ffcc;
+            background: rgba(0, 255, 204, 0.1);
+            height: 20vh;
+            width: 1vw;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+        }
+
+        .scanBar {
+            background: #00ffcc;
+            box-shadow: 0 0 8px #00ffcc;
+        }
+
+        /* CIRCUITO CERRADO CCTV CÁMARAS */
+        #camcontainer {
+            font-family: "Share Tech Mono", "Roboto Mono", monospace;
+            position: relative;
+            height: 100vh;
+            background-color: transparent !important;
+        }
+
+        .cctv-overlay-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .cctv-watermark {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 6px 20px;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rec-dot {
+            width: 10px;
+            height: 10px;
+            background: #e74c3c;
+            border-radius: 50%;
+            animation: recBlink 1s infinite;
+        }
+
+        @keyframes recBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        #camlabel {
+            position: absolute;
+            left: 50%;
+            bottom: 6%;
+            transform: translate(-50%, 0);
+            font-size: 1.15rem;
+            color: #ffffff;
+            background: rgba(14, 23, 38, 0.9);
+            border: 1px solid #00cec9;
+            padding: 8px 24px;
+            border-radius: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+        }
+
+        #camtimelabel {
+            position: absolute;
+            right: 4%;
+            top: 4%;
+            font-size: 1.1rem;
+            color: #00cec9;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 6px;
+        }
+
+        #camdatelabel {
+            position: absolute;
+            left: 4%;
+            top: 4%;
+            font-size: 1.1rem;
+            color: #00cec9;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 6px;
+        }
+
+        #iplabel {
+            position: absolute;
+            right: 4%;
+            bottom: 8%;
+            font-size: 0.85rem;
+            color: #a4b0be;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+
+        #connectedlabel {
+            position: absolute;
+            right: 4%;
+            bottom: 4%;
+            font-size: 0.85rem;
+            color: #2ed573;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid #2ed573;
+        }
+
+        .connected { color: #2ed573 !important; }
+        .disconnect { color: #ff4757 !important; }
+
+        #blockscreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 15, 24, 1);
+            display: none;
+            z-index: -99;
+        }
+
+        /* TABLET BIOMÉTRICA DE HUELLAS DACTILARES */
+        .fingerprint-container {
+            display: none;
+            position: relative;
+            width: 460px;
+            height: 600px;
+            margin: 0 auto;
+            top: 8vh;
+            background: #0d121c;
+            border-radius: 28px;
+            border: 12px solid #1a2233;
+            outline: 2px solid #00cec9;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 206, 201, 0.3);
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .fp-scanner-top {
+            width: 100%;
+            background: #141c2c;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #00cec9;
+        }
+
+        .fp-scanner-top i {
+            font-size: 1.5rem;
+            color: #00cec9;
+        }
+
+        .fp-scanner-title h3 {
+            font-size: 0.95rem;
+            color: #ffffff;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .fp-scanner-title p {
+            font-size: 0.65rem;
+            color: #747d8c;
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .fp-scan-zone {
+            position: relative;
+            width: 240px;
+            height: 280px;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 206, 201, 0.03);
+            border: 2px dashed rgba(0, 206, 201, 0.35);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .fingerprint-frame {
+            width: 180px;
+            opacity: 0.85;
+            filter: drop-shadow(0 0 10px rgba(0, 206, 201, 0.5));
+        }
+
+        /* Línea láser de escaneo animada */
+        .fp-laser-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00cec9, #2ed573, transparent);
+            box-shadow: 0 0 15px #00cec9;
+            animation: fpLaserSweep 2.5s ease-in-out infinite;
+        }
+
+        @keyframes fpLaserSweep {
+            0% { top: 5%; }
+            50% { top: 92%; }
+            100% { top: 5%; }
+        }
+
+        .fingerprint-id {
+            margin-top: 20px;
+            width: 85%;
+            background: #111722;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: bold;
+            color: #a4b0be;
+            font-size: 0.85rem;
+        }
+
+        .fingerprint-id p {
+            font-size: 1.15rem;
+            color: #2ed573;
+            margin: 4px 0 0 0;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(46, 213, 115, 0.4);
+        }
+
+        .take-fingerprint {
+            width: 85%;
+            height: 48px;
+            background: linear-gradient(135deg, #0984e3, #00cec9);
+            margin: 18px auto 0 auto;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 206, 201, 0.4);
+            transition: all 0.2s;
+        }
+
+        .take-fingerprint:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(0, 206, 201, 0.7);
+        }
+
+        .take-fingerprint::after {
+            content: "COLOCAR DEDO EN EL SENSOR";
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- CCTV SECURITY CAMERAS -->
+    <div id="camcontainer" v-show="camerasOpen">
+        <div class="cctv-overlay-grid"></div>
+        <div class="cctv-watermark">
+            <span class="rec-dot"></span>
+            <span>POLICÍA NACIONAL &bull; CIRCUITO CERRADO CCTV EN DIRECTO</span>
         </div>
-        <div id="fingerprint">
-            <div class="fingerprint-container">
+        <div id="camlabel">{{ cameraLabel }}</div>
+        <div id="camdatelabel">{{ dateLabel }}</div>
+        <div id="camtimelabel">{{ timeLabel }}</div>
+        <div id="iplabel">{{ ipLabel }}</div>
+        <div id="connectedlabel" class="connected">{{ connectLabel }}</div>
+
+        <div id="blockscreen"></div>
+    </div>
+
+    <!-- BIOMETRIC FINGERPRINT SCANNER -->
+    <div id="fingerprint">
+        <div class="fingerprint-container">
+            <div class="fp-scanner-top">
+                <i class="fa-solid fa-fingerprint fa-bounce"></i>
+                <div class="fp-scanner-title">
+                    <h3>POLICÍA CIENTÍFICA (AFIS)</h3>
+                    <p>SISTEMA BIOMÉTRICO DACTILAR AUTOMATIZADO</p>
+                </div>
+            </div>
+
+            <div class="fp-scan-zone">
+                <div class="fp-laser-line"></div>
                 <img src="./fingerprint.png" alt="fingerprint" class="fingerprint-frame" />
-                <div class="fingerprint-id">
-                    Fingerprint ID
-                    <p>No result</p>
-                </div>
-                <div class="take-fingerprint"></div>
             </div>
+
+            <div class="fingerprint-id">
+                <span>IDENTIFICADOR BIOMÉTRICO (DNI):</span>
+                <p>Sin Lectura / Esperando Dedo</p>
+            </div>
+
+            <div class="take-fingerprint"></div>
         </div>
-        <div id="helicontainer">
-            <div class="vehicleinfo">
-                <div class="heli-model">
-                    <p>MODEL: COSAGNETTI</p>
-                </div>
-                <div class="heli-street">
-                    <p>Spanish Ave | Lagunas Pl</p>
-                </div>
-                <div class="heli-plate">
-                    <p>PLATE: 01AGB123</p>
-                </div>
-                <div class="heli-speed">
-                    <p>420 KM/U</p>
-                </div>
-                <div class="heli-rectangle"></div>
+    </div>
+
+    <!-- CÓNDOR HELICÓPTERO FLIR -->
+    <div id="helicontainer">
+        <div class="vehicleinfo">
+            <div class="heli-model">
+                <p>MODEL: COSAGNETTI</p>
             </div>
-            <div class="scan">
-                <div class="scanBar"></div>
+            <div class="heli-street">
+                <p>Spanish Ave | Lagunas Pl</p>
             </div>
+            <div class="heli-plate">
+                <p>PLATE: 01AGB123</p>
+            </div>
+            <div class="heli-speed">
+                <p>420 KM/H</p>
+            </div>
+            <div class="heli-rectangle"></div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <script src="vue.min.js"></script>
-        <script src="script.js"></script>
-    </body>
+        <div class="scan">
+            <div class="scanBar"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>

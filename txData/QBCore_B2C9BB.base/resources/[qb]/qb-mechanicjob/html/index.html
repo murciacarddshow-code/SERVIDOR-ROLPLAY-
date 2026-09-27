@@ -1,26 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <link rel="stylesheet" href="./style.css" />
-        <title>QB Tunerchip</title>
-    </head>
-    <body>
-        <div class="tablet">
-            <div class="screen">
-                <div class="navbar"></div>
-                <div id="content-area"></div>
-                <div class="button-group">
-                    <button class="action-button" id="save-button">Save</button>
-                    <div class="description-box">
-                        <p id="table-description"></p>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spain Motors Pro - Tablet de Diagnóstico & Reprogramación ECU</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="tuner-overlay">
+        <!-- Tablet Rugerizada de Taller Profesional -->
+        <div class="tablet-chassis">
+            <!-- Esquinas y protectores de goma antichoque estilo Bosch/Autel -->
+            <div class="bumper corner-tl"></div>
+            <div class="bumper corner-tr"></div>
+            <div class="bumper corner-bl"></div>
+            <div class="bumper corner-br"></div>
+
+            <div class="screen-container">
+                <!-- Barra Superior de Diagnóstico OBD-II -->
+                <header class="tablet-topbar">
+                    <div class="brand-badge">
+                        <div class="brand-logo">
+                            <i class="fa-solid fa-gear fa-spin brand-gear"></i>
+                            <i class="fa-solid fa-wrench brand-wrench"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h2>SPAIN MOTORS <span>TUNING PRO</span></h2>
+                            <p><i class="fa-solid fa-flag-checkered"></i> SISTEMA DE REPROGRAMACIÓN & DIAGNOSIS ECU v4.2</p>
+                        </div>
                     </div>
-                    <button class="action-button" id="reset-button">Reset</button>
-                </div>
+
+                    <div class="obd-status-panel">
+                        <div class="obd-indicator">
+                            <span class="pulsing-led online"></span>
+                            <div class="obd-info">
+                                <span class="label">ENLACE CAN-BUS</span>
+                                <span class="val highlight">OBD-II CONECTADO</span>
+                            </div>
+                        </div>
+
+                        <div class="telemetry-pill">
+                            <i class="fa-solid fa-car-battery"></i>
+                            <span>14.4 V</span>
+                        </div>
+                        <div class="telemetry-pill">
+                            <i class="fa-solid fa-temperature-three-quarters"></i>
+                            <span>92 °C</span>
+                        </div>
+                        <div class="telemetry-pill">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <span id="boost-display">1.8 BAR</span>
+                        </div>
+
+                        <button class="tuner-close-btn" id="close-x-btn" title="Cerrar Terminal (ESC)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Barra de Navegación por Sistemas del Vehículo -->
+                <nav class="tuner-nav">
+                    <button class="nav-tab active" data-tab="power">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                        <span>Motor & Transmisión</span>
+                    </button>
+                    <button class="nav-tab" data-tab="braking">
+                        <i class="fa-solid fa-circle-dot"></i>
+                        <span>Frenos & ABS</span>
+                    </button>
+                    <button class="nav-tab" data-tab="traction">
+                        <i class="fa-solid fa-road"></i>
+                        <span>Tracción & Drift</span>
+                    </button>
+                    <button class="nav-tab" data-tab="suspension">
+                        <i class="fa-solid fa-arrows-up-down"></i>
+                        <span>Chasis & Suspensión</span>
+                    </button>
+                    <button class="nav-tab" data-tab="diagnostics">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <span>Diagnóstico Motor</span>
+                    </button>
+                    <button class="nav-tab" data-tab="presets">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span>Mapas Rápidos ECU</span>
+                    </button>
+                </nav>
+
+                <!-- Área Central de Configuración y Parámetros -->
+                <main class="tuner-main">
+                    <!-- Contenedor dinámico de parámetros (Power, Braking, Traction, Suspension) -->
+                    <div id="content-area" class="parameters-grid"></div>
+
+                    <!-- Panel de Diagnóstico en Tiempo Real -->
+                    <div id="diagnostics-panel" class="custom-panel" style="display: none;">
+                        <div class="diag-header">
+                            <h3><i class="fa-solid fa-clipboard-check"></i> ESTADO GENERAL DE COMPONENTES MECÁNICOS</h3>
+                            <span class="diag-status-ok"><i class="fa-solid fa-circle-check"></i> TEST SUPERADO: VEHÍCULO OPERATIVO</span>
+                        </div>
+                        <div class="diag-grid">
+                            <div class="diag-card">
+                                <div class="diag-card-top">
+                                    <span class="comp-name"><i class="fa-solid fa-oil-can"></i> Aceite Sintético 5W-30</span>
+                                    <span class="comp-val ok">98%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill ok" style="width: 98%;"></div></div>
+                                <span class="comp-desc">Presión óptima 4.2 bar. Sin fugas detectadas.</span>
+                            </div>
+                            <div class="diag-card">
+                                <div class="diag-card-top">
+                                    <span class="comp-name"><i class="fa-solid fa-fire-burner"></i> Bujías & Inyectores</span>
+                                    <span class="comp-val ok">94%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill ok" style="width: 94%;"></div></div>
+                                <span class="comp-desc">Encendido electrónico sincronizado a 750 RPM ralentí.</span>
+                            </div>
+                            <div class="diag-card">
+                                <div class="diag-card-top">
+                                    <span class="comp-name"><i class="fa-solid fa-fan"></i> Radiador & Refrigeración</span>
+                                    <span class="comp-val ok">91%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill ok" style="width: 91%;"></div></div>
+                                <span class="comp-desc">Circuito estanco. Termostato abre a 88 °C.</span>
+                            </div>
+                            <div class="diag-card">
+                                <div class="diag-card-top">
+                                    <span class="comp-name"><i class="fa-solid fa-compact-disc"></i> Pastillas & Discos Frenos</span>
+                                    <span class="comp-val warn">82%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill warn" style="width: 82%;"></div></div>
+                                <span class="comp-desc">Desgaste uniforme. Eficacia de frenada alta.</span>
+                            </div>
+                            <div class="diag-card">
+                                <div class="diag-card-top">
+                                    <span class="comp-name"><i class="fa-solid fa-gears"></i> Embrague Reforzado Cerámico</span>
+                                    <span class="comp-val ok">95%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill ok" style="width: 95%;"></div></div>
+                                <span class="comp-desc">Acoplamiento directo sin patinamiento.</span>
+                            </div>
+                            <div class="diag-card">
+                                <div class="diag-card-top">
+                                    <span class="comp-name"><i class="fa-solid fa-wind"></i> Turbo Garrett Doble Entrada</span>
+                                    <span class="comp-val ok">100%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill ok" style="width: 100%;"></div></div>
+                                <span class="comp-desc">Válvula de descarga Blow-Off ajustada a 1.9 bar.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Mapas Rápidos / Presets -->
+                    <div id="presets-panel" class="custom-panel" style="display: none;">
+                        <div class="presets-intro">
+                            <h3><i class="fa-solid fa-sliders"></i> SELECCIÓN DE REPRO RÁPIDA (STAGE MAPS)</h3>
+                            <p>Carga perfiles de telemetría de competición optimizados para cada disciplina de conducción.</p>
+                        </div>
+                        <div class="presets-grid">
+                            <div class="preset-card" onclick="applyPreset('street')">
+                                <div class="preset-badge street">STAGE 1 &bull; CALLE / SPORT</div>
+                                <h4>Perfil Urbano Deportivo</h4>
+                                <p>Excelente respuesta de aceleración, ralentí suave y consumo contenido para el día a día.</p>
+                                <div class="preset-specs">
+                                    <span><i class="fa-solid fa-gauge"></i> +25% Potencia</span>
+                                    <span><i class="fa-solid fa-shield"></i> Alta Estabilidad</span>
+                                </div>
+                                <button class="btn-preset-load"><i class="fa-solid fa-download"></i> Cargar Repro Stage 1</button>
+                            </div>
+
+                            <div class="preset-card featured" onclick="applyPreset('race')">
+                                <div class="preset-badge race">STAGE 3 &bull; CIRCUITO / TRACK</div>
+                                <h4>Perfil Competición Extrema</h4>
+                                <p>Máximo soplado de turbo, relaciones de cambio ultrarrápidas y downforce de circuito.</p>
+                                <div class="preset-specs">
+                                    <span><i class="fa-solid fa-fire"></i> +60% Potencia</span>
+                                    <span><i class="fa-solid fa-flag-checkered"></i> Agarre Máximo</span>
+                                </div>
+                                <button class="btn-preset-load active"><i class="fa-solid fa-bolt"></i> Cargar Repro Competición</button>
+                            </div>
+
+                            <div class="preset-card" onclick="applyPreset('drift')">
+                                <div class="preset-badge drift">STAGE DRIFT &bull; TOUGE / CRUZADAS</div>
+                                <h4>Perfil Drift King</h4>
+                                <p>Propulsión trasera 100% RWD, mayor ángulo de dirección y suspensión trasera dura.</p>
+                                <div class="preset-specs">
+                                    <span><i class="fa-solid fa-compass-drafting"></i> 65° Dirección</span>
+                                    <span><i class="fa-solid fa-arrows-split-up-and-left"></i> Tracción Trasera RWD</span>
+                                </div>
+                                <button class="btn-preset-load"><i class="fa-solid fa-road"></i> Cargar Repro Drift Pro</button>
+                            </div>
+
+                            <div class="preset-card" onclick="applyPreset('eco')">
+                                <div class="preset-badge eco">STAGE ECO &bull; BAJO CONSUMO</div>
+                                <h4>Perfil Eficiente Urbano</h4>
+                                <p>Curva de par progresiva para conducción relajada, sin sobreviraje y con frenada suave.</p>
+                                <div class="preset-specs">
+                                    <span><i class="fa-solid fa-leaf"></i> Menor Consumo</span>
+                                    <span><i class="fa-solid fa-feather"></i> Suave & Confort</span>
+                                </div>
+                                <button class="btn-preset-load"><i class="fa-solid fa-seedling"></i> Cargar Repro Eco</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Barra Inferior de Acción y Descripción -->
+                <footer class="tuner-footer">
+                    <div class="description-strip">
+                        <i class="fa-solid fa-circle-info info-icon"></i>
+                        <div class="desc-text-wrapper">
+                            <span class="desc-title">PARÁMETRO SELECCIONADO</span>
+                            <p id="table-description">Pasa el ratón sobre cualquier ajuste mecánico para ver los detalles técnicos de la pieza.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons-group">
+                        <button class="tuner-btn btn-reset" id="reset-button">
+                            <i class="fa-solid fa-arrow-rotate-left"></i>
+                            <span>Restablecer Stock</span>
+                        </button>
+                        <button class="tuner-btn btn-save" id="save-button">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Flashear Mapa ECU</span>
+                        </button>
+                        <button class="tuner-btn btn-cancel" id="cancel">
+                            <i class="fa-solid fa-power-off"></i>
+                            <span>Desconectar</span>
+                        </button>
+                    </div>
+                </footer>
             </div>
         </div>
-        <script src="./script.js"></script>
-    </body>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
 </html>

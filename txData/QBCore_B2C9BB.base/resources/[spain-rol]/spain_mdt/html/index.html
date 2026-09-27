@@ -3,187 +3,661 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MDT Spain Rol - Fuerzas y Cuerpos de Seguridad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>MDT Spain Rol - Fuerzas y Cuerpos de Seguridad & SAMUR 112</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&family=Share+Tech+Mono&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="tablet-case">
-        <!-- Header -->
-        <div class="tablet-header">
-            <div class="header-left">
-                <span class="police-badge">🛡️</span>
-                <div class="system-title">
-                    <h2>MDT SPAIN ROL</h2>
-                    <p>Terminal Móvil Policial &bull; CNP - Guardia Civil - SAMUR</p>
-                </div>
+    <div class="tablet-wrapper">
+        <div class="tablet-frame">
+            <!-- Tablet Antena & Sensor Bar -->
+            <div class="tablet-sensor-bar">
+                <span class="antenna-cam"></span>
+                <span class="sensor-dot"></span>
+                <span class="tablet-brand-tag">POLICÍA NACIONAL &bull; TERMINAL TETRA RUGGED v5.0</span>
             </div>
-            <div class="header-right">
-                <div class="agent-badge">
-                    <span id="officer-name">Agente Oficial</span> &bull; <span id="officer-callsign">ID: 01</span>
+
+            <!-- Header Policial & Sanitario -->
+            <header class="mdt-header">
+                <div class="header-left">
+                    <div class="badge-emblem-container">
+                        <!-- Escudo Oficial y Bandera -->
+                        <div class="emblem-shield">
+                            <i class="fa-solid fa-shield-halved emblem-icon"></i>
+                            <span class="spanish-ribbon"></span>
+                        </div>
+                    </div>
+                    <div class="header-titles">
+                        <div class="corp-tags">
+                            <span class="corp-pill cnp">POLICÍA NACIONAL</span>
+                            <span class="corp-pill gc">GUARDIA CIVIL</span>
+                            <span class="corp-pill samur">SAMUR 112</span>
+                        </div>
+                        <h1>SISTEMA INTEGRAL DE SEGURIDAD & EMERGENCIAS</h1>
+                        <p class="subtitle"><i class="fa-solid fa-satellite-dish"></i> RED TETRA ENCRIPTADA &bull; PROVINCIA DE LOS SANTOS &bull; SPAIN ROL</p>
+                    </div>
                 </div>
-                <button class="close-btn" id="btn-close-tablet">✕</button>
+
+                <div class="header-center">
+                    <div class="live-clock-card">
+                        <span class="clock-time" id="mdt-clock">18:00:00</span>
+                        <span class="clock-date" id="mdt-date">DOMINGO, 27 DE SEPTIEMBRE</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="panic-btn-wrapper">
+                        <button class="panic-button" id="btn-panic-alert" title="Pulsar en caso de agente o sanitario bajo fuego / en peligro extremo">
+                            <i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i>
+                            <span>BOTÓN 112</span>
+                        </button>
+                    </div>
+
+                    <div class="officer-profile-card">
+                        <div class="officer-avatar">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div class="officer-details">
+                            <span class="officer-name" id="officer-name">Agente Oficial</span>
+                            <div class="officer-meta">
+                                <span class="officer-callsign" id="officer-callsign">INDICATIVO: Z-10</span>
+                                <span class="officer-status en-servicio">10-8 EN SERVICIO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="mdt-close-button" id="btn-close-tablet" title="Cerrar Terminal (ESC)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Body Layout -->
+            <div class="mdt-layout">
+                <!-- Sidebar Lateral de Navegación -->
+                <aside class="mdt-sidebar">
+                    <div class="sidebar-status-banner">
+                        <div class="status-indicator-ping"></div>
+                        <div class="status-text">
+                            <strong>COBERTURA RADAR</strong>
+                            <span>CANAL POLICIAL 1.0 MHz</span>
+                        </div>
+                    </div>
+
+                    <nav class="sidebar-menu">
+                        <button class="nav-btn active" data-target="sec-dash">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Centralita & Cuadrante</span>
+                            <span class="nav-badge live">LIVE</span>
+                        </button>
+                        <button class="nav-btn" data-target="sec-citizens">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span>Fichero de Ciudadanos</span>
+                        </button>
+                        <button class="nav-btn" data-target="sec-vehicles">
+                            <i class="fa-solid fa-car-on"></i>
+                            <span>Registro DGT & Tráfico</span>
+                        </button>
+                        <button class="nav-btn" data-target="sec-penal">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            <span>Código Penal & Multas</span>
+                        </button>
+                        <button class="nav-btn" data-target="sec-warrants">
+                            <i class="fa-solid fa-handcuffs"></i>
+                            <span>Busca y Captura</span>
+                            <span class="nav-badge danger" id="warrants-count-badge">3</span>
+                        </button>
+                        <button class="nav-btn" data-target="sec-ems">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                            <span>SAMUR / Urgencias MS</span>
+                            <span class="nav-badge ems-badge">112</span>
+                        </button>
+                    </nav>
+
+                    <!-- Códigos 10 Rápidos de Radiopatrulla -->
+                    <div class="radio-codes-box">
+                        <div class="codes-title">
+                            <i class="fa-solid fa-walkie-talkie"></i>
+                            <span>CÓDIGOS 10 RADIOPATRULLA</span>
+                        </div>
+                        <div class="codes-grid">
+                            <span title="Mensaje recibido / Entendido"><strong>10-4</strong> Recibido</span>
+                            <span title="En servicio / Disponible"><strong>10-8</strong> En Servicio</span>
+                            <span title="Fuera de servicio"><strong>10-7</strong> Fuera Turno</span>
+                            <span title="Solicitud de ubicación"><strong>10-20</strong> Posición</span>
+                            <span title="Control de Tráfico / Parada"><strong>10-38</strong> Tráfico</span>
+                            <span title="Agente / Sanitario necesita apoyo urgente"><strong>10-99</strong> Emergencia</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Área Central de Contenido Dinámico -->
+                <main class="mdt-content">
+                    <!-- ============================================== -->
+                    <!-- SECCIÓN 1: DASHBOARD / CENTRALITA 112         -->
+                    <!-- ============================================== -->
+                    <section class="view-section active" id="sec-dash">
+                        <div class="section-banner">
+                            <div class="banner-title">
+                                <h2><i class="fa-solid fa-tower-broadcast"></i> CUADRANTE DE PATRULLAJE & DESPACHO 112</h2>
+                                <p>Supervisión en directo de unidades de intervención de Policía Nacional, Guardia Civil y SAMUR Protección Civil.</p>
+                            </div>
+                            <div class="alert-level-box nivel-verde">
+                                <span class="alert-dot"></span>
+                                <div>
+                                    <span class="al-title">NIVEL DE ALERTA NACIONAL</span>
+                                    <span class="al-state">NIVEL 2 &bull; PATRULLAJE INTENSIFICADO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjetas de Estadísticas Operativas -->
+                        <div class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-icon blue"><i class="fa-solid fa-shield-cat"></i></div>
+                                <div class="kpi-data">
+                                    <span class="kpi-label">PATRULLAS EN CALLE</span>
+                                    <h3 class="kpi-value">8 Unidades</h3>
+                                    <span class="kpi-sub"><i class="fa-solid fa-circle-check"></i> CNP Z-10, Z-12, GC-04, SAMUR-01</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon green"><i class="fa-solid fa-bell"></i></div>
+                                <div class="kpi-data">
+                                    <span class="kpi-label">INCIDENTES 112 ATENDIDOS</span>
+                                    <h3 class="kpi-value">34 Hoy</h3>
+                                    <span class="kpi-sub"><i class="fa-solid fa-bolt"></i> Tiempo medio respuesta: 1m 45s</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon amber"><i class="fa-solid fa-dungeon"></i></div>
+                                <div class="kpi-data">
+                                    <span class="kpi-label">INTERNOS EN BOLINGBROKE</span>
+                                    <h3 class="kpi-value">6 Presos</h3>
+                                    <span class="kpi-sub"><i class="fa-solid fa-lock"></i> Módulo de Máxima Seguridad</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                <div class="kpi-data">
+                                    <span class="kpi-label">ÓRDENES ACTIVAS</span>
+                                    <h3 class="kpi-value">3 Prófugos</h3>
+                                    <span class="kpi-sub"><i class="fa-solid fa-bullseye"></i> Alta Peligrosidad / Captura</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cuadrante Táctico y Despacho en Directo -->
+                        <div class="dash-columns-grid">
+                            <!-- Columna 1: Feed de Incidentes 112 Recientes -->
+                            <div class="panel-box">
+                                <div class="panel-box-header">
+                                    <h3><i class="fa-solid fa-headset"></i> CENTRALITA DE LLAMADAS 112 (DESPACHO ACTIVO)</h3>
+                                    <span class="live-pill"><i class="fa-solid fa-circle fa-beat"></i> EN TIEMPO REAL</span>
+                                </div>
+                                <div class="dispatch-feed">
+                                    <div class="dispatch-item priority-high">
+                                        <div class="dispatch-badge">CÓDIGO 3</div>
+                                        <div class="dispatch-body">
+                                            <strong>Atraco en curso con rehenes &bull; Joyería Vangelico</strong>
+                                            <p><i class="fa-solid fa-location-dot"></i> Rockford Hills &bull; Postal #7025 &bull; Hace 2 minutos</p>
+                                            <span class="disp-units">Asignadas: Z-10 (Líder), Z-12, GC Alfa</span>
+                                        </div>
+                                    </div>
+                                    <div class="dispatch-item priority-med">
+                                        <div class="dispatch-badge">CÓDIGO 2</div>
+                                        <div class="dispatch-body">
+                                            <strong>Accidente de tráfico múltiple &bull; Conductor atrapado</strong>
+                                            <p><i class="fa-solid fa-location-dot"></i> Autovía de Del Perro &bull; Postal #8112 &bull; Hace 7 minutos</p>
+                                            <span class="disp-units">Asignadas: SAMUR Delta-1, Atestados CNP</span>
+                                        </div>
+                                    </div>
+                                    <div class="dispatch-item priority-low">
+                                        <div class="dispatch-badge">CÓDIGO 1</div>
+                                        <div class="dispatch-body">
+                                            <strong>Altercado público / Riña tumultuaria en Badulake</strong>
+                                            <p><i class="fa-solid fa-location-dot"></i> Strawberry &bull; Postal #6040 &bull; Hace 15 minutos</p>
+                                            <span class="disp-units">Asignadas: Z-20 de patrulla</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Columna 2: Protocolos Operativos y Radar Táctico -->
+                            <div class="panel-box">
+                                <div class="panel-box-header">
+                                    <h3><i class="fa-solid fa-book-bookmark"></i> DIRECTIVAS OPERATIVAS & PROTOCOLOS CNP</h3>
+                                </div>
+                                <div class="protocols-list">
+                                    <div class="protocol-card">
+                                        <div class="proto-num">01</div>
+                                        <div class="proto-desc">
+                                            <strong>Identificación y Cacheo Legal</strong>
+                                            <p>Comando <code>/dni</code> para solicitar documentación. Cacheos en vía pública requieren sospecha fundada o control preventivo.</p>
+                                        </div>
+                                    </div>
+                                    <div class="protocol-card">
+                                        <div class="proto-num">02</div>
+                                        <div class="proto-desc">
+                                            <strong>Pruebas de Alcoholemia y Narcóticos</strong>
+                                            <p>Obligatorias ante conducción anómala o tras siniestro vial. Sanción tipificada en Código Penal (TRAF-04).</p>
+                                        </div>
+                                    </div>
+                                    <div class="protocol-card">
+                                        <div class="proto-num">03</div>
+                                        <div class="proto-desc">
+                                            <strong>Procedimiento de Ingreso en Prisión</strong>
+                                            <p>Para trasladar a penitenciaría de Bolingbroke utilizar el comando oficial: <code>/jail [ID] [Minutos]</code>.</p>
+                                        </div>
+                                    </div>
+                                    <div class="protocol-card">
+                                        <div class="proto-num">04</div>
+                                        <div class="proto-desc">
+                                            <strong>Custodia y Reclamaciones Judiciales</strong>
+                                            <p>Todo detenido tiene derecho a asistencia letrada (Bufete Jurídico) y llamada telefónica de 3 minutos.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ============================================== -->
+                    <!-- SECCIÓN 2: BÚSQUEDA CIUDADANA                 -->
+                    <!-- ============================================== -->
+                    <section class="view-section" id="sec-citizens">
+                        <div class="section-banner">
+                            <div class="banner-title">
+                                <h2><i class="fa-solid fa-address-card"></i> BASE DE DATOS DEL REGISTRO CIVIL & ANTECEDENTES</h2>
+                                <p>Consulta de ficheros policiales por DNI Español (ES-XXXXXXXX), Nombre o Apellidos.</p>
+                            </div>
+                        </div>
+
+                        <div class="search-bar-wrapper">
+                            <div class="search-input-group">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                <input type="text" class="search-input" id="input-citizen" placeholder="Introduce DNI español o Nombre completo del ciudadano...">
+                            </div>
+                            <button class="search-button" id="btn-search-citizen">
+                                <i class="fa-solid fa-fingerprint"></i>
+                                <span>Consultar Archivo</span>
+                            </button>
+                        </div>
+
+                        <!-- Resultados de Ciudadanos -->
+                        <div class="results-table-container">
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>FOTO / FICHA</th>
+                                        <th>DNI OFICIAL</th>
+                                        <th>NOMBRE Y APELLIDOS</th>
+                                        <th>FECHA NACIMIENTO</th>
+                                        <th>CONTACTO</th>
+                                        <th>ESTADO JUDICIAL</th>
+                                        <th>ACCIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="citizen-results-body">
+                                    <tr>
+                                        <td colspan="7" class="table-empty-msg">
+                                            <i class="fa-solid fa-user-magnifying-glass"></i>
+                                            <p>Introduce un término de búsqueda para consultar el fichero nacional de filiación.</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- ============================================== -->
+                    <!-- SECCIÓN 3: VEHÍCULOS & REGISTRO DGT          -->
+                    <!-- ============================================== -->
+                    <section class="view-section" id="sec-vehicles">
+                        <div class="section-banner">
+                            <div class="banner-title">
+                                <h2><i class="fa-solid fa-car-rear"></i> REGISTRO CENTRAL DE VEHÍCULOS & DGT</h2>
+                                <p>Control telemático de matrículas, titulares legales, inspecciones ITV y encargos de robo.</p>
+                            </div>
+                        </div>
+
+                        <div class="search-bar-wrapper">
+                            <div class="search-input-group">
+                                <i class="fa-solid fa-barcode search-icon"></i>
+                                <input type="text" class="search-input" id="input-veh" placeholder="Introduce matrícula del vehículo (ej: 46ABC789)...">
+                            </div>
+                            <button class="search-button" id="btn-search-veh">
+                                <i class="fa-solid fa-car"></i>
+                                <span>Verificar Matrícula</span>
+                            </button>
+                        </div>
+
+                        <div id="veh-result-box" class="veh-details-container">
+                            <div class="dgt-placeholder-card">
+                                <i class="fa-solid fa-car-burst"></i>
+                                <h4>Ningún vehículo consultado</h4>
+                                <p>Escribe una matrícula en el cuadro superior para conectar con el registro telemático de la DGT.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ============================================== -->
+                    <!-- SECCIÓN 4: CÓDIGO PENAL & CALCULADORA          -->
+                    <!-- ============================================== -->
+                    <section class="view-section" id="sec-penal">
+                        <div class="penal-layout-grid">
+                            <!-- Lista de Artículos del Código Penal -->
+                            <div class="penal-list-column">
+                                <div class="section-banner mini">
+                                    <div class="banner-title">
+                                        <h2><i class="fa-solid fa-scale-unbalanced-flip"></i> CATÁLOGO OFICIAL DEL CÓDIGO PENAL</h2>
+                                        <p>Marca las infracciones o delitos para calcular automáticamente las penas acumuladas.</p>
+                                    </div>
+                                    <div class="penal-filter-tabs" id="penal-filters">
+                                        <button class="penal-filter active" data-filter="all">Todos</button>
+                                        <button class="penal-filter" data-filter="Tráfico">Tráfico</button>
+                                        <button class="penal-filter" data-filter="Orden Público">Orden Público</button>
+                                        <button class="penal-filter" data-filter="Armas">Armas</button>
+                                        <button class="penal-filter" data-filter="Drogas">Drogas</button>
+                                        <button class="penal-filter" data-filter="Robos">Robos</button>
+                                        <button class="penal-filter" data-filter="Delitos Graves">Graves</button>
+                                    </div>
+                                </div>
+
+                                <div class="penal-table-scroll">
+                                    <table class="modern-table penal-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 40px;"><i class="fa-solid fa-check"></i></th>
+                                                <th>CÓDIGO</th>
+                                                <th>CATEGORÍA</th>
+                                                <th>TIPIFICACIÓN DEL DELITO</th>
+                                                <th>MULTA (€)</th>
+                                                <th>PRISIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="penal-table-body">
+                                            <tr><td colspan="6" class="table-empty-msg">Cargando catálogo del Código Penal...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Calculadora Lateral de Sanciones -->
+                            <div class="penal-calculator-card">
+                                <div class="calc-header">
+                                    <i class="fa-solid fa-calculator"></i>
+                                    <h3>CALCULADORA DE CONDENAS</h3>
+                                </div>
+
+                                <div class="calc-charges-list" id="calc-selected-list">
+                                    <div class="calc-no-items">No has seleccionado ningún artículo penal de la tabla. Haz clic en las casillas para acumular penas.</div>
+                                </div>
+
+                                <div class="calc-summary-box">
+                                    <div class="summary-row">
+                                        <span>TOTAL MULTA PECUNIARIA:</span>
+                                        <strong id="calc-total-fine">€0</strong>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>TIEMPO PRISIÓN (BOLINGBROKE):</span>
+                                        <strong id="calc-total-jail" class="highlight-red">0 Meses</strong>
+                                    </div>
+                                </div>
+
+                                <div class="calc-actions">
+                                    <button class="calc-btn btn-clear-calc" id="btn-clear-calc">
+                                        <i class="fa-solid fa-trash-can"></i> Limpiar
+                                    </button>
+                                    <button class="calc-btn btn-apply-calc" id="btn-apply-calc">
+                                        <i class="fa-solid fa-stamp"></i> Procesar Sanción
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ============================================== -->
+                    <!-- SECCIÓN 5: BUSCA Y CAPTURA                    -->
+                    <!-- ============================================== -->
+                    <section class="view-section" id="sec-warrants">
+                        <div class="section-banner">
+                            <div class="banner-title">
+                                <h2><i class="fa-solid fa-triangle-exclamation"></i> ÓRDENES JUDICIALES DE BUSCA Y CAPTURA</h2>
+                                <p>Sujetos reclamados por los Juzgados de Guardia de Los Santos con orden de detención inmediata.</p>
+                            </div>
+                            <button class="btn-create-warrant" id="btn-new-warrant">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Emitir Nueva Orden Judicial</span>
+                            </button>
+                        </div>
+
+                        <!-- Cuadrícula de Carteles de Busca y Captura -->
+                        <div class="warrants-grid" id="warrants-grid">
+                            <!-- Renderizado dinámico -->
+                        </div>
+                    </section>
+
+                    <!-- ============================================== -->
+                    <!-- SECCIÓN 6: SAMUR / SERVICIOS MÉDICOS (MS)     -->
+                    <!-- ============================================== -->
+                    <section class="view-section" id="sec-ems">
+                        <div class="section-banner samur-banner">
+                            <div class="banner-title">
+                                <h2><i class="fa-solid fa-truck-medical"></i> TELEMETRÍA MÉDICA & PROTOCOLOS SAMUR 112</h2>
+                                <p>Unidad de Soporte Vital Avanzado (SVA), monitor de constantes vitales y triaje de traumatología.</p>
+                            </div>
+                            <div class="samur-status-pill">
+                                <span class="pulsing-heart"><i class="fa-solid fa-heart fa-beat"></i></span>
+                                <span>SISTEMA DE ASISTENCIA CLÍNICA CONECTADO</span>
+                            </div>
+                        </div>
+
+                        <!-- Monitor ECG y Constantes Vitales -->
+                        <div class="vitals-monitor-card">
+                            <div class="monitor-top">
+                                <div class="monitor-channel">
+                                    <span class="live-dot-green"></span>
+                                    <span>MONITOR VITAL MULTIPARAMÉTRICO PHILIPS INTELLIVUE</span>
+                                </div>
+                                <div class="monitor-time">DERIVACIÓN II &bull; FILTRO 50Hz</div>
+                            </div>
+
+                            <!-- Electrocardiograma animado -->
+                            <div class="ecg-canvas-container">
+                                <svg class="ecg-wave-svg" viewBox="0 0 1000 120" preserveAspectRatio="none">
+                                    <path class="ecg-path" d="M0,60 L120,60 L130,50 L140,70 L150,60 L240,60 L250,55 L255,20 L265,100 L275,60 L290,65 L300,60 L400,60 L410,50 L420,70 L430,60 L520,60 L530,55 L535,20 L545,100 L555,60 L570,65 L580,60 L700,60 L710,50 L720,70 L730,60 L820,60 L830,55 L835,20 L845,100 L855,60 L870,65 L880,60 L1000,60" />
+                                </svg>
+                                <div class="ecg-grid-overlay"></div>
+                            </div>
+
+                            <!-- Valores Numéricos de Constantes Vitales -->
+                            <div class="vitals-kpi-bar">
+                                <div class="vital-item">
+                                    <span class="vital-label"><i class="fa-solid fa-heart-pulse"></i> FRECUENCIA CARDÍACA</span>
+                                    <div class="vital-num-row">
+                                        <span class="vital-value green" id="vital-bpm">76</span>
+                                        <span class="vital-unit">LPM (BPM)</span>
+                                    </div>
+                                    <span class="vital-sub">Ritmo Sinusal Regular</span>
+                                </div>
+                                <div class="vital-item">
+                                    <span class="vital-label"><i class="fa-solid fa-lungs"></i> SATURACIÓN OXÍGENO</span>
+                                    <div class="vital-num-row">
+                                        <span class="vital-value cyan">98%</span>
+                                        <span class="vital-unit">SpO2</span>
+                                    </div>
+                                    <span class="vital-sub">Normoxemia Estable</span>
+                                </div>
+                                <div class="vital-item">
+                                    <span class="vital-label"><i class="fa-solid fa-droplet"></i> TENSIÓN ARTERIAL</span>
+                                    <div class="vital-num-row">
+                                        <span class="vital-value yellow">120/80</span>
+                                        <span class="vital-unit">mmHg</span>
+                                    </div>
+                                    <span class="vital-sub">Normotensión Arterial</span>
+                                </div>
+                                <div class="vital-item">
+                                    <span class="vital-label"><i class="fa-solid fa-temperature-arrow-up"></i> TEMPERATURA</span>
+                                    <div class="vital-num-row">
+                                        <span class="vital-value green">36.6</span>
+                                        <span class="vital-unit">°C</span>
+                                    </div>
+                                    <span class="vital-sub">Eutermia</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Triaje Anatómico y Acciones Rápidas Médicas -->
+                        <div class="ems-work-grid">
+                            <!-- Columna 1: Botiquín y Acciones de Intervención -->
+                            <div class="panel-box">
+                                <div class="panel-box-header">
+                                    <h3><i class="fa-solid fa-kit-medical"></i> INTERVENCIONES SANITARIAS EN CAMPO</h3>
+                                    <span class="corp-pill samur">ASISTENCIA 112</span>
+                                </div>
+                                <div class="ems-actions-list">
+                                    <div class="ems-action-card" onclick="executeEmsCmd('reanimar')">
+                                        <div class="ems-act-icon red"><i class="fa-solid fa-heart-crack"></i></div>
+                                        <div class="ems-act-info">
+                                            <strong>Reanimación Cardiopulmonar & Desfibrilador (RCP)</strong>
+                                            <p>Aplica descargas eléctricas y compresiones torácicas a paciente en parada cardíaca.</p>
+                                            <span class="ems-cmd-tag">Comando: /reanimar</span>
+                                        </div>
+                                        <button class="btn-ems-act red"><i class="fa-solid fa-bolt"></i> Ejecutar</button>
+                                    </div>
+
+                                    <div class="ems-action-card" onclick="executeEmsCmd('curar')">
+                                        <div class="ems-act-icon green"><i class="fa-solid fa-bandage"></i></div>
+                                        <div class="ems-act-info">
+                                            <strong>Curación Integral y Vendaje Compresivo</strong>
+                                            <p>Limpia heridas abiertas, cauteriza hemorragias y venda fracturas óseas.</p>
+                                            <span class="ems-cmd-tag">Comando: /curar</span>
+                                        </div>
+                                        <button class="btn-ems-act green"><i class="fa-solid fa-check"></i> Aplicar</button>
+                                    </div>
+
+                                    <div class="ems-action-card" onclick="executeEmsCmd('camilla')">
+                                        <div class="ems-act-icon blue"><i class="fa-solid fa-bed"></i></div>
+                                        <div class="ems-act-info">
+                                            <strong>Desplegar / Recoger Camilla Móvil</strong>
+                                            <p>Permite acostar y transportar de forma segura a pacientes críticos a la ambulancia.</p>
+                                            <span class="ems-cmd-tag">Comando: /camilla</span>
+                                        </div>
+                                        <button class="btn-ems-act blue"><i class="fa-solid fa-arrows-up-down"></i> Camilla</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Columna 2: Farmacología & Triaje Anatómico -->
+                            <div class="panel-box">
+                                <div class="panel-box-header">
+                                    <h3><i class="fa-solid fa-capsules"></i> FARMACOPEA CLÍNICA DE URGENCIA</h3>
+                                </div>
+                                <div class="meds-grid">
+                                    <div class="med-item">
+                                        <div class="med-icon"><i class="fa-solid fa-syringe"></i></div>
+                                        <div class="med-data">
+                                            <strong>Adrenalina 1 mg</strong>
+                                            <span>Estimulante adrenérgico para parada cardiorrespiratoria y shock anafiláctico.</span>
+                                        </div>
+                                    </div>
+                                    <div class="med-item">
+                                        <div class="med-icon"><i class="fa-solid fa-vial"></i></div>
+                                        <div class="med-data">
+                                            <strong>Morfina 10 mg</strong>
+                                            <span>Analgésico opioide mayor para dolor severo en politraumatismos.</span>
+                                        </div>
+                                    </div>
+                                    <div class="med-item">
+                                        <div class="med-icon"><i class="fa-solid fa-bottle-droplet"></i></div>
+                                        <div class="med-data">
+                                            <strong>Suero Salino 0.9%</strong>
+                                            <span>Reposición volémica intravenosa en hipovolemia por hemorragia.</span>
+                                        </div>
+                                    </div>
+                                    <div class="med-item">
+                                        <div class="med-icon"><i class="fa-solid fa-shield-virus"></i></div>
+                                        <div class="med-data">
+                                            <strong>Torniquete Táctico CAT</strong>
+                                            <span>Control de hemorragias exanguinantes en extremidades bajo fuego.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
             </div>
         </div>
+    </div>
 
-        <!-- Body -->
-        <div class="tablet-body">
-            <!-- Sidebar Navigation -->
-            <div class="sidebar">
-                <div class="nav-item active" data-target="sec-dash">
-                    <span>🏠</span> Inicio / Centralita
+    <!-- Modal para Sancionar / Multar Oficialmente -->
+    <div class="mdt-modal-backdrop" id="modal-fine">
+        <div class="mdt-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-stamp"></i> EMISIÓN DE SANCIÓN POLICIAL OFICIAL</h3>
+                <button class="modal-close" onclick="closeModal('modal-fine')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="fine-citizenid">
+                <div class="form-group">
+                    <label>Ciudadano Sancionado</label>
+                    <input type="text" id="fine-citizen-name" class="modal-input" readonly>
                 </div>
-                <div class="nav-item" data-target="sec-citizens">
-                    <span>👤</span> Búsqueda Ciudadana
+                <div class="form-group">
+                    <label>Cuantía de la Multa en Euros (€)</label>
+                    <input type="number" id="fine-amount" class="modal-input" placeholder="Ej: 500">
                 </div>
-                <div class="nav-item" data-target="sec-vehicles">
-                    <span>🚗</span> Registro Matrículas
+                <div class="form-group">
+                    <label>Meses de Prisión en Bolingbroke</label>
+                    <input type="number" id="fine-jail" class="modal-input" placeholder="0 para solo sanción económica">
                 </div>
-                <div class="nav-item" data-target="sec-penal">
-                    <span>⚖️</span> Código Penal y Multas
-                </div>
-                <div class="nav-item" data-target="sec-warrants">
-                    <span>🚨</span> Busca y Captura
-                </div>
-                <div class="nav-item" data-target="sec-ems">
-                    <span>🚑</span> SAMUR / Sanitarios
+                <div class="form-group">
+                    <label>Motivo y Artículos del Código Penal Infringidos</label>
+                    <textarea id="fine-reason" class="modal-textarea" rows="3" placeholder="Describe los hechos y artículos aplicados..."></textarea>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeModal('modal-fine')">Cancelar</button>
+                <button class="btn-modal-confirm" id="btn-confirm-fine"><i class="fa-solid fa-check"></i> Emitir y Cobrar Sanción</button>
+            </div>
+        </div>
+    </div>
 
-            <!-- Content Area -->
-            <div class="content-panel">
-                <!-- Section 1: Dashboard -->
-                <div class="view-section active" id="sec-dash">
-                    <div class="section-title">
-                        <span>📊</span> Estado del Operativo y Centralita 112
-                    </div>
-                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem; margin-bottom:1.5rem;">
-                        <div style="background:#131a24; padding:1.2rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
-                            <p style="color:#b2bec3; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Cuerpo Activo</p>
-                            <h3 style="color:#0984e3; margin-top:0.4rem;">CNP & Guardia Civil</h3>
-                        </div>
-                        <div style="background:#131a24; padding:1.2rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
-                            <p style="color:#b2bec3; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Nivel de Alerta</p>
-                            <h3 style="color:#00b894; margin-top:0.4rem;">Verde (Patrullaje Regular)</h3>
-                        </div>
-                        <div style="background:#131a24; padding:1.2rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
-                            <p style="color:#b2bec3; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Canal de Radio</p>
-                            <h3 style="color:#ffeaa7; margin-top:0.4rem;">Frecuencia 1.0 MHz (CNP)</h3>
-                        </div>
-                    </div>
-                    <div style="background:#131a24; padding:1.4rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
-                        <h4 style="margin-bottom:0.8rem; color:#dfe6e9;">Protocolos de Actuación Rápida:</h4>
-                        <p style="color:#b2bec3; font-size:0.9rem; line-height:1.6;">
-                            1. Utilizar <strong>/dni</strong> para solicitar identificación oficial a ciudadanos sospechosos.<br>
-                            2. Realizar test de alcoholemia y narcotest saliva en controles preventivos.<br>
-                            3. Toda sanción debe registrarse en la pestaña <strong>Búsqueda Ciudadana</strong>.<br>
-                            4. Para ingresos penitenciarios en Bolingbroke utilizar el comando <strong>/jail [ID] [Minutos]</strong>.
-                        </p>
-                    </div>
+    <!-- Modal para Emitir Orden de Busca y Captura -->
+    <div class="mdt-modal-backdrop" id="modal-warrant">
+        <div class="mdt-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-handcuffs"></i> ORDEN JUDICIAL DE BUSCA Y CAPTURA</h3>
+                <button class="modal-close" onclick="closeModal('modal-warrant')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>DNI o CitizenID del Prófugo</label>
+                    <input type="text" id="warrant-citizenid" class="modal-input" placeholder="Ej: ES-10492819">
                 </div>
-
-                <!-- Section 2: Citizens Search -->
-                <div class="view-section" id="sec-citizens">
-                    <div class="section-title">
-                        <span>👤</span> Registro Civil y Búsqueda por DNI
-                    </div>
-                    <div class="search-bar">
-                        <input type="text" class="search-input" id="input-citizen" placeholder="Introduce DNI español (ES-XXXXXXXX) o Nombre y Apellidos...">
-                        <button class="action-btn" id="btn-search-citizen">Buscar Ciudadano</button>
-                    </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>DNI</th>
-                                <th>Nombre Completo</th>
-                                <th>Nacimiento</th>
-                                <th>Teléfono</th>
-                                <th>Licencias</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="citizen-results-body">
-                            <tr>
-                                <td colspan="6" style="text-align:center; color:#b2bec3;">Introduce un término de búsqueda para consultar el fichero policial.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="form-group">
+                    <label>Nombre y Apellidos del Sospechoso</label>
+                    <input type="text" id="warrant-name" class="modal-input" placeholder="Nombre completo">
                 </div>
-
-                <!-- Section 3: Vehicles Search -->
-                <div class="view-section" id="sec-vehicles">
-                    <div class="section-title">
-                        <span>🚗</span> Control de Tráfico y Matrículas
-                    </div>
-                    <div class="search-bar">
-                        <input type="text" class="search-input" id="input-veh" placeholder="Introduce matrícula del vehículo (ej: 46ABC789)...">
-                        <button class="action-btn" id="btn-search-veh">Consultar Matrícula</button>
-                    </div>
-                    <div id="veh-result-box">
-                        <p style="color:#b2bec3;">Consulta una matrícula para verificar el titular, el modelo y si tiene encargo de búsqueda o robo.</p>
-                    </div>
+                <div class="form-group">
+                    <label>Nivel de Peligrosidad</label>
+                    <select id="warrant-danger" class="modal-input">
+                        <option value="Extrema">Peligrosidad Extrema 🔴 (Armado y Muy Peligroso)</option>
+                        <option value="Alta" selected>Peligrosidad Alta 🟠 (Reincidente)</option>
+                        <option value="Media">Peligrosidad Media 🟡 (Búsqueda Regular)</option>
+                    </select>
                 </div>
-
-                <!-- Section 4: Penal Code -->
-                <div class="view-section" id="sec-penal">
-                    <div class="section-title">
-                        <span>⚖️</span> Código Penal y Baremos de Sanción (Euros €)
-                    </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th>Categoría</th>
-                                <th>Infracción / Delito</th>
-                                <th>Multa</th>
-                                <th>Prisión</th>
-                            </tr>
-                        </thead>
-                        <tbody id="penal-table-body">
-                            <tr>
-                                <td colspan="5" style="text-align:center; color:#b2bec3;">Cargando catálogo del Código Penal...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="form-group">
+                    <label>Cargos Judiciales e Instrucción del Atestado</label>
+                    <textarea id="warrant-reason" class="modal-textarea" rows="3" placeholder="Delitos por los que se decreta la detención judicial..."></textarea>
                 </div>
-
-                <!-- Section 5: Warrants -->
-                <div class="view-section" id="sec-warrants">
-                    <div class="section-title">
-                        <span>🚨</span> Órdenes Activas de Busca y Captura
-                    </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Fugitivo</th>
-                                <th>Cargos Judiciales</th>
-                                <th>Peligrosidad</th>
-                                <th>Agente Instructor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="warrants-table-body">
-                            <tr>
-                                <td colspan="5" style="text-align:center; color:#b2bec3;">No hay órdenes judiciales pendientes.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Section 6: SAMUR -->
-                <div class="view-section" id="sec-ems">
-                    <div class="section-title">
-                        <span>🚑</span> Registro de Intervenciones Médicas SAMUR
-                    </div>
-                    <div style="background:#131a24; padding:1.4rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06); margin-bottom:1.5rem;">
-                        <h4 style="color:#e74c3c; margin-bottom:0.8rem;">Comandos Médicos de Asistencia Inmediata:</h4>
-                        <p style="color:#dfe6e9; font-size:0.9rem; line-height:1.7;">
-                            &bull; <strong>/reanimar</strong>: Aplica protocolo de RCP y descarga con desfibrilador al paciente inconsciente más cercano.<br>
-                            &bull; <strong>/curar</strong>: Trata y venda todas las heridas físicas superficiales y fracturas.<br>
-                            &bull; <strong>/camilla</strong>: Despliega una camilla médica en el lugar para trasladar pacientes al hospital.
-                        </p>
-                    </div>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeModal('modal-warrant')">Cancelar</button>
+                <button class="btn-modal-confirm red" id="btn-confirm-warrant"><i class="fa-solid fa-gavel"></i> Decretar Busca y Captura</button>
             </div>
         </div>
     </div>
